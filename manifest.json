@@ -1,0 +1,16 @@
+{
+  "name": "슬림 76 프로젝트 - 전용 헬스 가이드",
+  "short_name": "슬림76 헬스",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#0f172a",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "images/machine_mag_lat.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg"
+    }
+  ]
+}
