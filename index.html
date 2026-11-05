@@ -420,10 +420,20 @@
       currentWeight: 95.0,
       todayWatchKcal: 180,
       todayWatchHr: '평균 135 BPM',
-      waterCups: 1,
+      waterCups: 2,
       psylliumLunch: false,
       psylliumDinner: false,
-      todayMeals: [],
+      todayMeals: [
+        {
+          id: 1793853741000,
+          time: '오후 01:40',
+          name: '🍔 클래식 BLT 수제버거 + 감튀 세트',
+          kcal: 870,
+          carb: 78,
+          protein: 36,
+          fat: 44
+        }
+      ],
       activeTab: 'courseA',
       courses: {
         courseA: [
@@ -730,8 +740,10 @@
       if (!merged.currentWeight || merged.currentWeight === 94) merged.currentWeight = 95.0;
       if (!merged.todayWatchKcal) merged.todayWatchKcal = 180;
       if (!merged.todayWatchHr) merged.todayWatchHr = '평균 135 BPM';
-      if (merged.waterCups === undefined) merged.waterCups = 1;
-      if (!Array.isArray(merged.todayMeals)) merged.todayMeals = [];
+      if (merged.waterCups === undefined) merged.waterCups = 2;
+      if (!Array.isArray(merged.todayMeals) || merged.todayMeals.length === 0) {
+        merged.todayMeals = defaultData.todayMeals;
+      }
       return merged;
     }
 
