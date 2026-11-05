@@ -760,6 +760,7 @@
 
     let timerInterval = null;
     let remainingSeconds = 40;
+    let activeTimerTarget = null; // { courseKey, idx, setIdx }
     let selectedQuickWorkout = '🚴 실내자전거';
 
     const todayStr = new Date().toLocaleDateString('ko-KR', { month: '2-digit', day: '2-digit', weekday: 'short' });
@@ -1307,6 +1308,12 @@
       const item = state.courses[courseKey][idx];
       const setObj = item.sets[setIdx];
       setObj.done = !setObj.done;
+      if (setObj.done && !item.isCardio) {
+        activeTimerTarget = { courseKey, idx, setIdx };
+        startRestTimer(40);
+      } else if (!setObj.done && activeTimerTarget && activeTimerTarget.courseKey === courseKey && activeTimerTarget.idx === idx && activeTimerTarget.setIdx === setIdx) {
+        resetRestTimer();
+      }
       renderWorkoutList();
       if (item.isCardio) {
         saveState(
@@ -1319,9 +1326,6 @@
           true
         );
       }
-      if (setObj.done && !item.isCardio) {
-        startRestTimer(40);
-      }
     }
 
     function resetTodaySets() {
@@ -1329,29 +1333,74 @@
       state.courses[courseKey].forEach(item => {
         item.sets.forEach(s => { s.done = false; });
       });
+      resetRestTimer();
       renderWorkoutList();
       saveState('오늘 세트 체크 초기화', true);
     }
 
-    function startRestTimer(seconds) {
+    function updateInlineTimerUI() {
+      if (!activeTimerTarget) return;
+      const { courseKey, idx, setIdx } = activeTimerTarget;
+      const btnEl = document.getElementById(`setBtn-${courseKey}-${idx}-${setIdx}`);
+      const barEl = document.getElementById(`inlineTimerBar-${courseKey}-${idx}-${setIdx}`);
+      if (remainingSeconds > 0) {
+        if (btnEl) {
+          btnEl.innerHTML = `⏱️ ${remainingSeconds}초`;
+          btnEl.className = 'px-3 py-2 rounded-xl text-xs font-black border transition active:scale-95 shrink-0 bg-amber-400 text-slate-950 border-amber-300 shadow animate-pulse';
+        }
+        if (barEl) {
+          barEl.innerHTML = `
+            <div class="flex items-center justify-between bg-amber-500/20 border border-amber-400/50 rounded-xl px-3 py-2 mt-1">
+              <div class="text-xs font-extrabold text-amber-300">
+                ⏱️ 휴식 <span class="text-white text-sm font-black">${remainingSeconds}초</span> 남음 · 💧 지금 물 두 모금!
+              </div>
+              <div class="flex items-center space-x-1.5">
+                <button onclick="addWaterCup(1)" class="px-2 py-1 rounded-lg text-[11px] font-black bg-sky-500 text-slate-950 active:scale-95">💧+1컵</button>
+                <button onclick="startRestTimer(remainingSeconds + 15)" class="px-2 py-1 rounded-lg text-[11px] font-bold bg-slate-800 text-slate-200 border border-slate-600">+15초</button>
+                <button onclick="resetRestTimer()" class="px-2 py-1 rounded-lg text-[11px] font-bold bg-slate-900 text-slate-400">끄기</button>
+              </div>
+            </div>
+          `;
+        }
+      } else {
+        if (btnEl) {
+          btnEl.innerHTML = '✅ 완료(GO!)';
+          btnEl.className = 'px-3 py-2 rounded-xl text-xs font-extrabold border transition active:scale-95 shrink-0 bg-emerald-500 text-slate-950 border-emerald-400 shadow';
+        }
+        if (barEl) {
+          barEl.innerHTML = `
+            <div class="flex items-center justify-between bg-emerald-500/20 border border-emerald-400/50 rounded-xl px-3 py-1.5 mt-1">
+              <span class="text-xs font-extrabold text-emerald-300">🔥 40초 휴식 끝! 바로 다음 세트 출발하세요!</span>
+              <button onclick="resetRestTimer()" class="text-[11px] text-slate-400 underline">닫기</button>
+            </div>
+          `;
+        }
+      }
+    }
+
+    function startRestTimer(seconds, customTarget = null) {
       clearInterval(timerInterval);
+      if (customTarget) activeTimerTarget = customTarget;
       remainingSeconds = seconds;
       const display = document.getElementById('timerDisplay');
       const title = document.getElementById('timerTitle');
 
       display.textContent = remainingSeconds + '초';
       display.className = 'w-12 h-12 rounded-2xl bg-amber-500 text-slate-950 flex items-center justify-center text-base font-black shadow-inner';
-      title.textContent = '⏱️ 휴식 중! 상단 [💧+1컵] 누르고 물 두 모금!';
+      title.textContent = '⏱️ 휴식 중! 물 두 모금 마시세요!';
+      updateInlineTimerUI();
 
       timerInterval = setInterval(() => {
         remainingSeconds--;
         if (remainingSeconds > 0) {
           display.textContent = remainingSeconds + '초';
+          updateInlineTimerUI();
         } else {
           clearInterval(timerInterval);
           display.textContent = 'GO!';
           display.className = 'w-12 h-12 rounded-2xl bg-emerald-500 text-slate-950 flex items-center justify-center text-base font-black animate-bounce';
           title.textContent = '🔥 40초 휴식 끝! 다음 세트 출발!';
+          updateInlineTimerUI();
           if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
         }
       }, 1000);
@@ -1359,10 +1408,12 @@
 
     function resetRestTimer() {
       clearInterval(timerInterval);
+      activeTimerTarget = null;
       const display = document.getElementById('timerDisplay');
       display.textContent = '40초';
       display.className = 'w-12 h-12 rounded-2xl bg-indigo-600 text-white flex items-center justify-center text-base font-extrabold shadow-inner';
       document.getElementById('timerTitle').textContent = '세트 완료 시 40초 자동 타이머';
+      renderWorkoutList();
     }
 
     function renderWorkoutList() {
@@ -1464,49 +1515,53 @@
                     </div>
                   </div>
                 ` : `
-                  <div class="flex items-center justify-between gap-1.5 p-2 rounded-2xl border ${
-                    setObj.done
-                      ? 'bg-emerald-950/40 border-emerald-500/60'
-                      : 'bg-slate-900/95 border-slate-700/80'
-                  }">
-                    <div class="w-12 text-center shrink-0">
-                      <span class="inline-block px-2 py-1 rounded-xl text-xs font-extrabold ${
-                        setObj.done ? 'bg-emerald-500 text-slate-950' : 'bg-slate-800 text-indigo-300'
-                      }">
-                        ${sIdx + 1}세트
-                      </span>
-                    </div>
-
-                    ${!isBodyweight ? `
-                      <div class="flex items-center space-x-1 bg-slate-950 border border-slate-700 rounded-xl px-1.5 py-1">
-                        <button onclick="changeSetWeight('${courseKey}', ${idx}, ${sIdx}, -${step})" class="w-6 h-6 rounded-lg bg-slate-800 text-xs font-black text-white active:scale-90">-</button>
-                        <input type="number" step="0.5" value="${setObj.weight}"
-                          onchange="inputSetWeight('${courseKey}', ${idx}, ${sIdx}, this.value)"
-                          class="w-10 text-center bg-transparent text-xs font-black text-emerald-400 focus:outline-none">
-                        <span class="text-[10px] text-slate-400 pr-0.5">${item.unit.replace('(양쪽)', '')}</span>
-                        <button onclick="changeSetWeight('${courseKey}', ${idx}, ${sIdx}, ${step})" class="w-6 h-6 rounded-lg bg-slate-800 text-xs font-black text-white active:scale-90">+</button>
+                  <div>
+                    <div class="flex items-center justify-between gap-1.5 p-2 rounded-2xl border ${
+                      setObj.done
+                        ? 'bg-emerald-950/40 border-emerald-500/60'
+                        : 'bg-slate-900/95 border-slate-700/80'
+                    }">
+                      <div class="w-12 text-center shrink-0">
+                        <span class="inline-block px-2 py-1 rounded-xl text-xs font-extrabold ${
+                          setObj.done ? 'bg-emerald-500 text-slate-950' : 'bg-slate-800 text-indigo-300'
+                        }">
+                          ${sIdx + 1}세트
+                        </span>
                       </div>
-                    ` : `
-                      <div class="text-xs font-bold text-slate-400 px-2">맨몸 진행</div>
-                    `}
 
-                    <div class="flex items-center space-x-1 bg-slate-950 border border-slate-700 rounded-xl px-1.5 py-1">
-                      <button onclick="changeSetReps('${courseKey}', ${idx}, ${sIdx}, -1)" class="w-6 h-6 rounded-lg bg-slate-800 text-xs font-black text-white active:scale-90">-</button>
-                      <input type="number" value="${setObj.reps}"
-                        onchange="inputSetReps('${courseKey}', ${idx}, ${sIdx}, this.value)"
-                        class="w-8 text-center bg-transparent text-xs font-black text-amber-300 focus:outline-none">
-                      <span class="text-[10px] text-slate-400 pr-0.5">${item.repUnit}</span>
-                      <button onclick="changeSetReps('${courseKey}', ${idx}, ${sIdx}, 1)" class="w-6 h-6 rounded-lg bg-slate-800 text-xs font-black text-white active:scale-90">+</button>
+                      ${!isBodyweight ? `
+                        <div class="flex items-center space-x-1 bg-slate-950 border border-slate-700 rounded-xl px-1.5 py-1">
+                          <button onclick="changeSetWeight('${courseKey}', ${idx}, ${sIdx}, -${step})" class="w-6 h-6 rounded-lg bg-slate-800 text-xs font-black text-white active:scale-90">-</button>
+                          <input type="number" step="0.5" value="${setObj.weight}"
+                            onchange="inputSetWeight('${courseKey}', ${idx}, ${sIdx}, this.value)"
+                            class="w-10 text-center bg-transparent text-xs font-black text-emerald-400 focus:outline-none">
+                          <span class="text-[10px] text-slate-400 pr-0.5">${item.unit.replace('(양쪽)', '')}</span>
+                          <button onclick="changeSetWeight('${courseKey}', ${idx}, ${sIdx}, ${step})" class="w-6 h-6 rounded-lg bg-slate-800 text-xs font-black text-white active:scale-90">+</button>
+                        </div>
+                      ` : `
+                        <div class="text-xs font-bold text-slate-400 px-2">맨몸 진행</div>
+                      `}
+
+                      <div class="flex items-center space-x-1 bg-slate-950 border border-slate-700 rounded-xl px-1.5 py-1">
+                        <button onclick="changeSetReps('${courseKey}', ${idx}, ${sIdx}, -1)" class="w-6 h-6 rounded-lg bg-slate-800 text-xs font-black text-white active:scale-90">-</button>
+                        <input type="number" value="${setObj.reps}"
+                          onchange="inputSetReps('${courseKey}', ${idx}, ${sIdx}, this.value)"
+                          class="w-8 text-center bg-transparent text-xs font-black text-amber-300 focus:outline-none">
+                        <span class="text-[10px] text-slate-400 pr-0.5">${item.repUnit}</span>
+                        <button onclick="changeSetReps('${courseKey}', ${idx}, ${sIdx}, 1)" class="w-6 h-6 rounded-lg bg-slate-800 text-xs font-black text-white active:scale-90">+</button>
+                      </div>
+
+                      <button id="setBtn-${courseKey}-${idx}-${sIdx}" onclick="toggleSet('${courseKey}', ${idx}, ${sIdx})"
+                        class="px-3 py-2 rounded-xl text-xs font-extrabold border transition active:scale-95 shrink-0 ${
+                          setObj.done
+                            ? 'bg-emerald-500 text-slate-950 border-emerald-400 shadow'
+                            : 'bg-indigo-600 text-white border-indigo-500'
+                        }">
+                        ${setObj.done ? '✅ 완료' : '⬜ 완료'}
+                      </button>
                     </div>
-
-                    <button onclick="toggleSet('${courseKey}', ${idx}, ${sIdx})"
-                      class="px-3 py-2 rounded-xl text-xs font-extrabold border transition active:scale-95 shrink-0 ${
-                        setObj.done
-                          ? 'bg-emerald-500 text-slate-950 border-emerald-400 shadow'
-                          : 'bg-indigo-600 text-white border-indigo-500'
-                      }">
-                      ${setObj.done ? '✅ 완료' : '⬜ 완료'}
-                    </button>
+                    <!-- 세트 바로 밑에 뜨는 인라인 40초 휴식 타이머 바 -->
+                    <div id="inlineTimerBar-${courseKey}-${idx}-${sIdx}"></div>
                   </div>
                 `).join('')}
               </div>
@@ -1527,6 +1582,7 @@
           </div>
         `;
       }).join('');
+      updateInlineTimerUI();
     }
 
     function renderRecords() {
