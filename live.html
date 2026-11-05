@@ -8,7 +8,7 @@
   <meta name="apple-mobile-web-app-title" content="슬림76 헬스">
   <link rel="manifest" href="manifest.json">
   <link rel="apple-touch-icon" href="images/machine_mag_lat.jpg">
-  <title>슬림 76 프로젝트 - 실시간 연동 헬스 앱</title>
+  <title>슬림 76 프로젝트 - 식단·운동·워치 통합 슈퍼앱</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     body {
@@ -45,15 +45,15 @@
         </div>
         <div>
           <div id="timerTitle" class="text-sm font-bold text-white leading-tight">세트 완료 시 40초 자동 타이머</div>
-          <div id="waterReminder" class="text-xs text-sky-400 font-medium mt-0.5">💧 휴식마다 생수 두 모금 필수!</div>
+          <div id="waterReminder" class="text-xs text-sky-400 font-medium mt-0.5">💧 오늘 마신 물: <span id="topWaterText" class="font-extrabold text-white">0.0L / 2.0L</span></div>
         </div>
       </div>
       <div class="flex space-x-1.5">
-        <button onclick="startRestTimer(40)" class="px-3 py-2 rounded-xl text-xs font-bold bg-indigo-600 text-white active:scale-95 transition">
-          40초 시작
+        <button onclick="addWaterCup(1)" class="px-2.5 py-2 rounded-xl text-xs font-extrabold bg-sky-500 text-slate-950 active:scale-95 transition">
+          💧+1컵
         </button>
-        <button onclick="resetRestTimer()" class="px-2.5 py-2 rounded-xl text-xs font-semibold bg-slate-800 text-slate-300 border border-slate-700">
-          리셋
+        <button onclick="startRestTimer(40)" class="px-2.5 py-2 rounded-xl text-xs font-bold bg-indigo-600 text-white active:scale-95 transition">
+          40초
         </button>
       </div>
     </div>
@@ -61,7 +61,7 @@
 
   <div class="max-w-md mx-auto px-4 pt-4 space-y-4">
 
-    <!-- 체중 & 실시간 클라우드 연동 대시보드 카드 -->
+    <!-- 체중 & 필라이즈 스타일 칼로리 밸런스 대시보드 카드 -->
     <div class="bg-slate-800/90 border border-slate-700/80 rounded-3xl p-4 shadow-md">
       <!-- 실시간 클라우드 상태 바 -->
       <div class="flex items-center justify-between bg-slate-900/90 border border-slate-700/80 rounded-2xl px-3 py-2 mb-3">
@@ -70,7 +70,7 @@
           <span id="syncStatusText" class="text-xs font-bold text-emerald-300">AI 코치 실시간 공유 연결됨</span>
         </div>
         <button onclick="pushToCloud('수동 동기화 신호 전송', true)" class="text-xs font-bold text-emerald-300 bg-emerald-500/20 border border-emerald-500/40 px-2.5 py-1 rounded-xl active:scale-95">
-          📡 코치에게 현재 상태 전송
+          📡 코치에게 전송
         </button>
       </div>
 
@@ -79,12 +79,12 @@
           <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
             176cm · 허리 보호 · 슬림 감량
           </span>
-          <h1 class="text-lg font-extrabold text-white mt-1">🔥 슬림 76 프로젝트</h1>
+          <h1 class="text-lg font-extrabold text-white mt-1">🔥 슬림 76 슈퍼앱</h1>
         </div>
         <div class="text-right">
           <div class="text-xs text-slate-400">시작 96kg → 현재 (최종 76kg)</div>
           <div class="text-lg font-black text-emerald-400">
-            <span id="currentWeightDisplay">95.0</span>kg <span class="text-xs font-normal text-amber-300">(-1.0kg 🔥)</span>
+            <span id="currentWeightDisplay">95.0</span>kg <span class="text-xs font-normal text-amber-300" id="weightDiffBadge">(-1.0kg 🔥)</span>
           </div>
         </div>
       </div>
@@ -94,29 +94,45 @@
         <div id="weightProgressBar" class="bg-gradient-to-r from-indigo-500 to-emerald-400 h-2.5 rounded-full transition-all duration-500" style="width: 10%"></div>
       </div>
 
-      <div class="grid grid-cols-3 gap-2 text-center">
+      <!-- 필라이즈 스타일: 오늘 섭취 vs 소모 & 실시간 지방 연소량 -->
+      <div class="grid grid-cols-4 gap-1.5 text-center">
         <div class="bg-slate-900/80 border border-slate-700/60 rounded-2xl p-2">
-          <div class="text-xs text-slate-400">어제 (96.0kg)</div>
-          <div class="text-xs font-extrabold text-white">활동 673 kcal</div>
-          <div class="text-xs text-emerald-400 font-semibold">총 815 완료</div>
+          <div class="text-[11px] text-slate-400">🥗 오늘 섭취</div>
+          <div class="text-xs font-extrabold text-white mt-0.5"><span id="todayDietKcalDisplay">0</span> kcal</div>
+          <div class="text-[10px] text-slate-400">목표 1,700</div>
         </div>
         <div class="bg-slate-900/80 border border-indigo-500/40 rounded-2xl p-2">
-          <div class="text-xs text-indigo-300 font-bold">오늘 워치 누적</div>
-          <div class="text-xs font-extrabold text-white"><span id="todayWatchKcalDisplay">180</span> kcal</div>
-          <div id="todayWatchHrDisplay" class="text-[11px] text-emerald-400 font-semibold">평균 135 BPM</div>
+          <div class="text-[11px] text-indigo-300 font-bold">⌚ 워치 운동</div>
+          <div class="text-xs font-extrabold text-white mt-0.5"><span id="todayWatchKcalDisplay">180</span> kcal</div>
+          <div id="todayWatchHrDisplay" class="text-[10px] text-emerald-400 font-semibold">135 BPM</div>
         </div>
-        <div class="bg-slate-900/80 border border-slate-700/60 rounded-2xl p-2">
-          <div class="text-xs text-slate-400">오늘 세트 진행</div>
-          <div class="text-xs font-extrabold text-white"><span id="completedSetsCount">0</span> / <span id="totalSetsCount">16</span></div>
-          <div id="todayStatusBadge" class="text-xs text-amber-400 font-semibold">대기 중</div>
+        <div class="bg-slate-900/80 border border-sky-500/40 rounded-2xl p-2" onclick="switchTab('diet', true)">
+          <div class="text-[11px] text-sky-300 font-bold">💧 수분/차전자</div>
+          <div class="text-xs font-extrabold text-white mt-0.5"><span id="dashWaterDisplay">0</span> / 8컵</div>
+          <div id="dashPsylliumDisplay" class="text-[10px] text-sky-400 font-semibold">차전자피 체크</div>
+        </div>
+        <div class="bg-slate-900/80 border border-emerald-500/40 rounded-2xl p-2">
+          <div class="text-[11px] text-emerald-300 font-bold">🏋️ 오늘 세트</div>
+          <div class="text-xs font-extrabold text-white mt-0.5"><span id="completedSetsCount">0</span> / <span id="totalSetsCount">16</span></div>
+          <div id="todayStatusBadge" class="text-[10px] text-amber-400 font-semibold">대기 중</div>
+        </div>
+      </div>
+
+      <!-- 오늘 실시간 체지방 감량 추정 배너 -->
+      <div class="mt-2.5 bg-gradient-to-r from-indigo-950/90 to-emerald-950/90 border border-emerald-500/30 rounded-2xl px-3 py-2 flex items-center justify-between">
+        <div class="text-xs text-slate-200">
+          🔥 <strong>오늘 총 소모(기초+운동):</strong> <span id="totalBurnDisplay" class="text-emerald-300 font-extrabold">2,330</span> kcal
+        </div>
+        <div class="text-xs font-extrabold text-amber-300" id="fatLossEstimateBadge">
+          예상 체지방 -30g 연소 중!
         </div>
       </div>
 
       <!-- ⚡ 원터치 애플워치 운동 실시간 전송 박스 -->
       <div class="mt-3 pt-3 border-t border-slate-700/70 bg-slate-900/60 rounded-2xl p-3 border border-indigo-500/30">
         <div class="flex items-center justify-between mb-1.5">
-          <span class="text-xs font-extrabold text-white">⌚ 워치 운동 기록 → AI 코치에게 보내기</span>
-          <span class="text-[11px] text-amber-300 font-semibold">입력 즉시 실시간 공유</span>
+          <span class="text-xs font-extrabold text-white">⌚ 워치 운동 · 체중 빠른 전송</span>
+          <span class="text-[11px] text-emerald-400 font-semibold">식단·물 기록은 하단 [🥗식단·물] 탭!</span>
         </div>
         <div class="grid grid-cols-3 gap-1.5 mb-2">
           <button onclick="selectQuickType('🚴 실내자전거')" id="qtype-bike" class="py-1.5 rounded-xl text-xs font-bold bg-indigo-600 text-white border border-indigo-400">🚴 실내자전거</button>
@@ -129,21 +145,171 @@
           <input type="number" step="0.1" id="quickWeight" placeholder="체중 kg (선택)" class="px-2.5 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white font-bold">
         </div>
         <button onclick="sendQuickWatchLog()" class="w-full py-2.5 rounded-2xl text-xs font-extrabold bg-emerald-500 text-slate-950 shadow active:scale-98 transition">
-          🚀 입력한 워치 기록 AI 코치에게 실시간 전송!
+          🚀 워치 기록 AI 코치에게 실시간 전송!
         </button>
-      </div>
-
-      <div class="mt-2.5 flex justify-between items-center pt-2 border-t border-slate-700/60">
-        <span class="text-xs text-slate-400">세트별 무게·횟수 변경 및 세트 추가가 모두 자동 전송됩니다</span>
-        <button onclick="resetTodaySets()" class="text-xs font-bold text-indigo-400 underline">오늘 체크 초기화</button>
       </div>
     </div>
 
-    <!-- 코스 안내 컨테이너 -->
+    <!-- 코스 안내 컨테이너 (A코스 / B코스 / 화요일 홈트) -->
     <div id="workoutListContainer" class="space-y-4"></div>
+
+    <!-- 🥗 필라이즈 스타일: 식단 · 탄단지 · 수분 · 차전자피 탭 컨테이너 -->
+    <div id="dietContainer" class="hidden space-y-4">
+
+      <!-- 1. 수분 2L (8컵) & 차전자피 스틱 체크 카드 -->
+      <div class="bg-slate-800 border border-sky-500/40 rounded-3xl p-4 space-y-3 shadow-md">
+        <div class="flex items-center justify-between">
+          <div>
+            <h2 class="text-base font-extrabold text-white">💧 수분 2.0L & 차전자피 체크</h2>
+            <p class="text-xs text-sky-300 mt-0.5">소변 농축 방지 & 체지방 분해를 위해 컵을 터치하세요!</p>
+          </div>
+          <span id="waterVolumeBadge" class="px-3 py-1 rounded-full text-xs font-black bg-sky-500/20 text-sky-300 border border-sky-500/40">
+            0.0L / 2.0L
+          </span>
+        </div>
+
+        <!-- 물컵 8개 그리드 -->
+        <div id="waterCupsGrid" class="grid grid-cols-8 gap-1.5 pt-1"></div>
+
+        <!-- 차전자피 환 스틱 복용 체크 -->
+        <div class="pt-2 border-t border-slate-700/70">
+          <div class="text-xs font-bold text-slate-300 mb-2">🌾 황금구렁이 차전자피 환 스틱 (식전 20~30분 + 물 300ml)</div>
+          <div class="grid grid-cols-2 gap-2">
+            <button onclick="togglePsyllium('lunch')" id="btnPsylliumLunch" class="py-2.5 px-3 rounded-2xl text-xs font-extrabold border transition flex items-center justify-center space-x-1.5 bg-slate-900 text-slate-300 border-slate-700">
+              <span>⬜</span>
+              <span>점심 식전 1포 완료</span>
+            </button>
+            <button onclick="togglePsyllium('dinner')" id="btnPsylliumDinner" class="py-2.5 px-3 rounded-2xl text-xs font-extrabold border transition flex items-center justify-center space-x-1.5 bg-slate-900 text-slate-300 border-slate-700">
+              <span>⬜</span>
+              <span>저녁 식전 1포 완료</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. 필라이즈 스타일 오늘의 탄·단·지 & 식단 점수 카드 -->
+      <div class="bg-slate-800 border border-emerald-500/40 rounded-3xl p-4 space-y-3 shadow-md">
+        <div class="flex items-center justify-between">
+          <div>
+            <span class="text-xs font-bold text-emerald-400">필라이즈 AI 영양 분석</span>
+            <h2 class="text-base font-extrabold text-white">🥗 오늘의 탄·단·지 & 칼로리 밸런스</h2>
+          </div>
+          <div class="text-right">
+            <div class="text-xs text-slate-400">섭취 / 목표 칼로리</div>
+            <div class="text-sm font-black text-white"><span id="dietTotalKcal" class="text-emerald-400">0</span> / 1,700 kcal</div>
+          </div>
+        </div>
+
+        <!-- 칼로리 바 -->
+        <div class="w-full bg-slate-900 rounded-full h-3 overflow-hidden border border-slate-700">
+          <div id="dietKcalBar" class="bg-gradient-to-r from-emerald-400 to-sky-400 h-3 rounded-full transition-all duration-300" style="width: 0%"></div>
+        </div>
+
+        <!-- 탄·단·지 3대 영양소 프로그레스 -->
+        <div class="grid grid-cols-3 gap-2 pt-1">
+          <div class="bg-slate-900/90 border border-slate-700 rounded-2xl p-2.5 text-center">
+            <div class="text-xs font-bold text-amber-300">🍚 순탄수화물</div>
+            <div class="text-sm font-black text-white mt-0.5"><span id="macroCarb">0</span>g <span class="text-[11px] font-normal text-slate-400">/ 150g</span></div>
+            <div class="w-full bg-slate-950 rounded-full h-1.5 mt-1.5 overflow-hidden">
+              <div id="barCarb" class="bg-amber-400 h-1.5 rounded-full" style="width:0%"></div>
+            </div>
+          </div>
+          <div class="bg-slate-900/90 border border-emerald-500/40 rounded-2xl p-2.5 text-center">
+            <div class="text-xs font-bold text-emerald-300">🥩 단백질 (핵심)</div>
+            <div class="text-sm font-black text-white mt-0.5"><span id="macroProtein">0</span>g <span class="text-[11px] font-normal text-slate-400">/ 120g</span></div>
+            <div class="w-full bg-slate-950 rounded-full h-1.5 mt-1.5 overflow-hidden">
+              <div id="barProtein" class="bg-emerald-400 h-1.5 rounded-full" style="width:0%"></div>
+            </div>
+          </div>
+          <div class="bg-slate-900/90 border border-slate-700 rounded-2xl p-2.5 text-center">
+            <div class="text-xs font-bold text-rose-300">🥑 지방</div>
+            <div class="text-sm font-black text-white mt-0.5"><span id="macroFat">0</span>g <span class="text-[11px] font-normal text-slate-400">/ 55g</span></div>
+            <div class="w-full bg-slate-950 rounded-full h-1.5 mt-1.5 overflow-hidden">
+              <div id="barFat" class="bg-rose-400 h-1.5 rounded-full" style="width:0%"></div>
+            </div>
+          </div>
+        </div>
+
+        <div id="dietFeedbackBox" class="text-xs text-slate-200 bg-slate-900/90 rounded-2xl p-3 border border-slate-700">
+          💡 아래 <strong>원터치 자주 먹는 메뉴 버튼</strong>을 누르면 탄·단·지와 칼로리가 자동 계산되어 AI 코치에게 실시간 전송됩니다!
+        </div>
+      </div>
+
+      <!-- 3. 1초 원터치 식단 프리셋 버튼 -->
+      <div class="bg-slate-800 border border-slate-700 rounded-3xl p-4 space-y-3">
+        <div class="flex items-center justify-between">
+          <h3 class="text-sm font-extrabold text-white">⚡ 자주 먹는 식단 1초 원터치 추가</h3>
+          <span class="text-[11px] text-indigo-300 font-semibold">터치 즉시 기록 & 전송</span>
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <button onclick="addPresetMeal('🥗 포케 (연어/닭가슴살·밥반공기)', 520, 45, 38, 18)" class="p-2.5 rounded-2xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-left active:scale-95 transition">
+            <div class="text-xs font-extrabold text-white">🥗 포케 (밥 절반)</div>
+            <div class="text-[11px] text-emerald-400 font-bold">520 kcal · 단백질 38g</div>
+          </button>
+          <button onclick="addPresetMeal('🍗 굽네 오리지널/고추바사삭 반마리', 480, 8, 52, 24)" class="p-2.5 rounded-2xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-left active:scale-95 transition">
+            <div class="text-xs font-extrabold text-white">🍗 굽네치킨 반마리</div>
+            <div class="text-[11px] text-emerald-400 font-bold">480 kcal · 단백질 52g</div>
+          </button>
+          <button onclick="addPresetMeal('🥩 닭가슴살 1팩 (100g)', 110, 2, 23, 1)" class="p-2.5 rounded-2xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-left active:scale-95 transition">
+            <div class="text-xs font-extrabold text-white">🥩 닭가슴살 1팩</div>
+            <div class="text-[11px] text-emerald-400 font-bold">110 kcal · 단백질 23g</div>
+          </button>
+          <button onclick="addPresetMeal('🥚 삶은 계란 2개', 150, 1, 13, 10)" class="p-2.5 rounded-2xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-left active:scale-95 transition">
+            <div class="text-xs font-extrabold text-white">🥚 삶은 계란 2개</div>
+            <div class="text-[11px] text-emerald-400 font-bold">150 kcal · 단백질 13g</div>
+          </button>
+          <button onclick="addPresetMeal('🥛 단백질 쉐이크 / 고단백 두유', 160, 8, 22, 4)" class="p-2.5 rounded-2xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-left active:scale-95 transition">
+            <div class="text-xs font-extrabold text-white">🥛 단백질 음료/두유</div>
+            <div class="text-[11px] text-emerald-400 font-bold">160 kcal · 단백질 22g</div>
+          </button>
+          <button onclick="addPresetMeal('🍚 일반 한식 (건더기 위주·밥 1/2)', 580, 62, 28, 22)" class="p-2.5 rounded-2xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-left active:scale-95 transition">
+            <div class="text-xs font-extrabold text-white">🍚 한식 (밥 반공기)</div>
+            <div class="text-[11px] text-amber-300 font-bold">580 kcal · 단백질 28g</div>
+          </button>
+          <button onclick="addPresetMeal('🥩 삼겹살/목살 구이 1인분 + 쌈채소', 620, 6, 34, 48)" class="p-2.5 rounded-2xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-left active:scale-95 transition">
+            <div class="text-xs font-extrabold text-white">🥩 고기구이 + 쌈채소</div>
+            <div class="text-[11px] text-amber-300 font-bold">620 kcal · 단백질 34g</div>
+          </button>
+          <button onclick="addPresetMeal('☕ 아이스 아메리카노', 5, 1, 0, 0)" class="p-2.5 rounded-2xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-left active:scale-95 transition">
+            <div class="text-xs font-extrabold text-white">☕ 아메리카노</div>
+            <div class="text-[11px] text-sky-300 font-bold">5 kcal · 수분/대사 촉진</div>
+          </button>
+        </div>
+
+        <!-- 직접 음식 입력 -->
+        <div class="pt-3 border-t border-slate-700/70 space-y-2">
+          <div class="text-xs font-bold text-slate-300">✍️ 직접 먹은 메뉴 적어 보내기 (칼로리 모르면 비워도 OK!)</div>
+          <div class="grid grid-cols-3 gap-1.5">
+            <input type="text" id="customMealName" placeholder="음식명 (예: 서브웨이)" class="col-span-2 px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white font-bold">
+            <input type="number" id="customMealKcal" placeholder="kcal (선택)" class="px-2.5 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white font-bold">
+          </div>
+          <button onclick="addCustomMeal()" class="w-full py-2.5 rounded-2xl text-xs font-extrabold bg-indigo-600 text-white active:scale-98 transition">
+            + 내 식단 기록 & AI 코치에게 실시간 공유
+          </button>
+        </div>
+      </div>
+
+      <!-- 4. 오늘 먹은 식단 타임라인 -->
+      <div class="bg-slate-800 border border-slate-700 rounded-3xl p-4">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-sm font-extrabold text-white">📋 오늘 기록한 식단 목록</h3>
+          <button onclick="clearTodayDiet()" class="text-xs text-rose-400 underline font-semibold">오늘 식단/물 초기화</button>
+        </div>
+        <div id="todayMealsList" class="space-y-2"></div>
+      </div>
+    </div>
 
     <!-- 워치 & 체중 기록장 탭 컨테이너 -->
     <div id="recordsContainer" class="hidden space-y-4">
+      <!-- 체중 변화 미니 그래프 카드 -->
+      <div class="bg-slate-800 border border-emerald-500/40 rounded-3xl p-4 space-y-3">
+        <div class="flex items-center justify-between">
+          <h2 class="text-base font-extrabold text-white">📉 체중 감량 추이 (96kg → 76kg)</h2>
+          <span class="text-xs font-extrabold text-emerald-400">현재 -1.0kg 달성 🔥</span>
+        </div>
+        <div id="weightTrendChart" class="grid grid-cols-4 gap-2 pt-2 items-end h-28 bg-slate-900/90 rounded-2xl p-3 border border-slate-700"></div>
+      </div>
+
       <div class="bg-slate-800 border border-slate-700 rounded-3xl p-4 space-y-3">
         <h2 class="text-base font-extrabold text-white">⌚ 상세 운동 & 체중 기록 추가</h2>
         <div class="grid grid-cols-2 gap-2.5">
@@ -201,20 +367,23 @@
     </div>
   </div>
 
-  <!-- 하단 고정 네비게이션 탭 바 (앱 스타일) -->
-  <div class="fixed bottom-0 inset-x-0 z-40 bg-slate-900/95 backdrop-blur-md border-t border-slate-800 px-3 py-2" style="padding-bottom: calc(env(safe-area-inset-bottom) + 8px);">
-    <div class="max-w-md mx-auto grid grid-cols-4 gap-1.5">
-      <button onclick="switchTab('courseA', true)" id="tab-courseA" class="py-2 px-1 rounded-2xl text-xs font-extrabold bg-indigo-600 text-white transition">
-        🔥 A코스(상체)<br><span class="font-normal opacity-90">월·목</span>
+  <!-- 하단 고정 5개 네비게이션 탭 바 (필라이즈 식단·물 탭 포함) -->
+  <div class="fixed bottom-0 inset-x-0 z-40 bg-slate-900/95 backdrop-blur-md border-t border-slate-800 px-2 py-2" style="padding-bottom: calc(env(safe-area-inset-bottom) + 8px);">
+    <div class="max-w-md mx-auto grid grid-cols-5 gap-1">
+      <button onclick="switchTab('courseA', true)" id="tab-courseA" class="py-2 px-0.5 rounded-2xl text-[11px] font-extrabold bg-indigo-600 text-white transition">
+        🔥 A상체<br><span class="font-normal opacity-90 text-[10px]">월·목</span>
       </button>
-      <button onclick="switchTab('courseB', true)" id="tab-courseB" class="py-2 px-1 rounded-2xl text-xs font-bold text-slate-400 transition">
-        ⚡ B코스(하체)<br><span class="font-normal opacity-80">수·금</span>
+      <button onclick="switchTab('courseB', true)" id="tab-courseB" class="py-2 px-0.5 rounded-2xl text-[11px] font-bold text-slate-400 transition">
+        ⚡ B하체<br><span class="font-normal opacity-80 text-[10px]">수·금</span>
       </button>
-      <button onclick="switchTab('courseHome', true)" id="tab-courseHome" class="py-2 px-1 rounded-2xl text-xs font-bold text-slate-400 transition">
-        🚴 화요일 홈트<br><span class="font-normal opacity-80">점검날</span>
+      <button onclick="switchTab('diet', true)" id="tab-diet" class="py-2 px-0.5 rounded-2xl text-[11px] font-bold text-slate-400 transition">
+        🥗 식단·물<br><span class="font-normal opacity-80 text-[10px]">필라이즈</span>
       </button>
-      <button onclick="switchTab('records', true)" id="tab-records" class="py-2 px-1 rounded-2xl text-xs font-bold text-slate-400 transition">
-        ⌚ 워치·체중<br><span class="font-normal opacity-80">기록/패스기구</span>
+      <button onclick="switchTab('courseHome', true)" id="tab-courseHome" class="py-2 px-0.5 rounded-2xl text-[11px] font-bold text-slate-400 transition">
+        🚴 홈트<br><span class="font-normal opacity-80 text-[10px]">화요일</span>
+      </button>
+      <button onclick="switchTab('records', true)" id="tab-records" class="py-2 px-0.5 rounded-2xl text-[11px] font-bold text-slate-400 transition">
+        📈 기록장<br><span class="font-normal opacity-80 text-[10px]">체중·워치</span>
       </button>
     </div>
   </div>
@@ -239,10 +408,14 @@
 
     const defaultData = {
       updatedAt: Date.now(),
-      lastAction: '세트별 개별 무게/횟수 조절 업그레이드',
+      lastAction: '필라이즈 식단·수분·탄단지 통합 업그레이드',
       currentWeight: 95.0,
       todayWatchKcal: 180,
       todayWatchHr: '평균 135 BPM',
+      waterCups: 1,
+      psylliumLunch: false,
+      psylliumDinner: false,
+      todayMeals: [],
       activeTab: 'courseA',
       courses: {
         courseA: [
@@ -492,7 +665,6 @@
       ]
     };
 
-    // 구버전 배열(boolean) 데이터를 세트별 객체({weight, reps, done})로 자동 변환
     function normalizeState(raw) {
       const merged = Object.assign({}, defaultData, raw || {});
       if (!merged.courses) merged.courses = defaultData.courses;
@@ -508,7 +680,6 @@
           const defaultReps = item.defaultReps || defItem.defaultReps || 15;
           const weightStep = item.weightStep || defItem.weightStep || 5;
           const baseWeight = item.weight !== undefined ? item.weight : (defItem.weight || 20);
-
           const isCardio = Boolean(item.isCardio || defItem.isCardio || item.id === 'a6' || item.id === 'b5');
           const baseIncline = item.incline !== undefined ? item.incline : (defItem.incline || 5);
           const baseSpeed = item.speed !== undefined ? item.speed : (defItem.speed || 4.8);
@@ -551,6 +722,8 @@
       if (!merged.currentWeight || merged.currentWeight === 94) merged.currentWeight = 95.0;
       if (!merged.todayWatchKcal) merged.todayWatchKcal = 180;
       if (!merged.todayWatchHr) merged.todayWatchHr = '평균 135 BPM';
+      if (merged.waterCups === undefined) merged.waterCups = 1;
+      if (!Array.isArray(merged.todayMeals)) merged.todayMeals = [];
       return merged;
     }
 
@@ -584,8 +757,18 @@
       }
     }
 
+    function getDietTotals() {
+      return (state.todayMeals || []).reduce((acc, m) => {
+        acc.kcal += (m.kcal || 0);
+        acc.carb += (m.carb || 0);
+        acc.protein += (m.protein || 0);
+        acc.fat += (m.fat || 0);
+        return acc;
+      }, { kcal: 0, carb: 0, protein: 0, fat: 0 });
+    }
+
     function buildSummary(actionLabel) {
-      const courseKey = state.activeTab === 'records' ? 'courseA' : state.activeTab;
+      const courseKey = (state.activeTab === 'records' || state.activeTab === 'diet') ? 'courseA' : state.activeTab;
       const doneItems = state.courses[courseKey].map(item => ({
         name: item.name.split(' ')[0] + ' ' + (item.name.split(' ')[1] || ''),
         doneSets: item.sets.filter(s => s.done).length + '/' + item.sets.length,
@@ -595,6 +778,7 @@
             : `${i + 1}세트:${s.weight}${item.unit}×${s.reps}${item.repUnit}(${s.done ? '완료' : '대기'})`
         )
       }));
+      const diet = getDietTotals();
       return {
         timestamp: new Date().toLocaleString('ko-KR'),
         updatedAt: state.updatedAt,
@@ -602,6 +786,13 @@
         currentWeight: state.currentWeight,
         todayWatchKcal: state.todayWatchKcal || 0,
         todayWatchHr: state.todayWatchHr || '',
+        waterLiters: ((state.waterCups || 0) * 0.25).toFixed(2) + 'L (' + (state.waterCups || 0) + '/8컵)',
+        psyllium: { lunch: Boolean(state.psylliumLunch), dinner: Boolean(state.psylliumDinner) },
+        dietSummary: {
+          totalKcal: diet.kcal,
+          macros: `탄${diet.carb}g / 단${diet.protein}g / 지${diet.fat}g`,
+          meals: (state.todayMeals || []).map(m => `${m.name}(${m.kcal}kcal)`)
+        },
         activeCourse: courseKey,
         progress: doneItems,
         latestRecord: state.watchRecords[0] || null
@@ -643,6 +834,174 @@
       }
     }
 
+    // 💧 수분 섭취 컵 조절
+    function setWaterCups(count) {
+      state.waterCups = Math.max(0, Math.min(12, count));
+      renderDietTab();
+      saveState(`💧 물 섭취: ${state.waterCups}컵 (${(state.waterCups * 0.25).toFixed(2)}L)`, true);
+    }
+
+    function addWaterCup(delta) {
+      setWaterCups((state.waterCups || 0) + delta);
+    }
+
+    // 🌾 차전자피 복용 체크
+    function togglePsyllium(mealTime) {
+      if (mealTime === 'lunch') {
+        state.psylliumLunch = !state.psylliumLunch;
+        if (state.psylliumLunch) state.waterCups = Math.min(12, (state.waterCups || 0) + 1);
+        renderDietTab();
+        saveState(`🌾 점심 식전 차전자피 1포 ${state.psylliumLunch ? '복용 완료 (+물 1컵)' : '취소'}`, true);
+      } else {
+        state.psylliumDinner = !state.psylliumDinner;
+        if (state.psylliumDinner) state.waterCups = Math.min(12, (state.waterCups || 0) + 1);
+        renderDietTab();
+        saveState(`🌾 저녁 식전 차전자피 1포 ${state.psylliumDinner ? '복용 완료 (+물 1컵)' : '취소'}`, true);
+      }
+    }
+
+    // 🥗 프리셋 식단 추가
+    function addPresetMeal(name, kcal, carb, protein, fat) {
+      const timeStr = new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
+      state.todayMeals.unshift({
+        id: Date.now(),
+        time: timeStr,
+        name,
+        kcal,
+        carb,
+        protein,
+        fat
+      });
+      renderDietTab();
+      saveState(`식단 기록: ${name} (${kcal}kcal)`, true);
+    }
+
+    // ✍️ 직접 입력 식단 추가
+    function addCustomMeal() {
+      const nameEl = document.getElementById('customMealName');
+      const kcalEl = document.getElementById('customMealKcal');
+      const name = nameEl.value.trim();
+      if (!name) {
+        showToast('⚠️ 드신 음식 이름을 적어주세요!');
+        nameEl.focus();
+        return;
+      }
+      const kcal = parseInt(kcalEl.value, 10) || 450;
+      const estProtein = Math.round((kcal * 0.25) / 4);
+      const estCarb = Math.round((kcal * 0.45) / 4);
+      const estFat = Math.round((kcal * 0.30) / 9);
+      const timeStr = new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
+
+      state.todayMeals.unshift({
+        id: Date.now(),
+        time: timeStr,
+        name,
+        kcal,
+        carb: estCarb,
+        protein: estProtein,
+        fat: estFat
+      });
+      nameEl.value = '';
+      kcalEl.value = '';
+      renderDietTab();
+      saveState(`직접 식단 기록: ${name} (${kcal}kcal)`, true);
+    }
+
+    function removeMeal(id) {
+      state.todayMeals = (state.todayMeals || []).filter(m => m.id !== id);
+      renderDietTab();
+      saveState('식단 항목 삭제', true);
+    }
+
+    function clearTodayDiet() {
+      state.todayMeals = [];
+      state.waterCups = 0;
+      state.psylliumLunch = false;
+      state.psylliumDinner = false;
+      renderDietTab();
+      saveState('오늘 식단 및 수분 기록 초기화', true);
+    }
+
+    function renderDietTab() {
+      const cups = state.waterCups || 0;
+      const liters = (cups * 0.25).toFixed(2);
+      document.getElementById('waterVolumeBadge').textContent = `${liters}L / 2.0L (${cups}컵)`;
+
+      const cupsGrid = document.getElementById('waterCupsGrid');
+      if (cupsGrid) {
+        cupsGrid.innerHTML = Array.from({ length: 8 }, (_, i) => {
+          const filled = i < cups;
+          return `
+            <button onclick="setWaterCups(${i + 1 === cups ? i : i + 1})"
+              class="py-2.5 rounded-2xl border text-center transition active:scale-90 ${
+                filled
+                  ? 'bg-sky-500 text-slate-950 border-sky-300 font-black shadow'
+                  : 'bg-slate-900 text-slate-500 border-slate-700 font-bold'
+              }">
+              <div class="text-sm">${filled ? '💧' : '🥛'}</div>
+              <div class="text-[10px] mt-0.5">${(i + 1) * 250}</div>
+            </button>
+          `;
+        }).join('');
+      }
+
+      const btnLunch = document.getElementById('btnPsylliumLunch');
+      const btnDinner = document.getElementById('btnPsylliumDinner');
+      if (btnLunch) {
+        btnLunch.className = `py-2.5 px-3 rounded-2xl text-xs font-extrabold border transition flex items-center justify-center space-x-1.5 ${
+          state.psylliumLunch
+            ? 'bg-emerald-500 text-slate-950 border-emerald-400 shadow'
+            : 'bg-slate-900 text-slate-300 border-slate-700'
+        }`;
+        btnLunch.innerHTML = `<span>${state.psylliumLunch ? '✅' : '⬜'}</span><span>점심 식전 1포 완료</span>`;
+      }
+      if (btnDinner) {
+        btnDinner.className = `py-2.5 px-3 rounded-2xl text-xs font-extrabold border transition flex items-center justify-center space-x-1.5 ${
+          state.psylliumDinner
+            ? 'bg-emerald-500 text-slate-950 border-emerald-400 shadow'
+            : 'bg-slate-900 text-slate-300 border-slate-700'
+        }`;
+        btnDinner.innerHTML = `<span>${state.psylliumDinner ? '✅' : '⬜'}</span><span>저녁 식전 1포 완료</span>`;
+      }
+
+      const totals = getDietTotals();
+      document.getElementById('dietTotalKcal').textContent = totals.kcal.toLocaleString();
+      document.getElementById('macroCarb').textContent = totals.carb;
+      document.getElementById('macroProtein').textContent = totals.protein;
+      document.getElementById('macroFat').textContent = totals.fat;
+
+      document.getElementById('dietKcalBar').style.width = Math.min(100, (totals.kcal / 1700) * 100) + '%';
+      document.getElementById('barCarb').style.width = Math.min(100, (totals.carb / 150) * 100) + '%';
+      document.getElementById('barProtein').style.width = Math.min(100, (totals.protein / 120) * 100) + '%';
+      document.getElementById('barFat').style.width = Math.min(100, (totals.fat / 55) * 100) + '%';
+
+      const fb = document.getElementById('dietFeedbackBox');
+      if (totals.kcal === 0) {
+        fb.innerHTML = '💡 오늘 드신 점심/저녁 메뉴를 위 버튼에서 터치해 보세요! <strong>탄·단·지 비율과 오늘 빠질 체지방 무게(g)</strong>가 실시간 계산됩니다.';
+      } else if (totals.protein >= 80 && totals.kcal <= 1800) {
+        fb.innerHTML = `🏆 <strong>필라이즈 식단 점수 98점!</strong> 단백질(${totals.protein}g)이 충분하고 칼로리가 안정적이라 근손실 없이 체지방만 쏙 빠지는 황금 비율입니다!`;
+      } else if (totals.protein < 60) {
+        fb.innerHTML = `💪 현재 단백질이 <strong>${totals.protein}g</strong>입니다. 저녁이나 간식으로 <strong>닭가슴살·계란·굽네치킨·포케</strong>를 추가해 단백질 100g 이상을 채워주세요!`;
+      } else {
+        fb.innerHTML = `🔥 오늘 총 <strong>${totals.kcal} kcal</strong> 섭취 완료! 물 2L와 오르막 걷기만 채우시면 오늘도 감량 100% 성공입니다!`;
+      }
+
+      const listEl = document.getElementById('todayMealsList');
+      if (!state.todayMeals || state.todayMeals.length === 0) {
+        listEl.innerHTML = `<div class="text-xs text-slate-400 text-center py-4">아직 오늘 기록된 식단이 없습니다. 위 메뉴 버튼을 터치해 보세요!</div>`;
+      } else {
+        listEl.innerHTML = state.todayMeals.map(m => `
+          <div class="flex items-center justify-between bg-slate-900 border border-slate-700 rounded-2xl p-3">
+            <div>
+              <div class="text-xs font-extrabold text-white">${m.name} <span class="text-[10px] font-normal text-slate-400">(${m.time})</span></div>
+              <div class="text-[11px] text-emerald-400 font-bold mt-0.5">${m.kcal} kcal · 탄 ${m.carb}g / 단 ${m.protein}g / 지 ${m.fat}g</div>
+            </div>
+            <button onclick="removeMeal(${m.id})" class="text-xs text-slate-400 hover:text-rose-400 px-2 py-1">✕</button>
+          </div>
+        `).join('');
+      }
+    }
+
     function selectQuickType(typeLabel) {
       selectedQuickWorkout = typeLabel;
       const map = {
@@ -678,7 +1037,7 @@
         state.todayWatchKcal = (state.todayWatchKcal || 0) + kcal;
       }
       if (bpm) {
-        state.todayWatchHr = `평균 ${bpm} BPM`;
+        state.todayWatchHr = `${bpm} BPM`;
       }
 
       const memoParts = [selectedQuickWorkout];
@@ -709,15 +1068,37 @@
 
     function updateHeaderStats() {
       document.getElementById('currentWeightDisplay').textContent = Number(state.currentWeight).toFixed(1);
+      const diffFromStart = (state.currentWeight - 96.0).toFixed(1);
+      document.getElementById('weightDiffBadge').textContent = `(${diffFromStart}kg 🔥)`;
+
       document.getElementById('todayWatchKcalDisplay').textContent = state.todayWatchKcal || 0;
-      document.getElementById('todayWatchHrDisplay').textContent = state.todayWatchHr || '👇 아래에서 전송';
+      document.getElementById('todayWatchHrDisplay').textContent = state.todayWatchHr || '워치 기록';
+
+      const diet = getDietTotals();
+      document.getElementById('todayDietKcalDisplay').textContent = diet.kcal.toLocaleString();
+
+      const cups = state.waterCups || 0;
+      document.getElementById('dashWaterDisplay').textContent = cups;
+      document.getElementById('topWaterText').textContent = `${(cups * 0.25).toFixed(2)}L / 2.0L`;
+      const psyCount = (state.psylliumLunch ? 1 : 0) + (state.psylliumDinner ? 1 : 0);
+      document.getElementById('dashPsylliumDisplay').textContent = `차전자피 ${psyCount}/2포`;
+
+      // 기초+일상대사량(2,150kcal) + 워치 운동 칼로리 vs 섭취 칼로리
+      const totalBurn = 2150 + (state.todayWatchKcal || 0);
+      document.getElementById('totalBurnDisplay').textContent = totalBurn.toLocaleString();
+      const deficit = Math.max(0, totalBurn - (diet.kcal > 0 ? diet.kcal : 1600));
+      const estGrams = Math.round(deficit / 7.7);
+      document.getElementById('fatLossEstimateBadge').textContent =
+        diet.kcal > 0
+          ? `오늘 체지방 -${estGrams}g 감량 페이스!`
+          : `목표 식단 시 오늘 지방 -${estGrams}g 연소!`;
 
       const totalToLose = 96.0 - 76.0;
       const lostSoFar = Math.max(0, 96.0 - state.currentWeight);
       const pct = Math.min(100, Math.max(8, (lostSoFar / totalToLose) * 100));
       document.getElementById('weightProgressBar').style.width = pct + '%';
 
-      const currentKey = state.activeTab === 'records' ? 'courseA' : state.activeTab;
+      const currentKey = (state.activeTab === 'records' || state.activeTab === 'diet') ? 'courseA' : state.activeTab;
       const currentList = state.courses[currentKey];
       let totalSets = 0;
       let doneSets = 0;
@@ -731,13 +1112,13 @@
       const badge = document.getElementById('todayStatusBadge');
       if (doneSets === 0) {
         badge.textContent = '운동 전';
-        badge.className = 'text-xs text-slate-400 font-semibold';
+        badge.className = 'text-[10px] text-slate-400 font-semibold';
       } else if (doneSets < totalSets) {
         badge.textContent = '🔥 진행 중';
-        badge.className = 'text-xs text-amber-400 font-extrabold';
+        badge.className = 'text-[10px] text-amber-400 font-extrabold';
       } else {
         badge.textContent = '🎉 올클리어!';
-        badge.className = 'text-xs text-emerald-400 font-extrabold';
+        badge.className = 'text-[10px] text-emerald-400 font-extrabold';
       }
     }
 
@@ -757,22 +1138,28 @@
 
     function switchTab(tabName, shouldSync = false) {
       state.activeTab = tabName;
-      ['courseA', 'courseB', 'courseHome', 'records'].forEach(t => {
+      ['courseA', 'courseB', 'diet', 'courseHome', 'records'].forEach(t => {
         const btn = document.getElementById('tab-' + t);
+        if (!btn) return;
         if (t === tabName) {
-          btn.className = 'py-2 px-1 rounded-2xl text-xs font-extrabold bg-indigo-600 text-white transition shadow';
+          btn.className = 'py-2 px-0.5 rounded-2xl text-[11px] font-extrabold bg-indigo-600 text-white transition shadow';
         } else {
-          btn.className = 'py-2 px-1 rounded-2xl text-xs font-bold text-slate-400 transition';
+          btn.className = 'py-2 px-0.5 rounded-2xl text-[11px] font-bold text-slate-400 transition';
         }
       });
 
+      document.getElementById('workoutListContainer').classList.add('hidden');
+      document.getElementById('dietContainer').classList.add('hidden');
+      document.getElementById('recordsContainer').classList.add('hidden');
+
       if (tabName === 'records') {
-        document.getElementById('workoutListContainer').classList.add('hidden');
         document.getElementById('recordsContainer').classList.remove('hidden');
         renderRecords();
+      } else if (tabName === 'diet') {
+        document.getElementById('dietContainer').classList.remove('hidden');
+        renderDietTab();
       } else {
         document.getElementById('workoutListContainer').classList.remove('hidden');
-        document.getElementById('recordsContainer').classList.add('hidden');
         renderWorkoutList();
       }
       localStorage.setItem('slim76MobileAppV1', JSON.stringify(state));
@@ -826,7 +1213,6 @@
       saveState(`${item.name.split(' ')[0]} ${setIdx + 1}세트 무게: ${nextWeight}${item.unit}`, true);
     }
 
-    // 세트별 개별 무게 직접 입력
     function inputSetWeight(courseKey, idx, setIdx, val) {
       const item = state.courses[courseKey][idx];
       const num = parseFloat(val);
@@ -836,7 +1222,6 @@
       }
     }
 
-    // 세트별 개별 횟수/시간 변경 (+/- 버튼)
     function changeSetReps(courseKey, idx, setIdx, delta) {
       const item = state.courses[courseKey][idx];
       const setObj = item.sets[setIdx];
@@ -846,7 +1231,6 @@
       saveState(`${item.name.split(' ')[0]} ${setIdx + 1}세트 횟수: ${nextReps}${item.repUnit}`, true);
     }
 
-    // 세트별 개별 횟수 직접 입력
     function inputSetReps(courseKey, idx, setIdx, val) {
       const item = state.courses[courseKey][idx];
       const num = parseInt(val, 10);
@@ -856,7 +1240,6 @@
       }
     }
 
-    // 세트 추가 (+ 버튼)
     function addSet(courseKey, idx) {
       const item = state.courses[courseKey][idx];
       if (item.isCardio) {
@@ -881,7 +1264,6 @@
       saveState(`${item.name.split(' ')[0]} ${item.sets.length}세트 추가 (${lastSet.weight}${item.unit}×${lastSet.reps}${item.repUnit})`, true);
     }
 
-    // 마지막 세트 삭제 (- 버튼)
     function removeSet(courseKey, idx) {
       const item = state.courses[courseKey][idx];
       if (item.sets.length <= 1) {
@@ -893,7 +1275,6 @@
       saveState(`${item.name.split(' ')[0]} 세트/구간 축소 (총 ${item.sets.length}개)`, true);
     }
 
-    // 세트 완료/취소 토글
     function toggleSet(courseKey, idx, setIdx) {
       const item = state.courses[courseKey][idx];
       const setObj = item.sets[setIdx];
@@ -916,7 +1297,7 @@
     }
 
     function resetTodaySets() {
-      const courseKey = state.activeTab === 'records' ? 'courseA' : state.activeTab;
+      const courseKey = (state.activeTab === 'records' || state.activeTab === 'diet') ? 'courseA' : state.activeTab;
       state.courses[courseKey].forEach(item => {
         item.sets.forEach(s => { s.done = false; });
       });
@@ -929,12 +1310,10 @@
       remainingSeconds = seconds;
       const display = document.getElementById('timerDisplay');
       const title = document.getElementById('timerTitle');
-      const water = document.getElementById('waterReminder');
 
       display.textContent = remainingSeconds + '초';
       display.className = 'w-12 h-12 rounded-2xl bg-amber-500 text-slate-950 flex items-center justify-center text-base font-black shadow-inner';
-      title.textContent = '⏱️ 휴식 중! 지금 물 두 모금 마시세요!';
-      water.textContent = '💧 소변 농축 방지 & 체지방 가수분해 시간';
+      title.textContent = '⏱️ 휴식 중! 상단 [💧+1컵] 누르고 물 두 모금!';
 
       timerInterval = setInterval(() => {
         remainingSeconds--;
@@ -962,6 +1341,7 @@
       const container = document.getElementById('workoutListContainer');
       const courseKey = state.activeTab;
       const list = state.courses[courseKey];
+      if (!list) return;
 
       container.innerHTML = list.map((item, idx) => {
         const allDone = item.sets.length > 0 && item.sets.every(s => s.done);
@@ -978,7 +1358,7 @@
                   ${item.order}
                 </span>
                 <span class="absolute top-2.5 right-2.5 px-2.5 py-1 rounded-full text-xs font-extrabold ${allDone ? 'bg-emerald-500 text-slate-950' : 'bg-slate-950/80 text-emerald-400'} border border-slate-700">
-                  ${doneCount} / ${item.sets.length} 세트 완료
+                  ${doneCount} / ${item.sets.length} 완료
                 </span>
                 <span class="absolute bottom-2 right-2 px-2 py-0.5 rounded-lg text-xs bg-black/70 text-slate-200">
                   🔍 사진 터치 시 확대
@@ -997,7 +1377,6 @@
                 💡 <strong>자세 팁:</strong> ${item.tip}
               </div>
 
-              <!-- 세트별 개별 무게 · 횟수 · 완료 컨트롤 리스트 -->
               <div class="space-y-2">
                 ${item.sets.map((setObj, sIdx) => item.isCardio ? `
                   <div class="p-2.5 rounded-2xl border space-y-2 ${
@@ -1022,7 +1401,6 @@
                     </div>
 
                     <div class="grid grid-cols-3 gap-1.5">
-                      <!-- 경사도 (하늘색 버튼) -->
                       <div class="bg-slate-950 border border-sky-500/40 rounded-xl p-1.5 text-center">
                         <div class="text-[10px] font-bold text-sky-300 mb-1">경사도 (Incline)</div>
                         <div class="flex items-center justify-between">
@@ -1034,7 +1412,6 @@
                         </div>
                       </div>
 
-                      <!-- 속도 (노란색 버튼) -->
                       <div class="bg-slate-950 border border-amber-500/40 rounded-xl p-1.5 text-center">
                         <div class="text-[10px] font-bold text-amber-300 mb-1">속도 (km/h)</div>
                         <div class="flex items-center justify-between">
@@ -1046,7 +1423,6 @@
                         </div>
                       </div>
 
-                      <!-- 시간 (분) -->
                       <div class="bg-slate-950 border border-emerald-500/40 rounded-xl p-1.5 text-center">
                         <div class="text-[10px] font-bold text-emerald-300 mb-1">시간 (분)</div>
                         <div class="flex items-center justify-between">
@@ -1065,7 +1441,6 @@
                       ? 'bg-emerald-950/40 border-emerald-500/60'
                       : 'bg-slate-900/95 border-slate-700/80'
                   }">
-                    <!-- 세트 번호 -->
                     <div class="w-12 text-center shrink-0">
                       <span class="inline-block px-2 py-1 rounded-xl text-xs font-extrabold ${
                         setObj.done ? 'bg-emerald-500 text-slate-950' : 'bg-slate-800 text-indigo-300'
@@ -1074,7 +1449,6 @@
                       </span>
                     </div>
 
-                    <!-- 세트별 무게 조절 -->
                     ${!isBodyweight ? `
                       <div class="flex items-center space-x-1 bg-slate-950 border border-slate-700 rounded-xl px-1.5 py-1">
                         <button onclick="changeSetWeight('${courseKey}', ${idx}, ${sIdx}, -${step})" class="w-6 h-6 rounded-lg bg-slate-800 text-xs font-black text-white active:scale-90">-</button>
@@ -1088,7 +1462,6 @@
                       <div class="text-xs font-bold text-slate-400 px-2">맨몸 진행</div>
                     `}
 
-                    <!-- 세트별 횟수/시간 조절 -->
                     <div class="flex items-center space-x-1 bg-slate-950 border border-slate-700 rounded-xl px-1.5 py-1">
                       <button onclick="changeSetReps('${courseKey}', ${idx}, ${sIdx}, -1)" class="w-6 h-6 rounded-lg bg-slate-800 text-xs font-black text-white active:scale-90">-</button>
                       <input type="number" value="${setObj.reps}"
@@ -1098,7 +1471,6 @@
                       <button onclick="changeSetReps('${courseKey}', ${idx}, ${sIdx}, 1)" class="w-6 h-6 rounded-lg bg-slate-800 text-xs font-black text-white active:scale-90">+</button>
                     </div>
 
-                    <!-- 완료 체크 버튼 -->
                     <button onclick="toggleSet('${courseKey}', ${idx}, ${sIdx})"
                       class="px-3 py-2 rounded-xl text-xs font-extrabold border transition active:scale-95 shrink-0 ${
                         setObj.done
@@ -1111,7 +1483,6 @@
                 `).join('')}
               </div>
 
-              <!-- 세트 추가 / 삭제 버튼 바 -->
               <div class="mt-2.5 flex items-center justify-between gap-2 pt-2 border-t border-slate-700/50">
                 <button onclick="addSet('${courseKey}', ${idx})"
                   class="flex-1 py-2 rounded-xl text-xs font-extrabold bg-slate-900 hover:bg-slate-800 text-indigo-300 border border-indigo-500/40 active:scale-95 transition">
@@ -1131,6 +1502,26 @@
     }
 
     function renderRecords() {
+      const chartEl = document.getElementById('weightTrendChart');
+      if (chartEl) {
+        const points = [
+          { label: '어제(2일차)', w: 96.0, highlight: false },
+          { label: '오늘(3일차)', w: state.currentWeight || 95.0, highlight: true },
+          { label: '1차목표', w: 88.0, highlight: false },
+          { label: '최종목표', w: 76.0, highlight: false }
+        ];
+        chartEl.innerHTML = points.map(p => {
+          const hPct = Math.max(25, Math.min(100, ((p.w - 70) / 30) * 100));
+          return `
+            <div class="flex flex-col items-center justify-end h-full">
+              <div class="text-[11px] font-black ${p.highlight ? 'text-emerald-400' : 'text-slate-300'} mb-1">${p.w.toFixed(1)}kg</div>
+              <div class="w-full rounded-t-xl ${p.highlight ? 'bg-emerald-500' : 'bg-indigo-600/60'}" style="height:${hPct}%"></div>
+              <div class="text-[10px] text-slate-400 mt-1">${p.label}</div>
+            </div>
+          `;
+        }).join('');
+      }
+
       const listEl = document.getElementById('watchHistoryList');
       listEl.innerHTML = state.watchRecords.map(r => `
         <div class="bg-slate-900 border border-slate-700 rounded-2xl p-3.5">
