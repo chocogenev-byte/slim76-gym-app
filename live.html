@@ -416,34 +416,16 @@
 
     const defaultData = {
       updatedAt: Date.now(),
-      lastAction: '필라이즈 식단·수분·탄단지 통합 업그레이드',
+      lastDateKey: '2026-11-06',
+      lastAction: '4일차 (금) 일일 자동 초기화 완료',
       currentWeight: 95.0,
-      todayWatchKcal: 815,
-      todayWatchHr: '평균 139 BPM',
-      waterCups: 5,
-      psylliumLunch: true,
-      psylliumDinner: true,
-      todayMeals: [
-        {
-          id: 1793876725000,
-          time: '오후 08:00',
-          name: '🐟 광어·방어 모둠회 + 새우튀김·주먹밥·오짬(1/2) + 카스0.00',
-          kcal: 950,
-          carb: 105,
-          protein: 70,
-          fat: 29
-        },
-        {
-          id: 1793853741000,
-          time: '오후 01:40',
-          name: '🍔 클래식 BLT 수제버거 + 감튀 세트',
-          kcal: 870,
-          carb: 78,
-          protein: 36,
-          fat: 44
-        }
-      ],
-      activeTab: 'courseA',
+      todayWatchKcal: 0,
+      todayWatchHr: '기록 대기',
+      waterCups: 1,
+      psylliumLunch: false,
+      psylliumDinner: false,
+      todayMeals: [],
+      activeTab: 'courseB',
       courses: {
         courseA: [
           {
@@ -601,13 +583,13 @@
             isCardio: true,
             order: '마무리 유산소 · 25~30분',
             name: '창가 러닝머신 오르막 빠르게 걷기',
-            zone: '하늘색(경사도) 4~6 / 노란색(속도) 4.5~5.0',
+            zone: '하늘색(경사도) 4~4.5 / 노란색(속도) 4.2~4.4',
             img: 'images/machine_treadmill.jpg',
-            incline: 5,
-            speed: 4.8,
+            incline: 4.5,
+            speed: 4.3,
             defaultReps: 25,
             repUnit: '분',
-            sets: [{ incline: 5, speed: 4.8, reps: 25, done: false }],
+            sets: [{ incline: 4.5, speed: 4.3, reps: 25, done: false }],
             tip: '심박수 135~145 BPM 유지하며 성큼성큼 빠르게 걷기! (중간에 속도/경사를 바꾸면 아래 [구간 추가]를 눌러 기록하세요)'
           }
         ],
@@ -747,11 +729,28 @@
         });
       });
       if (!merged.currentWeight || merged.currentWeight === 94) merged.currentWeight = 95.0;
-      if (!merged.todayWatchKcal) merged.todayWatchKcal = 180;
-      if (!merged.todayWatchHr) merged.todayWatchHr = '평균 135 BPM';
-      if (merged.waterCups === undefined) merged.waterCups = 2;
-      if (!Array.isArray(merged.todayMeals) || merged.todayMeals.length < 2) {
-        merged.todayMeals = defaultData.todayMeals;
+
+      // 날짜가 바뀌면(매일 자정 이후 첫 접속 시) 오늘의 세트 체크·식단·물·워치 누적 자동 초기화!
+      const todayKey = new Date().toLocaleDateString('sv-SE');
+      if (merged.lastDateKey !== todayKey) {
+        merged.lastDateKey = todayKey;
+        merged.todayWatchKcal = 0;
+        merged.todayWatchHr = '기록 대기';
+        merged.waterCups = 1;
+        merged.psylliumLunch = false;
+        merged.psylliumDinner = false;
+        merged.todayMeals = [];
+        ['courseA', 'courseB', 'courseHome'].forEach(cKey => {
+          (merged.courses[cKey] || []).forEach(item => {
+            (item.sets || []).forEach(s => { s.done = false; });
+          });
+        });
+        // 요일별 자동 코스 탭 선택 (화=홈트, 수/금=B하체, 그외=A상체)
+        const dayOfWeek = new Date().getDay();
+        if (dayOfWeek === 2) merged.activeTab = 'courseHome';
+        else if (dayOfWeek === 3 || dayOfWeek === 5) merged.activeTab = 'courseB';
+        else merged.activeTab = 'courseA';
+        merged.watchRecords = defaultData.watchRecords;
       }
       return merged;
     }
