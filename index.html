@@ -8,20 +8,28 @@
   <meta name="apple-mobile-web-app-title" content="슬림76 헬스">
   <link rel="manifest" href="manifest.json">
   <link rel="apple-touch-icon" href="images/machine_mag_lat.jpg">
-  <title>슬림 76 프로젝트 - 전용 헬스 앱</title>
+  <title>슬림 76 프로젝트 - 실시간 연동 헬스 앱</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", sans-serif;
       background-color: #0f172a;
       color: #f8fafc;
-      padding-bottom: calc(env(safe-area-inset-bottom) + 90px);
+      padding-bottom: calc(env(safe-area-inset-bottom) + 95px);
       padding-top: env(safe-area-inset-top);
       -webkit-tap-highlight-color: transparent;
     }
   </style>
 </head>
 <body class="min-h-screen">
+
+  <!-- 실시간 전송 알림 토스트 -->
+  <div id="syncToast" class="fixed top-16 inset-x-4 z-50 hidden">
+    <div class="max-w-md mx-auto bg-emerald-500 text-slate-950 font-extrabold text-xs px-4 py-3 rounded-2xl shadow-xl flex items-center justify-between">
+      <span id="syncToastText">✅ AI 코치에게 실시간 전송 완료!</span>
+      <span class="text-[11px] opacity-80">방금 전</span>
+    </div>
+  </div>
 
   <!-- 상단 고정 40초 휴식 타이머 & 수분 알림 바 -->
   <div class="sticky top-0 z-40 bg-slate-900/95 backdrop-blur-md border-b border-slate-800 px-4 py-3 shadow-lg">
@@ -48,8 +56,19 @@
 
   <div class="max-w-md mx-auto px-4 pt-4 space-y-4">
 
-    <!-- 체중 & 감량 대시보드 카드 -->
+    <!-- 체중 & 실시간 클라우드 연동 대시보드 카드 -->
     <div class="bg-slate-800/90 border border-slate-700/80 rounded-3xl p-4 shadow-md">
+      <!-- 실시간 클라우드 상태 바 -->
+      <div class="flex items-center justify-between bg-slate-900/90 border border-slate-700/80 rounded-2xl px-3 py-2 mb-3">
+        <div class="flex items-center space-x-2">
+          <span id="syncDot" class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span id="syncStatusText" class="text-xs font-bold text-emerald-300">AI 코치 실시간 공유 연결됨</span>
+        </div>
+        <button onclick="pullFromCloud(true)" class="text-xs font-bold text-indigo-300 bg-indigo-500/20 border border-indigo-500/30 px-2.5 py-1 rounded-xl active:scale-95">
+          🔄 동기화 확인
+        </button>
+      </div>
+
       <div class="flex items-center justify-between mb-2">
         <div>
           <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
@@ -72,14 +91,14 @@
 
       <div class="grid grid-cols-3 gap-2 text-center">
         <div class="bg-slate-900/80 border border-slate-700/60 rounded-2xl p-2">
-          <div class="text-xs text-slate-400">1일차 (화)</div>
-          <div class="text-xs font-extrabold text-white">활동 491 kcal</div>
-          <div class="text-xs text-emerald-400 font-semibold">총 650+ 완료</div>
-        </div>
-        <div class="bg-slate-900/80 border border-slate-700/60 rounded-2xl p-2">
           <div class="text-xs text-slate-400">2일차 (수)</div>
           <div class="text-xs font-extrabold text-white">활동 673 kcal</div>
           <div class="text-xs text-emerald-400 font-semibold">총 815 완료</div>
+        </div>
+        <div class="bg-slate-900/80 border border-indigo-500/40 rounded-2xl p-2">
+          <div class="text-xs text-indigo-300 font-bold">오늘 워치 칼로리</div>
+          <div class="text-xs font-extrabold text-white"><span id="todayWatchKcalDisplay">0</span> kcal</div>
+          <div id="todayWatchHrDisplay" class="text-[11px] text-emerald-400 font-semibold">기록 대기</div>
         </div>
         <div class="bg-slate-900/80 border border-slate-700/60 rounded-2xl p-2">
           <div class="text-xs text-slate-400">오늘 세트 진행</div>
@@ -88,9 +107,30 @@
         </div>
       </div>
 
-      <div class="mt-3 flex justify-between items-center pt-2 border-t border-slate-700/60">
-        <span class="text-xs text-slate-400">오늘 운동 체크 초기화가 필요할 때 👉</span>
-        <button onclick="resetTodaySets()" class="text-xs font-bold text-indigo-400 underline">오늘 세트 초기화</button>
+      <!-- ⚡ 원터치 애플워치 운동 실시간 전송 박스 (메인 화면 바로 입력) -->
+      <div class="mt-3 pt-3 border-t border-slate-700/70">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-xs font-extrabold text-white">⌚ 방금 끝난 애플워치 운동 · 체중 즉시 공유</span>
+          <span class="text-[11px] text-emerald-400 font-semibold">입력 즉시 AI 코치에게 전송</span>
+        </div>
+        <div class="grid grid-cols-3 gap-1.5 mb-2">
+          <button onclick="selectQuickType('🚴 실내자전거')" id="qtype-bike" class="py-1.5 rounded-xl text-xs font-bold bg-indigo-600 text-white border border-indigo-400">🚴 실내자전거</button>
+          <button onclick="selectQuickType('🏋️ 헬스장기구')" id="qtype-gym" class="py-1.5 rounded-xl text-xs font-bold bg-slate-900 text-slate-300 border border-slate-700">🏋️ 헬스장기구</button>
+          <button onclick="selectQuickType('🏃 오르막걷기')" id="qtype-walk" class="py-1.5 rounded-xl text-xs font-bold bg-slate-900 text-slate-300 border border-slate-700">🏃 오르막걷기</button>
+        </div>
+        <div class="grid grid-cols-3 gap-1.5 mb-2">
+          <input type="number" id="quickKcal" placeholder="활동 kcal (예:210)" class="px-2.5 py-2 rounded-xl bg-slate-900 border border-slate-700 text-xs text-white font-bold">
+          <input type="number" id="quickBpm" placeholder="평균 심박 (예:138)" class="px-2.5 py-2 rounded-xl bg-slate-900 border border-slate-700 text-xs text-white font-bold">
+          <input type="number" step="0.1" id="quickWeight" placeholder="체중 kg (선택)" class="px-2.5 py-2 rounded-xl bg-slate-900 border border-slate-700 text-xs text-white font-bold">
+        </div>
+        <button onclick="sendQuickWatchLog()" class="w-full py-2.5 rounded-2xl text-xs font-extrabold bg-emerald-500 text-slate-950 shadow active:scale-98 transition">
+          🚀 AI 코치에게 워치 기록 실시간 전송하기
+        </button>
+      </div>
+
+      <div class="mt-2.5 flex justify-between items-center pt-2 border-t border-slate-700/60">
+        <span class="text-xs text-slate-400">세트를 터치할 때마다 AI 코치에게 자동 공유됩니다</span>
+        <button onclick="resetTodaySets()" class="text-xs font-bold text-indigo-400 underline">세트 초기화</button>
       </div>
     </div>
 
@@ -99,15 +139,34 @@
 
     <!-- 워치 & 체중 기록장 탭 컨테이너 -->
     <div id="recordsContainer" class="hidden space-y-4">
+      <!-- 아이폰 단축어 자동 연동 가이드 카드 -->
+      <div class="bg-indigo-950/70 border border-indigo-500/40 rounded-3xl p-4 space-y-2.5">
+        <div class="flex items-center justify-between">
+          <h2 class="text-sm font-extrabold text-indigo-300">⚡ 아이폰 [단축어]로 애플워치 자동 전송 세팅법</h2>
+          <span class="text-[11px] bg-indigo-500/30 text-indigo-200 px-2 py-0.5 rounded-full font-bold">1분 완성</span>
+        </div>
+        <p class="text-xs text-slate-300 leading-relaxed">
+          아이폰 기본 <strong>[단축어]</strong> 앱에서 아래 동작 2개만 넣으면, 버튼 한 번에 애플워치 건강 데이터가 앱과 AI 코치에게 자동 전송됩니다!
+        </p>
+        <div class="bg-slate-900/90 rounded-2xl p-3 text-xs text-slate-200 space-y-1.5 border border-slate-700">
+          <div>1️⃣ <strong>건강 샘플 찾기</strong> 추가 → 종류: <span class="text-emerald-400 font-bold">활동 에너지</span>, 시작일: <span class="text-emerald-400 font-bold">오늘</span></div>
+          <div>2️⃣ <strong>합계 계산</strong> (통계 계산 → 합계) 선택</div>
+          <div>3️⃣ <strong>URL 열기</strong> 추가 후 아래 주소 입력:</div>
+          <div class="bg-slate-950 p-2 rounded-xl font-mono text-[11px] text-indigo-300 break-all select-all">
+            https://chocogenev-byte.github.io/slim76-gym-app/?kcal=[합계]&memo=워치자동연동
+          </div>
+        </div>
+      </div>
+
       <div class="bg-slate-800 border border-slate-700 rounded-3xl p-4 space-y-3">
-        <h2 class="text-base font-extrabold text-white">⌚ 오늘 애플워치 & 체중 기록 추가</h2>
+        <h2 class="text-base font-extrabold text-white">⌚ 상세 운동 & 체중 기록 추가</h2>
         <div class="grid grid-cols-2 gap-2.5">
           <div>
             <label class="block text-xs text-slate-400 mb-1">날짜</label>
             <input type="text" id="inputDate" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-sm text-white">
           </div>
           <div>
-            <label class="block text-xs text-slate-400 mb-1">아침 체중 (kg)</label>
+            <label class="block text-xs text-slate-400 mb-1">체중 (kg)</label>
             <input type="number" step="0.1" id="inputWeight" placeholder="93.5" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-sm text-white">
           </div>
           <div>
@@ -120,12 +179,12 @@
           </div>
         </div>
         <button onclick="addWatchRecord()" class="w-full py-3 rounded-2xl text-sm font-extrabold bg-emerald-500 text-slate-950 active:scale-98 transition">
-          + 오늘 기록 저장하기
+          + 기록 저장 및 AI 코치에게 실시간 전송
         </button>
       </div>
 
       <div class="bg-slate-800 border border-slate-700 rounded-3xl p-4">
-        <h2 class="text-base font-extrabold text-white mb-3">📊 누적 운동 & 체중 기록장</h2>
+        <h2 class="text-base font-extrabold text-white mb-3">📊 실시간 누적 운동 & 체중 기록장</h2>
         <div id="watchHistoryList" class="space-y-2.5"></div>
       </div>
 
@@ -169,7 +228,7 @@
         🚴 화요일 홈트<br><span class="font-normal opacity-80">점검날</span>
       </button>
       <button onclick="switchTab('records')" id="tab-records" class="py-2 px-1 rounded-2xl text-xs font-bold text-slate-400 transition">
-        ⌚ 워치·체중<br><span class="font-normal opacity-80">기록/패스기구</span>
+        ⌚ 워치·체중<br><span class="font-normal opacity-80">기록/단축어</span>
       </button>
     </div>
   </div>
@@ -179,8 +238,16 @@
       navigator.serviceWorker.register('./sw.js').catch(() => {});
     }
 
+    // 실시간 클라우드 엔드포인트 (이중 백업: 영구 Object + 실시간 Ntfy 스트림)
+    const CLOUD_OBJ_URL = 'https://api.restful-api.dev/objects/ff808181a09d98f701a1a9040a013a53';
+    const NTFY_TOPIC_URL = 'https://ntfy.sh/slim76_sejong_sync_9476';
+
     const defaultData = {
+      updatedAt: Date.now(),
+      lastAction: '초기 세팅 완료',
       currentWeight: 94.0,
+      todayWatchKcal: 0,
+      todayWatchHr: '',
       activeTab: 'courseA',
       courses: {
         courseA: [
@@ -387,38 +454,212 @@
       ]
     };
 
-    let state = JSON.parse(localStorage.getItem('slim76MobileAppV1')) || defaultData;
+    let state = Object.assign({}, defaultData, JSON.parse(localStorage.getItem('slim76MobileAppV1') || '{}'));
     let timerInterval = null;
     let remainingSeconds = 40;
+    let selectedQuickWorkout = '🚴 실내자전거';
 
-    // 날짜 기본값 세팅
     const todayStr = new Date().toLocaleDateString('ko-KR', { month: '2-digit', day: '2-digit', weekday: 'short' });
     document.getElementById('inputDate').value = todayStr;
 
-    // URL 파라미터로 애플워치 단축어 자동 기록 지원 (?kcal=520&weight=93.2&memo=...)
-    const params = new URLSearchParams(window.location.search);
-    if (params.get('kcal') || params.get('weight')) {
-      const k = params.get('kcal') || '500';
-      const w = parseFloat(params.get('weight'));
-      const m = params.get('memo') || '애플워치 단축어 자동 기록';
-      if (!isNaN(w) && w > 40) state.currentWeight = w;
-      state.watchRecords.unshift({
-        date: todayStr,
-        weight: (!isNaN(w) ? w.toFixed(1) : state.currentWeight.toFixed(1)) + ' kg',
-        activeKcal: k + ' kcal',
-        memo: m
-      });
-      localStorage.setItem('slim76MobileAppV1', JSON.stringify(state));
-      window.history.replaceState({}, document.title, window.location.pathname);
+    function showToast(msg) {
+      const t = document.getElementById('syncToast');
+      document.getElementById('syncToastText').textContent = msg;
+      t.classList.remove('hidden');
+      setTimeout(() => t.classList.add('hidden'), 2800);
     }
 
-    function saveState() {
+    function setSyncStatus(text, isOk = true) {
+      const dot = document.getElementById('syncDot');
+      const label = document.getElementById('syncStatusText');
+      label.textContent = text;
+      if (isOk) {
+        dot.className = 'w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse';
+        label.className = 'text-xs font-bold text-emerald-300';
+      } else {
+        dot.className = 'w-2.5 h-2.5 rounded-full bg-amber-400';
+        label.className = 'text-xs font-bold text-amber-300';
+      }
+    }
+
+    // 요약본 생성 (AI 코치가 즉시 읽을 수 있는 핵심 요약)
+    function buildSummary(actionLabel) {
+      const courseKey = state.activeTab === 'records' ? 'courseA' : state.activeTab;
+      const doneItems = state.courses[courseKey].map(item => ({
+        name: item.name.split(' ')[0] + ' ' + (item.name.split(' ')[1] || ''),
+        weight: item.weight + item.unit,
+        doneSets: item.sets.filter(Boolean).length + '/' + item.sets.length
+      }));
+      return {
+        timestamp: new Date().toLocaleString('ko-KR'),
+        updatedAt: state.updatedAt,
+        action: actionLabel,
+        currentWeight: state.currentWeight,
+        todayWatchKcal: state.todayWatchKcal || 0,
+        todayWatchHr: state.todayWatchHr || '',
+        activeCourse: courseKey,
+        progress: doneItems,
+        latestRecord: state.watchRecords[0] || null
+      };
+    }
+
+    async function pushToCloud(actionLabel = '상태 업데이트', showNotification = false) {
+      state.updatedAt = Date.now();
+      state.lastAction = actionLabel;
+      localStorage.setItem('slim76MobileAppV1', JSON.stringify(state));
+      setSyncStatus('🔄 AI 코치에게 실시간 전송 중...', true);
+
+      const summary = buildSummary(actionLabel);
+
+      try {
+        // 1. 실시간 스트림(ntfy.sh)으로 즉시 푸시
+        fetch(NTFY_TOPIC_URL, {
+          method: 'POST',
+          body: JSON.stringify(summary)
+        }).catch(() => {});
+
+        // 2. 영구 클라우드 스토리지(restful-api.dev)에 전체 상태 저장
+        const res = await fetch(CLOUD_OBJ_URL, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: 'slim76_state',
+            data: state
+          })
+        });
+
+        if (res.ok) {
+          const nowTime = new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+          setSyncStatus(`🟢 실시간 공유 완료 (${nowTime})`, true);
+          if (showNotification) showToast(`✅ ${actionLabel} → AI 코치 전송 완료!`);
+        } else {
+          setSyncStatus('🟢 스트림 전송 완료', true);
+        }
+      } catch (e) {
+        setSyncStatus('⚠️ 오프라인 저장됨 (연결 시 자동 공유)', false);
+      }
+    }
+
+    async function pullFromCloud(manual = false) {
+      try {
+        setSyncStatus('🔄 클라우드 동기화 확인 중...', true);
+        const res = await fetch(CLOUD_OBJ_URL + '?t=' + Date.now());
+        if (!res.ok) return;
+        const json = await res.json();
+        if (json && json.data && json.data.courses) {
+          const cloudState = json.data;
+          // 클라우드 데이터가 더 최신이거나 수동 새로고침일 때 반영
+          if (manual || !state.updatedAt || (cloudState.updatedAt && cloudState.updatedAt >= state.updatedAt)) {
+            state = Object.assign({}, defaultData, cloudState);
+            localStorage.setItem('slim76MobileAppV1', JSON.stringify(state));
+            updateHeaderStats();
+            if (state.activeTab === 'records') {
+              renderRecords();
+            } else {
+              renderWorkoutList();
+            }
+          }
+          const nowTime = new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
+          setSyncStatus(`🟢 AI 코치 실시간 연동 중 (${nowTime})`, true);
+          if (manual) showToast('🔄 최신 운동/체중 데이터 동기화 완료!');
+        }
+      } catch (e) {
+        setSyncStatus('🟢 로컬 데이터 사용 중', true);
+      }
+    }
+
+    function selectQuickType(typeLabel) {
+      selectedQuickWorkout = typeLabel;
+      const map = {
+        '🚴 실내자전거': 'qtype-bike',
+        '🏋️ 헬스장기구': 'qtype-gym',
+        '🏃 오르막걷기': 'qtype-walk'
+      };
+      Object.entries(map).forEach(([label, id]) => {
+        const el = document.getElementById(id);
+        if (label === typeLabel) {
+          el.className = 'py-1.5 rounded-xl text-xs font-bold bg-indigo-600 text-white border border-indigo-400';
+        } else {
+          el.className = 'py-1.5 rounded-xl text-xs font-bold bg-slate-900 text-slate-300 border border-slate-700';
+        }
+      });
+    }
+
+    function sendQuickWatchLog() {
+      const kcal = parseInt(document.getElementById('quickKcal').value, 10);
+      const bpm = document.getElementById('quickBpm').value.trim();
+      const weightVal = parseFloat(document.getElementById('quickWeight').value);
+
+      if (isNaN(kcal) && isNaN(weightVal)) {
+        showToast('⚠️ 활동 칼로리(kcal) 또는 체중(kg)을 입력해주세요!');
+        return;
+      }
+
+      if (!isNaN(weightVal) && weightVal > 40) {
+        state.currentWeight = weightVal;
+      }
+      if (!isNaN(kcal) && kcal > 0) {
+        state.todayWatchKcal = (state.todayWatchKcal || 0) + kcal;
+      }
+      if (bpm) {
+        state.todayWatchHr = `평균 ${bpm} BPM`;
+      }
+
+      const memoParts = [selectedQuickWorkout];
+      if (!isNaN(kcal)) memoParts.push(`${kcal}kcal`);
+      if (bpm) memoParts.push(`평균 ${bpm}BPM`);
+
+      state.watchRecords.unshift({
+        date: todayStr + ' · 실시간',
+        weight: state.currentWeight.toFixed(1) + ' kg',
+        activeKcal: (!isNaN(kcal) ? `${kcal} kcal (누적 ${state.todayWatchKcal} kcal)` : `누적 ${state.todayWatchKcal || 0} kcal`),
+        memo: memoParts.join(' / ')
+      });
+
+      document.getElementById('quickKcal').value = '';
+      document.getElementById('quickBpm').value = '';
+      document.getElementById('quickWeight').value = '';
+
+      updateHeaderStats();
+      if (state.activeTab === 'records') renderRecords();
+      pushToCloud(`워치 기록 전송 (${memoParts.join(' ')})`, true);
+    }
+
+    // URL 파라미터로 애플워치 단축어 자동 기록 지원 (?kcal=520&hr=138&weight=93.2&memo=...)
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('kcal') || params.get('weight')) {
+      const k = parseInt(params.get('kcal') || '0', 10);
+      const hr = params.get('hr') || '';
+      const w = parseFloat(params.get('weight'));
+      const m = params.get('memo') || '애플워치 단축어 자동 전송';
+      if (!isNaN(w) && w > 40) state.currentWeight = w;
+      if (!isNaN(k) && k > 0) state.todayWatchKcal = (state.todayWatchKcal || 0) + k;
+      if (hr) state.todayWatchHr = `평균 ${hr} BPM`;
+
+      state.watchRecords.unshift({
+        date: todayStr + ' · 단축어',
+        weight: state.currentWeight.toFixed(1) + ' kg',
+        activeKcal: (k > 0 ? `${k} kcal (오늘 누적 ${state.todayWatchKcal} kcal)` : `${state.todayWatchKcal || 0} kcal`),
+        memo: m + (hr ? ` (${hr} BPM)` : '')
+      });
+      window.history.replaceState({}, document.title, window.location.pathname);
+      setTimeout(() => pushToCloud(`단축어 자동 기록 (${k}kcal)`, true), 300);
+    } else {
+      // 앱 열 때 클라우드 최신 상태 불러오기
+      pullFromCloud(false);
+    }
+
+    function saveState(actionLabel = '운동 진행 업데이트', notify = false) {
       localStorage.setItem('slim76MobileAppV1', JSON.stringify(state));
       updateHeaderStats();
+      pushToCloud(actionLabel, notify);
     }
 
     function updateHeaderStats() {
       document.getElementById('currentWeightDisplay').textContent = Number(state.currentWeight).toFixed(1);
+      document.getElementById('todayWatchKcalDisplay').textContent = state.todayWatchKcal || 0;
+      document.getElementById('todayWatchHrDisplay').textContent = state.todayWatchHr || '워치 연동 대기';
+
       const totalToLose = 94.0 - 76.0;
       const lostSoFar = Math.max(0, 94.0 - state.currentWeight);
       const pct = Math.min(100, Math.max(8, (lostSoFar / totalToLose) * 100));
@@ -462,7 +703,7 @@
       modal.classList.remove('flex');
     }
 
-    function switchTab(tabName) {
+    function switchTab(tabName, shouldSync = false) {
       state.activeTab = tabName;
       ['courseA', 'courseB', 'courseHome', 'records'].forEach(t => {
         const btn = document.getElementById('tab-' + t);
@@ -482,20 +723,24 @@
         document.getElementById('recordsContainer').classList.add('hidden');
         renderWorkoutList();
       }
-      saveState();
+      localStorage.setItem('slim76MobileAppV1', JSON.stringify(state));
+      updateHeaderStats();
+      if (shouldSync) pushToCloud(`탭 전환: ${tabName}`, false);
     }
 
     function changeWeight(courseKey, idx, delta) {
-      state.courses[courseKey][idx].weight = Math.max(0, state.courses[courseKey][idx].weight + delta);
-      saveState();
+      const item = state.courses[courseKey][idx];
+      item.weight = Math.max(0, item.weight + delta);
       renderWorkoutList();
+      saveState(`${item.name.split(' ')[0]} 무게 변경: ${item.weight}${item.unit}`, true);
     }
 
     function toggleSet(courseKey, idx, setIdx) {
-      const currentVal = state.courses[courseKey][idx].sets[setIdx];
-      state.courses[courseKey][idx].sets[setIdx] = !currentVal;
-      saveState();
+      const item = state.courses[courseKey][idx];
+      const currentVal = item.sets[setIdx];
+      item.sets[setIdx] = !currentVal;
       renderWorkoutList();
+      saveState(`${item.name.split(' ')[0]} ${setIdx + 1}세트 ${!currentVal ? '완료' : '취소'}`, true);
       if (!currentVal) {
         startRestTimer(40);
       }
@@ -506,8 +751,10 @@
       state.courses[courseKey].forEach(item => {
         item.sets = item.sets.map(() => false);
       });
-      saveState();
+      state.todayWatchKcal = 0;
+      state.todayWatchHr = '';
       renderWorkoutList();
+      saveState('오늘 세트 및 일일 칼로리 초기화', true);
     }
 
     function startRestTimer(seconds) {
@@ -625,27 +872,30 @@
     function addWatchRecord() {
       const date = document.getElementById('inputDate').value || todayStr;
       const weightVal = parseFloat(document.getElementById('inputWeight').value);
-      const activeKcal = document.getElementById('inputActiveKcal').value || '500';
+      const activeKcal = parseInt(document.getElementById('inputActiveKcal').value || '0', 10);
       const memo = document.getElementById('inputMemo').value || '헬스장 기구 + 오르막 걷기 완료';
 
       if (!isNaN(weightVal) && weightVal > 40) {
         state.currentWeight = weightVal;
       }
+      if (!isNaN(activeKcal) && activeKcal > 0) {
+        state.todayWatchKcal = (state.todayWatchKcal || 0) + activeKcal;
+      }
 
       state.watchRecords.unshift({
         date: date,
         weight: !isNaN(weightVal) ? weightVal.toFixed(1) + ' kg' : state.currentWeight.toFixed(1) + ' kg',
-        activeKcal: activeKcal + ' kcal',
+        activeKcal: (activeKcal > 0 ? activeKcal : 500) + ' kcal',
         memo: memo
       });
 
-      saveState();
       renderRecords();
       document.getElementById('inputActiveKcal').value = '';
       document.getElementById('inputMemo').value = '';
+      saveState(`워치 상세 기록 추가 (${activeKcal || 500}kcal)`, true);
     }
 
-    switchTab(state.activeTab || 'courseA');
+    switchTab(state.activeTab || 'courseA', false);
   </script>
 </body>
 </html>
