@@ -64,8 +64,8 @@
           <span id="syncDot" class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
           <span id="syncStatusText" class="text-xs font-bold text-emerald-300">AI 코치 실시간 공유 연결됨</span>
         </div>
-        <button onclick="pullFromCloud(true)" class="text-xs font-bold text-indigo-300 bg-indigo-500/20 border border-indigo-500/30 px-2.5 py-1 rounded-xl active:scale-95">
-          🔄 동기화 확인
+        <button onclick="pushToCloud('수동 동기화 신호 전송', true)" class="text-xs font-bold text-emerald-300 bg-emerald-500/20 border border-emerald-500/40 px-2.5 py-1 rounded-xl active:scale-95">
+          📡 코치에게 현재 상태 전송
         </button>
       </div>
 
@@ -96,9 +96,9 @@
           <div class="text-xs text-emerald-400 font-semibold">총 815 완료</div>
         </div>
         <div class="bg-slate-900/80 border border-indigo-500/40 rounded-2xl p-2">
-          <div class="text-xs text-indigo-300 font-bold">오늘 워치 칼로리</div>
+          <div class="text-xs text-indigo-300 font-bold">오늘 워치 누적</div>
           <div class="text-xs font-extrabold text-white"><span id="todayWatchKcalDisplay">0</span> kcal</div>
-          <div id="todayWatchHrDisplay" class="text-[11px] text-emerald-400 font-semibold">기록 대기</div>
+          <div id="todayWatchHrDisplay" class="text-[11px] text-amber-300 font-semibold">👇 아래에서 전송</div>
         </div>
         <div class="bg-slate-900/80 border border-slate-700/60 rounded-2xl p-2">
           <div class="text-xs text-slate-400">오늘 세트 진행</div>
@@ -108,10 +108,10 @@
       </div>
 
       <!-- ⚡ 원터치 애플워치 운동 실시간 전송 박스 (메인 화면 바로 입력) -->
-      <div class="mt-3 pt-3 border-t border-slate-700/70">
-        <div class="flex items-center justify-between mb-2">
-          <span class="text-xs font-extrabold text-white">⌚ 방금 끝난 애플워치 운동 · 체중 즉시 공유</span>
-          <span class="text-[11px] text-emerald-400 font-semibold">입력 즉시 AI 코치에게 전송</span>
+      <div class="mt-3 pt-3 border-t border-slate-700/70 bg-slate-900/60 rounded-2xl p-3 border border-indigo-500/30">
+        <div class="flex items-center justify-between mb-1.5">
+          <span class="text-xs font-extrabold text-white">⌚ 워치 운동 기록 → AI 코치에게 보내기</span>
+          <span class="text-[11px] text-amber-300 font-semibold">아이폰 보안상 숫자만 톡 쳐주세요!</span>
         </div>
         <div class="grid grid-cols-3 gap-1.5 mb-2">
           <button onclick="selectQuickType('🚴 실내자전거')" id="qtype-bike" class="py-1.5 rounded-xl text-xs font-bold bg-indigo-600 text-white border border-indigo-400">🚴 실내자전거</button>
@@ -119,17 +119,17 @@
           <button onclick="selectQuickType('🏃 오르막걷기')" id="qtype-walk" class="py-1.5 rounded-xl text-xs font-bold bg-slate-900 text-slate-300 border border-slate-700">🏃 오르막걷기</button>
         </div>
         <div class="grid grid-cols-3 gap-1.5 mb-2">
-          <input type="number" id="quickKcal" placeholder="활동 kcal (예:210)" class="px-2.5 py-2 rounded-xl bg-slate-900 border border-slate-700 text-xs text-white font-bold">
-          <input type="number" id="quickBpm" placeholder="평균 심박 (예:138)" class="px-2.5 py-2 rounded-xl bg-slate-900 border border-slate-700 text-xs text-white font-bold">
-          <input type="number" step="0.1" id="quickWeight" placeholder="체중 kg (선택)" class="px-2.5 py-2 rounded-xl bg-slate-900 border border-slate-700 text-xs text-white font-bold">
+          <input type="number" id="quickKcal" placeholder="활동 kcal (예:210)" class="px-2.5 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white font-bold">
+          <input type="number" id="quickBpm" placeholder="평균 심박 (예:138)" class="px-2.5 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white font-bold">
+          <input type="number" step="0.1" id="quickWeight" placeholder="체중 kg (선택)" class="px-2.5 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white font-bold">
         </div>
         <button onclick="sendQuickWatchLog()" class="w-full py-2.5 rounded-2xl text-xs font-extrabold bg-emerald-500 text-slate-950 shadow active:scale-98 transition">
-          🚀 AI 코치에게 워치 기록 실시간 전송하기
+          🚀 입력한 워치 기록 AI 코치에게 실시간 전송!
         </button>
       </div>
 
       <div class="mt-2.5 flex justify-between items-center pt-2 border-t border-slate-700/60">
-        <span class="text-xs text-slate-400">세트를 터치할 때마다 AI 코치에게 자동 공유됩니다</span>
+        <span class="text-xs text-slate-400">아래 기구 세트 버튼만 눌러도 AI 코치에게 자동 전송됩니다</span>
         <button onclick="resetTodaySets()" class="text-xs font-bold text-indigo-400 underline">세트 초기화</button>
       </div>
     </div>
@@ -142,18 +142,19 @@
       <!-- 아이폰 단축어 자동 연동 가이드 카드 -->
       <div class="bg-indigo-950/70 border border-indigo-500/40 rounded-3xl p-4 space-y-2.5">
         <div class="flex items-center justify-between">
-          <h2 class="text-sm font-extrabold text-indigo-300">⚡ 아이폰 [단축어]로 애플워치 자동 전송 세팅법</h2>
-          <span class="text-[11px] bg-indigo-500/30 text-indigo-200 px-2 py-0.5 rounded-full font-bold">1분 완성</span>
+          <h2 class="text-sm font-extrabold text-indigo-300">💡 왜 웹사이트가 워치를 바로 못 읽어오나요?</h2>
+          <span class="text-[11px] bg-indigo-500/30 text-indigo-200 px-2 py-0.5 rounded-full font-bold">애플 보안정책</span>
         </div>
         <p class="text-xs text-slate-300 leading-relaxed">
-          아이폰 기본 <strong>[단축어]</strong> 앱에서 아래 동작 2개만 넣으면, 버튼 한 번에 애플워치 건강 데이터가 앱과 AI 코치에게 자동 전송됩니다!
+          아이폰은 해킹 방지를 위해 <strong>인터넷 웹페이지가 [건강/애플워치] 데이터를 직접 빼가는 것을 차단</strong>합니다.<br>
+          대신 ① <strong>메인 화면 상단 칸에 워치 칼로리만 적어 전송</strong>하거나, ② 아래처럼 아이폰 기본 <strong>[단축어]</strong> 앱에서 워치 데이터를 꺼내 이 웹앱으로 던져주게 만들 수 있습니다!
         </p>
         <div class="bg-slate-900/90 rounded-2xl p-3 text-xs text-slate-200 space-y-1.5 border border-slate-700">
-          <div>1️⃣ <strong>건강 샘플 찾기</strong> 추가 → 종류: <span class="text-emerald-400 font-bold">활동 에너지</span>, 시작일: <span class="text-emerald-400 font-bold">오늘</span></div>
-          <div>2️⃣ <strong>합계 계산</strong> (통계 계산 → 합계) 선택</div>
+          <div>1️⃣ 아이폰 <strong>[단축어]</strong> 앱 → 우측 상단 <strong>+</strong> → <strong>건강 샘플 찾기</strong> 추가 (종류: <span class="text-emerald-400 font-bold">활동 에너지</span>, 시작일: <span class="text-emerald-400 font-bold">오늘</span>)</div>
+          <div>2️⃣ <strong>통계 계산</strong> 추가 → <strong>합계</strong> 선택</div>
           <div>3️⃣ <strong>URL 열기</strong> 추가 후 아래 주소 입력:</div>
           <div class="bg-slate-950 p-2 rounded-xl font-mono text-[11px] text-indigo-300 break-all select-all">
-            https://chocogenev-byte.github.io/slim76-gym-app/?kcal=[합계]&memo=워치자동연동
+            https://chocogenev-byte.github.io/slim76-gym-app/live.html?kcal=[합계]&memo=워치자동연동
           </div>
         </div>
       </div>
@@ -218,27 +219,29 @@
   <!-- 하단 고정 네비게이션 탭 바 (앱 스타일) -->
   <div class="fixed bottom-0 inset-x-0 z-40 bg-slate-900/95 backdrop-blur-md border-t border-slate-800 px-3 py-2" style="padding-bottom: calc(env(safe-area-inset-bottom) + 8px);">
     <div class="max-w-md mx-auto grid grid-cols-4 gap-1.5">
-      <button onclick="switchTab('courseA')" id="tab-courseA" class="py-2 px-1 rounded-2xl text-xs font-extrabold bg-indigo-600 text-white transition">
+      <button onclick="switchTab('courseA', true)" id="tab-courseA" class="py-2 px-1 rounded-2xl text-xs font-extrabold bg-indigo-600 text-white transition">
         🔥 A코스(상체)<br><span class="font-normal opacity-90">월·목</span>
       </button>
-      <button onclick="switchTab('courseB')" id="tab-courseB" class="py-2 px-1 rounded-2xl text-xs font-bold text-slate-400 transition">
+      <button onclick="switchTab('courseB', true)" id="tab-courseB" class="py-2 px-1 rounded-2xl text-xs font-bold text-slate-400 transition">
         ⚡ B코스(하체)<br><span class="font-normal opacity-80">수·금</span>
       </button>
-      <button onclick="switchTab('courseHome')" id="tab-courseHome" class="py-2 px-1 rounded-2xl text-xs font-bold text-slate-400 transition">
+      <button onclick="switchTab('courseHome', true)" id="tab-courseHome" class="py-2 px-1 rounded-2xl text-xs font-bold text-slate-400 transition">
         🚴 화요일 홈트<br><span class="font-normal opacity-80">점검날</span>
       </button>
-      <button onclick="switchTab('records')" id="tab-records" class="py-2 px-1 rounded-2xl text-xs font-bold text-slate-400 transition">
+      <button onclick="switchTab('records', true)" id="tab-records" class="py-2 px-1 rounded-2xl text-xs font-bold text-slate-400 transition">
         ⌚ 워치·체중<br><span class="font-normal opacity-80">기록/단축어</span>
       </button>
     </div>
   </div>
 
   <script>
+    // 이전 캐시된 서비스워커 강제 갱신
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('./sw.js').catch(() => {});
+      navigator.serviceWorker.getRegistrations().then(regs => {
+        regs.forEach(r => r.update());
+      });
     }
 
-    // 실시간 클라우드 엔드포인트 (이중 백업: 영구 Object + 실시간 Ntfy 스트림)
     const CLOUD_OBJ_URL = 'https://api.restful-api.dev/objects/ff808181a09d98f701a1a9040a013a53';
     const NTFY_TOPIC_URL = 'https://ntfy.sh/slim76_sejong_sync_9476';
 
@@ -482,7 +485,6 @@
       }
     }
 
-    // 요약본 생성 (AI 코치가 즉시 읽을 수 있는 핵심 요약)
     function buildSummary(actionLabel) {
       const courseKey = state.activeTab === 'records' ? 'courseA' : state.activeTab;
       const doneItems = state.courses[courseKey].map(item => ({
@@ -512,13 +514,11 @@
       const summary = buildSummary(actionLabel);
 
       try {
-        // 1. 실시간 스트림(ntfy.sh)으로 즉시 푸시
         fetch(NTFY_TOPIC_URL, {
           method: 'POST',
           body: JSON.stringify(summary)
         }).catch(() => {});
 
-        // 2. 영구 클라우드 스토리지(restful-api.dev)에 전체 상태 저장
         const res = await fetch(CLOUD_OBJ_URL, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
@@ -528,43 +528,15 @@
           })
         });
 
+        const nowTime = new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
         if (res.ok) {
-          const nowTime = new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-          setSyncStatus(`🟢 실시간 공유 완료 (${nowTime})`, true);
-          if (showNotification) showToast(`✅ ${actionLabel} → AI 코치 전송 완료!`);
+          setSyncStatus(`🟢 AI 코치 전송 완료 (${nowTime})`, true);
         } else {
-          setSyncStatus('🟢 스트림 전송 완료', true);
+          setSyncStatus(`🟢 스트림 전송 완료 (${nowTime})`, true);
         }
+        if (showNotification) showToast(`✅ ${actionLabel} → AI 코치 전송 완료!`);
       } catch (e) {
-        setSyncStatus('⚠️ 오프라인 저장됨 (연결 시 자동 공유)', false);
-      }
-    }
-
-    async function pullFromCloud(manual = false) {
-      try {
-        setSyncStatus('🔄 클라우드 동기화 확인 중...', true);
-        const res = await fetch(CLOUD_OBJ_URL + '?t=' + Date.now());
-        if (!res.ok) return;
-        const json = await res.json();
-        if (json && json.data && json.data.courses) {
-          const cloudState = json.data;
-          // 클라우드 데이터가 더 최신이거나 수동 새로고침일 때 반영
-          if (manual || !state.updatedAt || (cloudState.updatedAt && cloudState.updatedAt >= state.updatedAt)) {
-            state = Object.assign({}, defaultData, cloudState);
-            localStorage.setItem('slim76MobileAppV1', JSON.stringify(state));
-            updateHeaderStats();
-            if (state.activeTab === 'records') {
-              renderRecords();
-            } else {
-              renderWorkoutList();
-            }
-          }
-          const nowTime = new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
-          setSyncStatus(`🟢 AI 코치 실시간 연동 중 (${nowTime})`, true);
-          if (manual) showToast('🔄 최신 운동/체중 데이터 동기화 완료!');
-        }
-      } catch (e) {
-        setSyncStatus('🟢 로컬 데이터 사용 중', true);
+        setSyncStatus('⚠️ 오프라인 저장됨', false);
       }
     }
 
@@ -591,7 +563,8 @@
       const weightVal = parseFloat(document.getElementById('quickWeight').value);
 
       if (isNaN(kcal) && isNaN(weightVal)) {
-        showToast('⚠️ 활동 칼로리(kcal) 또는 체중(kg)을 입력해주세요!');
+        showToast('⚠️ 활동 칼로리(kcal) 또는 체중(kg) 숫자를 먼저 적어주세요!');
+        document.getElementById('quickKcal').focus();
         return;
       }
 
@@ -612,7 +585,7 @@
       state.watchRecords.unshift({
         date: todayStr + ' · 실시간',
         weight: state.currentWeight.toFixed(1) + ' kg',
-        activeKcal: (!isNaN(kcal) ? `${kcal} kcal (누적 ${state.todayWatchKcal} kcal)` : `누적 ${state.todayWatchKcal || 0} kcal`),
+        activeKcal: (!isNaN(kcal) ? `${kcal} kcal (오늘 누적 ${state.todayWatchKcal} kcal)` : `누적 ${state.todayWatchKcal || 0} kcal`),
         memo: memoParts.join(' / ')
       });
 
@@ -625,7 +598,6 @@
       pushToCloud(`워치 기록 전송 (${memoParts.join(' ')})`, true);
     }
 
-    // URL 파라미터로 애플워치 단축어 자동 기록 지원 (?kcal=520&hr=138&weight=93.2&memo=...)
     const params = new URLSearchParams(window.location.search);
     if (params.get('kcal') || params.get('weight')) {
       const k = parseInt(params.get('kcal') || '0', 10);
@@ -645,8 +617,7 @@
       window.history.replaceState({}, document.title, window.location.pathname);
       setTimeout(() => pushToCloud(`단축어 자동 기록 (${k}kcal)`, true), 300);
     } else {
-      // 앱 열 때 클라우드 최신 상태 불러오기
-      pullFromCloud(false);
+      setTimeout(() => pushToCloud('아이폰에서 앱 접속 완료', false), 400);
     }
 
     function saveState(actionLabel = '운동 진행 업데이트', notify = false) {
@@ -658,7 +629,7 @@
     function updateHeaderStats() {
       document.getElementById('currentWeightDisplay').textContent = Number(state.currentWeight).toFixed(1);
       document.getElementById('todayWatchKcalDisplay').textContent = state.todayWatchKcal || 0;
-      document.getElementById('todayWatchHrDisplay').textContent = state.todayWatchHr || '워치 연동 대기';
+      document.getElementById('todayWatchHrDisplay').textContent = state.todayWatchHr || '👇 아래에서 전송';
 
       const totalToLose = 94.0 - 76.0;
       const lostSoFar = Math.max(0, 94.0 - state.currentWeight);
