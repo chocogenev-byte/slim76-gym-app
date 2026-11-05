@@ -322,17 +322,17 @@
           },
           {
             id: 'a6',
+            isCardio: true,
             order: '마무리 유산소 · 25~30분',
             name: '창가 러닝머신 오르막 빠르게 걷기',
-            zone: '하늘색(경사도) 4~6 / 노란색(속도) 4.5~4.8',
+            zone: '하늘색(경사도) 4~6 / 노란색(속도) 4.5~5.0',
             img: 'images/machine_treadmill.jpg',
-            weight: 140,
-            weightStep: 5,
-            unit: 'BPM',
+            incline: 5,
+            speed: 4.8,
             defaultReps: 25,
             repUnit: '분',
-            sets: [{ weight: 140, reps: 25, done: false }],
-            tip: '절대 뛰지 말 것! 손잡이에서 손을 떼고 팔을 흔들며 심박수 135~145 BPM 유지!'
+            sets: [{ incline: 5, speed: 4.8, reps: 25, done: false }],
+            tip: '절대 뛰지 말 것! 손잡이에서 손을 떼고 팔을 흔들며 심박수 135~145 BPM 유지! (중간에 속도/경사를 바꾸면 아래 [구간 추가]를 눌러 기록하세요)'
           }
         ],
         courseB: [
@@ -398,17 +398,17 @@
           },
           {
             id: 'b5',
+            isCardio: true,
             order: '마무리 유산소 · 25~30분',
             name: '창가 러닝머신 오르막 빠르게 걷기',
-            zone: '하늘색(경사도) 4~6 / 노란색(속도) 4.5~4.8',
+            zone: '하늘색(경사도) 4~6 / 노란색(속도) 4.5~5.0',
             img: 'images/machine_treadmill.jpg',
-            weight: 140,
-            weightStep: 5,
-            unit: 'BPM',
+            incline: 5,
+            speed: 4.8,
             defaultReps: 25,
             repUnit: '분',
-            sets: [{ weight: 140, reps: 25, done: false }],
-            tip: '심박수 135~145 BPM 유지하며 성큼성큼 빠르게 걷기!'
+            sets: [{ incline: 5, speed: 4.8, reps: 25, done: false }],
+            tip: '심박수 135~145 BPM 유지하며 성큼성큼 빠르게 걷기! (중간에 속도/경사를 바꾸면 아래 [구간 추가]를 눌러 기록하세요)'
           }
         ],
         courseHome: [
@@ -509,9 +509,23 @@
           const weightStep = item.weightStep || defItem.weightStep || 5;
           const baseWeight = item.weight !== undefined ? item.weight : (defItem.weight || 20);
 
+          const isCardio = Boolean(item.isCardio || defItem.isCardio || item.id === 'a6' || item.id === 'b5');
+          const baseIncline = item.incline !== undefined ? item.incline : (defItem.incline || 5);
+          const baseSpeed = item.speed !== undefined ? item.speed : (defItem.speed || 4.8);
+
           const normalizedSets = (item.sets || []).map(s => {
             if (typeof s === 'boolean') {
-              return { weight: baseWeight, reps: defaultReps, done: s };
+              return isCardio
+                ? { incline: baseIncline, speed: baseSpeed, reps: defaultReps, done: s }
+                : { weight: baseWeight, reps: defaultReps, done: s };
+            }
+            if (isCardio) {
+              return {
+                incline: s.incline !== undefined ? s.incline : baseIncline,
+                speed: s.speed !== undefined ? s.speed : baseSpeed,
+                reps: s.reps !== undefined ? s.reps : defaultReps,
+                done: Boolean(s.done)
+              };
             }
             return {
               weight: s.weight !== undefined ? s.weight : baseWeight,
@@ -521,11 +535,16 @@
           });
 
           return Object.assign({}, defItem, item, {
+            isCardio,
+            incline: baseIncline,
+            speed: baseSpeed,
             unit,
             repUnit,
             defaultReps,
             weightStep,
-            sets: normalizedSets.length > 0 ? normalizedSets : makeSets(3, baseWeight, defaultReps)
+            sets: normalizedSets.length > 0
+              ? normalizedSets
+              : (isCardio ? [{ incline: baseIncline, speed: baseSpeed, reps: defaultReps, done: false }] : makeSets(3, baseWeight, defaultReps))
           });
         });
       });
@@ -570,7 +589,11 @@
       const doneItems = state.courses[courseKey].map(item => ({
         name: item.name.split(' ')[0] + ' ' + (item.name.split(' ')[1] || ''),
         doneSets: item.sets.filter(s => s.done).length + '/' + item.sets.length,
-        setsDetail: item.sets.map((s, i) => `${i + 1}세트:${s.weight}${item.unit}×${s.reps}${item.repUnit}(${s.done ? '완료' : '대기'})`)
+        setsDetail: item.sets.map((s, i) =>
+          item.isCardio
+            ? `${i + 1}구간:경사${s.incline}·속도${s.speed}km/h·${s.reps}분(${s.done ? '완료' : '대기'})`
+            : `${i + 1}세트:${s.weight}${item.unit}×${s.reps}${item.repUnit}(${s.done ? '완료' : '대기'})`
+        )
       }));
       return {
         timestamp: new Date().toLocaleString('ko-KR'),
@@ -757,6 +780,42 @@
       if (shouldSync) pushToCloud(`탭 전환: ${tabName}`, false);
     }
 
+    // 러닝머신 경사도 변경 (+/- 버튼 및 직접 입력)
+    function changeCardioIncline(courseKey, idx, setIdx, delta) {
+      const item = state.courses[courseKey][idx];
+      const setObj = item.sets[setIdx];
+      setObj.incline = Math.max(0, Number(((setObj.incline || 0) + delta).toFixed(1)));
+      renderWorkoutList();
+      saveState(`러닝머신 ${setIdx + 1}구간 경사도: ${setObj.incline}`, true);
+    }
+
+    function inputCardioIncline(courseKey, idx, setIdx, val) {
+      const item = state.courses[courseKey][idx];
+      const num = parseFloat(val);
+      if (!isNaN(num) && num >= 0) {
+        item.sets[setIdx].incline = num;
+        saveState(`러닝머신 ${setIdx + 1}구간 경사도 입력: ${num}`, true);
+      }
+    }
+
+    // 러닝머신 속도 변경 (+/- 버튼 및 직접 입력)
+    function changeCardioSpeed(courseKey, idx, setIdx, delta) {
+      const item = state.courses[courseKey][idx];
+      const setObj = item.sets[setIdx];
+      setObj.speed = Math.max(1, Number(((setObj.speed || 4.5) + delta).toFixed(1)));
+      renderWorkoutList();
+      saveState(`러닝머신 ${setIdx + 1}구간 속도: ${setObj.speed}km/h`, true);
+    }
+
+    function inputCardioSpeed(courseKey, idx, setIdx, val) {
+      const item = state.courses[courseKey][idx];
+      const num = parseFloat(val);
+      if (!isNaN(num) && num >= 0.5) {
+        item.sets[setIdx].speed = num;
+        saveState(`러닝머신 ${setIdx + 1}구간 속도 입력: ${num}km/h`, true);
+      }
+    }
+
     // 세트별 개별 무게 변경 (+/- 버튼)
     function changeSetWeight(courseKey, idx, setIdx, delta) {
       const item = state.courses[courseKey][idx];
@@ -800,6 +859,18 @@
     // 세트 추가 (+ 버튼)
     function addSet(courseKey, idx) {
       const item = state.courses[courseKey][idx];
+      if (item.isCardio) {
+        const lastSet = item.sets[item.sets.length - 1] || { incline: 5, speed: 4.8, reps: 15 };
+        item.sets.push({
+          incline: lastSet.incline,
+          speed: lastSet.speed,
+          reps: lastSet.reps,
+          done: false
+        });
+        renderWorkoutList();
+        saveState(`러닝머신 ${item.sets.length}구간 추가 (경사${lastSet.incline}·속도${lastSet.speed}km/h·${lastSet.reps}분)`, true);
+        return;
+      }
       const lastSet = item.sets[item.sets.length - 1] || { weight: item.weight || 20, reps: item.defaultReps || 15 };
       item.sets.push({
         weight: lastSet.weight,
@@ -814,12 +885,12 @@
     function removeSet(courseKey, idx) {
       const item = state.courses[courseKey][idx];
       if (item.sets.length <= 1) {
-        showToast('⚠️ 최소 1세트는 남겨두어야 합니다!');
+        showToast('⚠️ 최소 1개는 남겨두어야 합니다!');
         return;
       }
       item.sets.pop();
       renderWorkoutList();
-      saveState(`${item.name.split(' ')[0]} 세트 축소 (총 ${item.sets.length}세트)`, true);
+      saveState(`${item.name.split(' ')[0]} 세트/구간 축소 (총 ${item.sets.length}개)`, true);
     }
 
     // 세트 완료/취소 토글
@@ -828,11 +899,18 @@
       const setObj = item.sets[setIdx];
       setObj.done = !setObj.done;
       renderWorkoutList();
-      saveState(
-        `${item.name.split(' ')[0]} ${setIdx + 1}세트 (${setObj.weight}${item.unit} × ${setObj.reps}${item.repUnit}) ${setObj.done ? '완료!' : '취소'}`,
-        true
-      );
-      if (setObj.done) {
+      if (item.isCardio) {
+        saveState(
+          `러닝머신 ${setIdx + 1}구간 (경사도 ${setObj.incline} · 속도 ${setObj.speed}km/h · ${setObj.reps}분) ${setObj.done ? '완료!' : '취소'}`,
+          true
+        );
+      } else {
+        saveState(
+          `${item.name.split(' ')[0]} ${setIdx + 1}세트 (${setObj.weight}${item.unit} × ${setObj.reps}${item.repUnit}) ${setObj.done ? '완료!' : '취소'}`,
+          true
+        );
+      }
+      if (setObj.done && !item.isCardio) {
         startRestTimer(40);
       }
     }
@@ -921,7 +999,67 @@
 
               <!-- 세트별 개별 무게 · 횟수 · 완료 컨트롤 리스트 -->
               <div class="space-y-2">
-                ${item.sets.map((setObj, sIdx) => `
+                ${item.sets.map((setObj, sIdx) => item.isCardio ? `
+                  <div class="p-2.5 rounded-2xl border space-y-2 ${
+                    setObj.done
+                      ? 'bg-emerald-950/40 border-emerald-500/60'
+                      : 'bg-slate-900/95 border-slate-700/80'
+                  }">
+                    <div class="flex items-center justify-between">
+                      <span class="inline-block px-2.5 py-1 rounded-xl text-xs font-extrabold ${
+                        setObj.done ? 'bg-emerald-500 text-slate-950' : 'bg-sky-500/20 text-sky-300 border border-sky-500/30'
+                      }">
+                        🏃 ${item.sets.length > 1 ? (sIdx + 1) + '구간' : '오르막 걷기 세팅'}
+                      </span>
+                      <button onclick="toggleSet('${courseKey}', ${idx}, ${sIdx})"
+                        class="px-3.5 py-1.5 rounded-xl text-xs font-extrabold border transition active:scale-95 ${
+                          setObj.done
+                            ? 'bg-emerald-500 text-slate-950 border-emerald-400 shadow'
+                            : 'bg-indigo-600 text-white border-indigo-500'
+                        }">
+                        ${setObj.done ? '✅ 걷기 완료!' : '⬜ 걷기 완료 체크'}
+                      </button>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-1.5">
+                      <!-- 경사도 (하늘색 버튼) -->
+                      <div class="bg-slate-950 border border-sky-500/40 rounded-xl p-1.5 text-center">
+                        <div class="text-[10px] font-bold text-sky-300 mb-1">경사도 (Incline)</div>
+                        <div class="flex items-center justify-between">
+                          <button onclick="changeCardioIncline('${courseKey}', ${idx}, ${sIdx}, -0.5)" class="w-6 h-6 rounded-lg bg-slate-800 text-xs font-black text-white active:scale-90">-</button>
+                          <input type="number" step="0.5" value="${setObj.incline}"
+                            onchange="inputCardioIncline('${courseKey}', ${idx}, ${sIdx}, this.value)"
+                            class="w-10 text-center bg-transparent text-xs font-black text-sky-300 focus:outline-none">
+                          <button onclick="changeCardioIncline('${courseKey}', ${idx}, ${sIdx}, 0.5)" class="w-6 h-6 rounded-lg bg-slate-800 text-xs font-black text-white active:scale-90">+</button>
+                        </div>
+                      </div>
+
+                      <!-- 속도 (노란색 버튼) -->
+                      <div class="bg-slate-950 border border-amber-500/40 rounded-xl p-1.5 text-center">
+                        <div class="text-[10px] font-bold text-amber-300 mb-1">속도 (km/h)</div>
+                        <div class="flex items-center justify-between">
+                          <button onclick="changeCardioSpeed('${courseKey}', ${idx}, ${sIdx}, -0.2)" class="w-6 h-6 rounded-lg bg-slate-800 text-xs font-black text-white active:scale-90">-</button>
+                          <input type="number" step="0.1" value="${setObj.speed}"
+                            onchange="inputCardioSpeed('${courseKey}', ${idx}, ${sIdx}, this.value)"
+                            class="w-10 text-center bg-transparent text-xs font-black text-amber-300 focus:outline-none">
+                          <button onclick="changeCardioSpeed('${courseKey}', ${idx}, ${sIdx}, 0.2)" class="w-6 h-6 rounded-lg bg-slate-800 text-xs font-black text-white active:scale-90">+</button>
+                        </div>
+                      </div>
+
+                      <!-- 시간 (분) -->
+                      <div class="bg-slate-950 border border-emerald-500/40 rounded-xl p-1.5 text-center">
+                        <div class="text-[10px] font-bold text-emerald-300 mb-1">시간 (분)</div>
+                        <div class="flex items-center justify-between">
+                          <button onclick="changeSetReps('${courseKey}', ${idx}, ${sIdx}, -5)" class="w-6 h-6 rounded-lg bg-slate-800 text-xs font-black text-white active:scale-90">-</button>
+                          <input type="number" value="${setObj.reps}"
+                            onchange="inputSetReps('${courseKey}', ${idx}, ${sIdx}, this.value)"
+                            class="w-10 text-center bg-transparent text-xs font-black text-emerald-300 focus:outline-none">
+                          <button onclick="changeSetReps('${courseKey}', ${idx}, ${sIdx}, 5)" class="w-6 h-6 rounded-lg bg-slate-800 text-xs font-black text-white active:scale-90">+</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ` : `
                   <div class="flex items-center justify-between gap-1.5 p-2 rounded-2xl border ${
                     setObj.done
                       ? 'bg-emerald-950/40 border-emerald-500/60'
@@ -977,12 +1115,12 @@
               <div class="mt-2.5 flex items-center justify-between gap-2 pt-2 border-t border-slate-700/50">
                 <button onclick="addSet('${courseKey}', ${idx})"
                   class="flex-1 py-2 rounded-xl text-xs font-extrabold bg-slate-900 hover:bg-slate-800 text-indigo-300 border border-indigo-500/40 active:scale-95 transition">
-                  ➕ 세트 추가 (${item.sets.length + 1}세트)
+                  ${item.isCardio ? `➕ 구간 추가 (${item.sets.length + 1}구간 · 경사/속도 변경 시)` : `➕ 세트 추가 (${item.sets.length + 1}세트)`}
                 </button>
                 ${item.sets.length > 1 ? `
                   <button onclick="removeSet('${courseKey}', ${idx})"
                     class="px-3 py-2 rounded-xl text-xs font-bold bg-slate-900 text-slate-400 border border-slate-700 active:scale-95 transition">
-                    ➖ 세트 삭제
+                    ➖ 삭제
                   </button>
                 ` : ''}
               </div>
