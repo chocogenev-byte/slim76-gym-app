@@ -418,12 +418,21 @@
       updatedAt: Date.now(),
       lastAction: '필라이즈 식단·수분·탄단지 통합 업그레이드',
       currentWeight: 95.0,
-      todayWatchKcal: 180,
-      todayWatchHr: '평균 135 BPM',
-      waterCups: 2,
-      psylliumLunch: false,
-      psylliumDinner: false,
+      todayWatchKcal: 815,
+      todayWatchHr: '평균 139 BPM',
+      waterCups: 5,
+      psylliumLunch: true,
+      psylliumDinner: true,
       todayMeals: [
+        {
+          id: 1793876725000,
+          time: '오후 08:00',
+          name: '🐟 광어·방어 모둠회 + 새우튀김·주먹밥·오짬(1/2) + 카스0.00',
+          kcal: 950,
+          carb: 105,
+          protein: 70,
+          fat: 29
+        },
         {
           id: 1793853741000,
           time: '오후 01:40',
@@ -663,10 +672,10 @@
       },
       watchRecords: [
         {
-          date: '11/05 (목) · 3일차 오전',
+          date: '11/05 (목) · 3일차 완주',
           weight: '95.0 kg (-1.0kg 🔥)',
-          activeKcal: '180 kcal (오늘 누적 180 kcal)',
-          memo: '🚴 오전 공복 실내자전거 (180kcal / 평균 135BPM)'
+          activeKcal: '815 kcal (자전거180 + 기구325 + 걷기310)',
+          memo: '상체 A코스 16세트 올클리어 + 오르막 걷기 25분 + 오전 자전거 완료!'
         },
         {
           date: '11/04 (수) · 2일차',
@@ -741,7 +750,7 @@
       if (!merged.todayWatchKcal) merged.todayWatchKcal = 180;
       if (!merged.todayWatchHr) merged.todayWatchHr = '평균 135 BPM';
       if (merged.waterCups === undefined) merged.waterCups = 2;
-      if (!Array.isArray(merged.todayMeals) || merged.todayMeals.length === 0) {
+      if (!Array.isArray(merged.todayMeals) || merged.todayMeals.length < 2) {
         merged.todayMeals = defaultData.todayMeals;
       }
       return merged;
