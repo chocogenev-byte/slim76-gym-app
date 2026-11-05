@@ -248,9 +248,9 @@
     const defaultData = {
       updatedAt: Date.now(),
       lastAction: '초기 세팅 완료',
-      currentWeight: 94.0,
-      todayWatchKcal: 0,
-      todayWatchHr: '',
+      currentWeight: 95.0,
+      todayWatchKcal: 180,
+      todayWatchHr: '평균 135 BPM',
       activeTab: 'courseA',
       courses: {
         courseA: [
@@ -443,8 +443,14 @@
       },
       watchRecords: [
         {
+          date: '11/05 (목) · 3일차 오전',
+          weight: '95.0 kg (-1.0kg 🔥)',
+          activeKcal: '180 kcal (오늘 누적 180 kcal)',
+          memo: '🚴 오전 공복 실내자전거 (180kcal / 평균 135BPM)'
+        },
+        {
           date: '11/04 (수) · 2일차',
-          weight: '94.0 kg',
+          weight: '96.0 kg (실측 시작)',
           activeKcal: '673 kcal (총 815 kcal)',
           memo: '오전 자전거(178kcal, 135bpm) + 오후 기구 5종(231kcal) + 오르막 걷기(264kcal)'
         },
@@ -631,8 +637,8 @@
       document.getElementById('todayWatchKcalDisplay').textContent = state.todayWatchKcal || 0;
       document.getElementById('todayWatchHrDisplay').textContent = state.todayWatchHr || '👇 아래에서 전송';
 
-      const totalToLose = 94.0 - 76.0;
-      const lostSoFar = Math.max(0, 94.0 - state.currentWeight);
+      const totalToLose = 96.0 - 76.0;
+      const lostSoFar = Math.max(0, 96.0 - state.currentWeight);
       const pct = Math.min(100, Math.max(8, (lostSoFar / totalToLose) * 100));
       document.getElementById('weightProgressBar').style.width = pct + '%';
 
