@@ -464,56 +464,17 @@
 
     const defaultData = {
       updatedAt: Date.now(),
-      lastDateKey: '2026-11-06',
-      day4MorningSyncedV2: true,
-      day4LunchSyncedV2: true,
-      day4DinnerSyncedV1: true,
-      lastAction: '4일차 (금) 저녁: 소고기 스테이크·육회·구운채소 + 부르고뉴 피노누아 기록 완료',
+      lastDateKey: '2026-11-07',
+      day5SaturdaySyncedV1: true,
+      lastAction: '5일차 (토) 일일 자동 초기화 완료',
       currentWeight: 95.0,
-      todayWatchKcal: 640,
-      todayWatchHr: '평균 144 BPM (추정)',
-      waterCups: 6,
-      psylliumLunch: true,
-      psylliumDinner: true,
-      todayMeals: [
-        {
-          id: 1793967900002,
-          time: '20:30',
-          name: '🍷 부르고뉴 1er Cru 피노누아 레드와인 (드라이)',
-          kcal: 380,
-          carb: 4,
-          protein: 0,
-          fat: 0
-        },
-        {
-          id: 1793967900001,
-          time: '20:00',
-          name: '🥩 수비드 소고기 스테이크 + 한우 육회 + 구운채소·포카치아(1/2)',
-          kcal: 770,
-          carb: 44,
-          protein: 63,
-          fat: 35
-        },
-        {
-          id: 1793937500000,
-          time: '12:55',
-          name: '🌰 얼티브 프로틴 밤맛 (맛밤 콜라보 · 당류0g)',
-          kcal: 115,
-          carb: 1,
-          protein: 21,
-          fat: 3
-        },
-        {
-          id: 1793937200000,
-          time: '12:50',
-          name: '🥩 닭가슴살 2덩어리 + 펩시 제로 프리바이오틱',
-          kcal: 227,
-          carb: 4,
-          protein: 46,
-          fat: 2
-        }
-      ],
-      activeTab: 'diet',
+      todayWatchKcal: 0,
+      todayWatchHr: '기록 대기',
+      waterCups: 1,
+      psylliumLunch: false,
+      psylliumDinner: false,
+      todayMeals: [],
+      activeTab: 'courseHome',
       courses: {
         courseA: [
           {
@@ -622,9 +583,9 @@
             defaultReps: 20,
             repUnit: '회',
             sets: [
-              { weight: 55, reps: 20, done: true },
-              { weight: 55, reps: 20, done: true },
-              { weight: 55, reps: 23, done: true }
+              { weight: 55, reps: 20, done: false },
+              { weight: 55, reps: 20, done: false },
+              { weight: 55, reps: 23, done: false }
             ],
             tip: '1~2세트 55kg×20회, 3세트 55kg×23회 완주! 무릎은 다 펴지 말고 90%만 펴서 관절 보호하기!'
           },
@@ -640,9 +601,9 @@
             defaultReps: 20,
             repUnit: '회',
             sets: [
-              { weight: 25, reps: 20, done: true },
-              { weight: 25, reps: 20, done: true },
-              { weight: 25, reps: 24, done: true }
+              { weight: 25, reps: 20, done: false },
+              { weight: 25, reps: 20, done: false },
+              { weight: 25, reps: 24, done: false }
             ],
             tip: '25kg 20·20·24회 완주! 다리를 끝까지 들어 올려 맨 위에서 1초 멈췄다 내리기!'
           },
@@ -658,9 +619,9 @@
             defaultReps: 20,
             repUnit: '회',
             sets: [
-              { weight: 20, reps: 20, done: true },
-              { weight: 20, reps: 23, done: true },
-              { weight: 20, reps: 25, done: true }
+              { weight: 20, reps: 20, done: false },
+              { weight: 20, reps: 23, done: false },
+              { weight: 20, reps: 25, done: false }
             ],
             tip: '무릎뼈가 벤치 끝단 밖으로 살짝 나오게 내려 눕고, 발끝을 정강이 쪽으로 당겨(ㄱ자) 접어 올리면 패드가 절대 안 말려 올라갑니다!'
           },
@@ -676,9 +637,9 @@
             defaultReps: 20,
             repUnit: '회',
             sets: [
-              { weight: 25, reps: 20, done: true },
-              { weight: 25, reps: 20, done: true },
-              { weight: 25, reps: 15, done: true }
+              { weight: 25, reps: 20, done: false },
+              { weight: 25, reps: 20, done: false },
+              { weight: 25, reps: 15, done: false }
             ],
             tip: '오른쪽 아래 레버로 다리를 넓게 벌린 뒤, 무릎 패드를 안쪽으로 돌려 허벅지 안쪽 힘으로 꽉 모으기!'
           },
@@ -694,9 +655,9 @@
             defaultReps: 20,
             repUnit: '회',
             sets: [
-              { weight: 25, reps: 20, done: true },
-              { weight: 25, reps: 30, done: true },
-              { weight: 25, reps: 20, done: true }
+              { weight: 25, reps: 20, done: false },
+              { weight: 25, reps: 30, done: false },
+              { weight: 25, reps: 20, done: false }
             ],
             tip: '이너타이 끝나고 바로 무릎 패드를 바깥쪽으로 돌린 뒤, 다리를 오므린 상태에서 엉덩이 옆쪽(중둔근) 힘으로 쫙 밀어 벌리기!'
           },
@@ -711,7 +672,7 @@
             speed: 5.0,
             defaultReps: 25,
             repUnit: '분',
-            sets: [{ incline: 5, speed: 5.0, reps: 25, done: true }],
+            sets: [{ incline: 5, speed: 5.0, reps: 25, done: false }],
             tip: '심박수 135~150 BPM 유지하며 성큼성큼 빠르게 걷기! (중간에 속도/경사를 바꾸면 아래 [구간 추가]를 눌러 기록하세요)'
           }
         ],
@@ -776,10 +737,10 @@
       },
       watchRecords: [
         {
-          date: '11/06 (금) · 4일차 오전 완주',
+          date: '11/06 (금) · 4일차 완주',
           weight: '95.0 kg',
           activeKcal: '640 kcal (하체15세트 295 + 걷기 345)',
-          memo: '⚡ B하체 5종 15세트(총 320회) + 오르막 걷기(경사5·속도5.0·25분) 올클리어! (워치 미착용 자동계산)'
+          memo: '⚡ B하체 15세트 + 오르막걷기 25분 올클리어! / 식단: 총 1,492kcal (단백질 130g · 스테이크/육회/피노누아)'
         },
         {
           date: '11/05 (목) · 3일차 완주',
@@ -804,8 +765,8 @@
 
     function normalizeState(raw) {
       const todayKey = new Date().toLocaleDateString('sv-SE');
-      // 4일차(2026-11-06) 오전 운동 및 점심·저녁 식단 자동 동기화 마이그레이션
-      if (todayKey === '2026-11-06' && (!raw || !raw.day4DinnerSyncedV1)) {
+      // 5일차(2026-11-07 토) 일일 자동 초기화 마이그레이션
+      if (todayKey === '2026-11-07' && (!raw || !raw.day5SaturdaySyncedV1)) {
         return JSON.parse(JSON.stringify(defaultData));
       }
       const rawDateKey = raw && raw.lastDateKey;
