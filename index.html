@@ -144,12 +144,20 @@
           <input type="number" id="quickBpm" placeholder="평균 심박 (예:138)" class="px-2.5 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white font-bold">
           <input type="number" step="0.1" id="quickWeight" placeholder="체중 kg (선택)" class="px-2.5 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white font-bold">
         </div>
-        <div class="grid grid-cols-2 gap-1.5">
+        <div class="grid grid-cols-2 gap-1.5 mb-1.5">
           <button onclick="sendQuickWatchLog()" class="py-2.5 rounded-2xl text-xs font-extrabold bg-emerald-500 text-slate-950 shadow active:scale-98 transition">
             🚀 워치 숫자 전송
           </button>
           <button onclick="autoCalcFromCompletedSets()" class="py-2.5 rounded-2xl text-xs font-extrabold bg-indigo-600 text-white border border-indigo-400 shadow active:scale-98 transition">
             ⚡ 워치 없을 때 자동계산
+          </button>
+        </div>
+        <div class="grid grid-cols-3 gap-1.5">
+          <a href="shortcuts://run-shortcut?name=%EC%8A%AC%EB%A6%BC76%EA%B1%B4%EA%B0%95%EC%97%B0%EB%8F%99" class="col-span-2 py-2 rounded-xl text-xs font-extrabold bg-rose-500/20 text-rose-300 border border-rose-500/40 text-center active:scale-95 transition">
+            ❤️ 아이폰 건강앱 1초 불러오기
+          </a>
+          <button onclick="toggleHealthGuideModal(true)" class="py-2 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 border border-slate-700 active:scale-95 transition">
+            ⚙️ 연동 설정법
           </button>
         </div>
       </div>
@@ -397,6 +405,41 @@
       </button>
       <button onclick="switchTab('records', true)" id="tab-records" class="py-2 px-0.5 rounded-2xl text-[11px] font-bold text-slate-400 transition">
         📈 기록장<br><span class="font-normal opacity-80 text-[10px]">체중·워치</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ❤️ 아이폰 건강(Apple Health) 1초 자동연동 단축어 가이드 모달 -->
+  <div id="healthGuideModal" class="fixed inset-0 z-50 bg-black/85 hidden items-center justify-center p-4">
+    <div class="bg-slate-900 border border-rose-500/40 rounded-3xl max-w-md w-full p-5 space-y-3.5 max-h-[85vh] overflow-y-auto shadow-2xl">
+      <div class="flex items-center justify-between">
+        <h3 class="text-base font-extrabold text-white">❤️ 아이폰 건강앱 · 애플워치 자동연동 법</h3>
+        <button onclick="toggleHealthGuideModal(false)" class="text-xs font-bold bg-slate-800 text-slate-300 px-2.5 py-1 rounded-xl">닫기 ✕</button>
+      </div>
+      <p class="text-xs text-slate-300 leading-relaxed">
+        아이폰 기본 <strong>『단축어(Shortcuts)』</strong> 앱에 딱 한 번만 등록해 두시면, 숫자를 손으로 칠 필요 없이 <strong>건강 앱의 오늘 활동 칼로리·심박수·체중</strong>이 1초 만에 자동 입력됩니다!
+      </p>
+      <div class="bg-slate-950 border border-slate-800 rounded-2xl p-3.5 space-y-2 text-xs text-slate-200">
+        <div class="font-extrabold text-rose-300">📱 1분 등록 순서 (최초 1회)</div>
+        <div>1️⃣ 아이폰 기본 <strong>[단축어]</strong> 앱 열기 → 우측 상단 <strong>[+]</strong> 누르기</div>
+        <div>2️⃣ 단축어 이름을 <strong><span class="text-emerald-300">슬림76건강연동</span></strong> 으로 변경</div>
+        <div>3️⃣ 동작 검색에서 <strong>[건강 샘플 찾기]</strong> 추가:
+          <div class="text-[11px] text-slate-400 pl-3 mt-0.5">• 유형: <strong>활동 에너지</strong> / 시작일: <strong>오늘</strong></div>
+        </div>
+        <div>4️⃣ 동작 검색에서 <strong>[통계 계산]</strong> 추가:
+          <div class="text-[11px] text-slate-400 pl-3 mt-0.5">• 입력: 건강 샘플의 <strong>합계(Sum)</strong></div>
+        </div>
+        <div>5️⃣ 동작 검색에서 <strong>[반올림]</strong> 추가 (소수점 첫째 자리에서 반올림)</div>
+        <div>6️⃣ 동작 검색에서 <strong>[URL 열기]</strong> 추가 후 아래 주소 붙여넣기:</div>
+        <div class="bg-slate-900 border border-indigo-500/40 rounded-xl p-2 text-[11px] font-mono text-indigo-300 break-all">
+          https://chocogenev-byte.github.io/slim76-gym-app/live.html?mode=total&kcal=[반올림된 숫자]
+        </div>
+      </div>
+      <div class="bg-emerald-950/40 border border-emerald-500/30 rounded-2xl p-3 text-xs text-emerald-200">
+        💡 <strong>완전 자동화 팁:</strong> 단축어 앱 하단 <strong>[자동화]</strong> 탭 → <strong>[Apple Watch 운동]</strong> → <strong>"운동이 종료될 때"</strong>에 이 단축어를 연결해 두시면, 워치에서 운동 종료를 누르는 순간 앱을 안 열어도 자동으로 기록됩니다!
+      </div>
+      <button onclick="copyShortcutTemplateUrl()" class="w-full py-2.5 rounded-2xl text-xs font-extrabold bg-indigo-600 text-white active:scale-95 transition">
+        📋 연동용 URL 주소 복사하기
       </button>
     </div>
   </div>
@@ -1746,7 +1789,57 @@
       saveState(`워치 상세 기록 추가 (${activeKcal || 500}kcal)`, true);
     }
 
+    function toggleHealthGuideModal(show) {
+      const modal = document.getElementById('healthGuideModal');
+      if (show) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      } else {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    }
+
+    function copyShortcutTemplateUrl() {
+      const url = 'https://chocogenev-byte.github.io/slim76-gym-app/live.html?mode=total&kcal=';
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(url).then(() => showToast('📋 연동 URL이 복사되었습니다! 단축어에 붙여넣으세요!'));
+      }
+    }
+
+    // 아이폰 건강(Apple Health) 단축어 URL 파라미터 자동 수신 (?kcal=640&hr=142&weight=94.8&mode=total)
+    function ingestHealthAppUrlParams() {
+      try {
+        const params = new URLSearchParams(window.location.search);
+        const kcalParam = parseInt(params.get('kcal') || '0', 10);
+        const hrParam = parseInt(params.get('hr') || '0', 10);
+        const weightParam = parseFloat(params.get('weight') || '0');
+        const mode = params.get('mode') || 'add';
+
+        if ((!isNaN(kcalParam) && kcalParam > 0) || (!isNaN(weightParam) && weightParam > 40)) {
+          if (!isNaN(kcalParam) && kcalParam > 0) {
+            state.todayWatchKcal = mode === 'total' ? kcalParam : ((state.todayWatchKcal || 0) + kcalParam);
+          }
+          if (!isNaN(hrParam) && hrParam > 50) {
+            state.todayWatchHr = `평균 ${hrParam} BPM`;
+          }
+          if (!isNaN(weightParam) && weightParam > 40) {
+            state.currentWeight = weightParam;
+          }
+          state.watchRecords.unshift({
+            date: `${todayStr} · 건강앱 연동`,
+            weight: `${Number(state.currentWeight).toFixed(1)} kg`,
+            activeKcal: `${state.todayWatchKcal} kcal (아이폰 건강앱 자동수신)`,
+            memo: `❤️ 아이폰 건강앱 단축어 자동 동기화 완료`
+          });
+          window.history.replaceState({}, document.title, window.location.pathname);
+          saveState(`❤️ 아이폰 건강앱 자동 동기화 (${state.todayWatchKcal}kcal)`, true);
+        }
+      } catch (e) {}
+    }
+
     switchTab(state.activeTab || 'courseA', false);
+    ingestHealthAppUrlParams();
   </script>
 </body>
 </html>
