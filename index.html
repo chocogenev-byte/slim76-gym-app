@@ -271,9 +271,9 @@
             <div class="text-xs font-extrabold text-white">🥚 삶은 계란 2개</div>
             <div class="text-[11px] text-emerald-400 font-bold">150 kcal · 단백질 13g</div>
           </button>
-          <button onclick="addPresetMeal('🥛 단백질 쉐이크 / 고단백 두유', 160, 8, 22, 4)" class="p-2.5 rounded-2xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-left active:scale-95 transition">
-            <div class="text-xs font-extrabold text-white">🥛 단백질 음료/두유</div>
-            <div class="text-[11px] text-emerald-400 font-bold">160 kcal · 단백질 22g</div>
+          <button onclick="addPresetMeal('🌰 얼티브 프로틴 밤맛 (당류0g)', 115, 1, 21, 3)" class="p-2.5 rounded-2xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-left active:scale-95 transition">
+            <div class="text-xs font-extrabold text-white">🌰 얼티브 프로틴 밤맛</div>
+            <div class="text-[11px] text-emerald-400 font-bold">115 kcal · 단백질 21g</div>
           </button>
           <button onclick="addPresetMeal('🍚 일반 한식 (건더기 위주·밥 1/2)', 580, 62, 28, 22)" class="p-2.5 rounded-2xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-left active:scale-95 transition">
             <div class="text-xs font-extrabold text-white">🍚 한식 (밥 반공기)</div>
@@ -466,8 +466,8 @@
       updatedAt: Date.now(),
       lastDateKey: '2026-11-06',
       day4MorningSyncedV2: true,
-      day4LunchSyncedV1: true,
-      lastAction: '4일차 (금) 점심: 닭가슴살 2덩어리 + 펩시 제로 프리바이오틱 기록 완료',
+      day4LunchSyncedV2: true,
+      lastAction: '4일차 (금) 점심: 닭가슴살 2덩어리 + 얼티브 프로틴 밤맛 + 펩시 제로 기록 완료',
       currentWeight: 95.0,
       todayWatchKcal: 640,
       todayWatchHr: '평균 144 BPM (추정)',
@@ -475,6 +475,15 @@
       psylliumLunch: false,
       psylliumDinner: false,
       todayMeals: [
+        {
+          id: 1793937500000,
+          time: '12:55',
+          name: '🌰 얼티브 프로틴 밤맛 (맛밤 콜라보 · 당류0g)',
+          kcal: 115,
+          carb: 1,
+          protein: 21,
+          fat: 3
+        },
         {
           id: 1793937200000,
           time: '12:50',
@@ -777,7 +786,7 @@
     function normalizeState(raw) {
       const todayKey = new Date().toLocaleDateString('sv-SE');
       // 4일차(2026-11-06) 오전 운동 및 점심 식단 자동 동기화 마이그레이션
-      if (todayKey === '2026-11-06' && (!raw || !raw.day4LunchSyncedV1)) {
+      if (todayKey === '2026-11-06' && (!raw || !raw.day4LunchSyncedV2)) {
         return JSON.parse(JSON.stringify(defaultData));
       }
       const rawDateKey = raw && raw.lastDateKey;
