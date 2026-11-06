@@ -144,9 +144,14 @@
           <input type="number" id="quickBpm" placeholder="평균 심박 (예:138)" class="px-2.5 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white font-bold">
           <input type="number" step="0.1" id="quickWeight" placeholder="체중 kg (선택)" class="px-2.5 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white font-bold">
         </div>
-        <button onclick="sendQuickWatchLog()" class="w-full py-2.5 rounded-2xl text-xs font-extrabold bg-emerald-500 text-slate-950 shadow active:scale-98 transition">
-          🚀 워치 기록 AI 코치에게 실시간 전송!
-        </button>
+        <div class="grid grid-cols-2 gap-1.5">
+          <button onclick="sendQuickWatchLog()" class="py-2.5 rounded-2xl text-xs font-extrabold bg-emerald-500 text-slate-950 shadow active:scale-98 transition">
+            🚀 워치 숫자 전송
+          </button>
+          <button onclick="autoCalcFromCompletedSets()" class="py-2.5 rounded-2xl text-xs font-extrabold bg-indigo-600 text-white border border-indigo-400 shadow active:scale-98 transition">
+            ⚡ 워치 없을 때 자동계산
+          </button>
+        </div>
       </div>
     </div>
 
@@ -417,11 +422,12 @@
     const defaultData = {
       updatedAt: Date.now(),
       lastDateKey: '2026-11-06',
-      lastAction: '4일차 (금) 일일 자동 초기화 완료',
+      day4MorningSyncedV2: true,
+      lastAction: '4일차 (금) 오전 B하체 15세트 + 오르막걷기 25분 완주 (640 kcal 자동계산)',
       currentWeight: 95.0,
-      todayWatchKcal: 0,
-      todayWatchHr: '기록 대기',
-      waterCups: 1,
+      todayWatchKcal: 640,
+      todayWatchHr: '평균 144 BPM (추정)',
+      waterCups: 2,
       psylliumLunch: false,
       psylliumDinner: false,
       todayMeals: [],
@@ -434,12 +440,16 @@
             name: '맥그립 랫풀다운 (나무바닥) 또는 원판 랫풀다운',
             zone: '나무 바닥 창가 쪽 (날개 모양 손잡이)',
             img: 'images/machine_mag_lat.jpg',
-            weight: 25,
+            weight: 30,
             weightStep: 5,
             unit: 'kg',
-            defaultReps: 15,
+            defaultReps: 20,
             repUnit: '회',
-            sets: makeSets(3, 25, 15),
+            sets: [
+              { weight: 25, reps: 20, done: false },
+              { weight: 30, reps: 20, done: false },
+              { weight: 35, reps: 18, done: false }
+            ],
             tip: '위 손잡이 양 끝을 잡고 가슴 위쪽으로 당긴 뒤 맨 아래서 1초 멈추고 천천히 올리기! (선풍기 옆 원판 기구로 할 땐 양쪽 15kg으로 변경)'
           },
           {
@@ -527,14 +537,14 @@
             weight: 55,
             weightStep: 5,
             unit: 'kg',
-            defaultReps: 15,
+            defaultReps: 20,
             repUnit: '회',
             sets: [
-              { weight: 50, reps: 15, done: false },
-              { weight: 55, reps: 20, done: false },
-              { weight: 55, reps: 15, done: false }
+              { weight: 55, reps: 20, done: true },
+              { weight: 55, reps: 20, done: true },
+              { weight: 55, reps: 23, done: true }
             ],
-            tip: '어제처럼 1세트 50kg, 2~3세트 55kg 등 세트마다 무게와 횟수를 자유롭게 조절하세요! 무릎은 90%만 펴기!'
+            tip: '1~2세트 55kg×20회, 3세트 55kg×23회 완주! 무릎은 다 펴지 말고 90%만 펴서 관절 보호하기!'
           },
           {
             id: 'b2',
@@ -547,8 +557,12 @@
             unit: 'kg',
             defaultReps: 20,
             repUnit: '회',
-            sets: makeSets(3, 25, 20),
-            tip: '첫날 25kg 20회×3세트 완주! 다리를 끝까지 들어 올려 맨 위에서 1초 멈췄다 내리기!'
+            sets: [
+              { weight: 25, reps: 20, done: true },
+              { weight: 25, reps: 20, done: true },
+              { weight: 25, reps: 24, done: true }
+            ],
+            tip: '25kg 20·20·24회 완주! 다리를 끝까지 들어 올려 맨 위에서 1초 멈췄다 내리기!'
           },
           {
             id: 'b3',
@@ -559,15 +573,19 @@
             weight: 20,
             weightStep: 5,
             unit: 'kg',
-            defaultReps: 15,
+            defaultReps: 20,
             repUnit: '회',
-            sets: makeSets(3, 20, 15),
-            tip: '패드에 배를 대고 엎드려 발목 뒤쪽에 스펀지를 걸고 엉덩이 쪽으로 접어 올리기!'
+            sets: [
+              { weight: 20, reps: 20, done: true },
+              { weight: 20, reps: 23, done: true },
+              { weight: 20, reps: 25, done: true }
+            ],
+            tip: '무릎뼈가 벤치 끝단 밖으로 살짝 나오게 내려 눕고, 발끝을 정강이 쪽으로 당겨(ㄱ자) 접어 올리면 패드가 절대 안 말려 올라갑니다!'
           },
           {
             id: 'b4',
             order: '4번 기구 · 허벅지 안쪽 라인',
-            name: '이너타이 (무릎 패드 오므리기)',
+            name: '이너타이 (무릎 패드 안으로 모으기)',
             zone: '나무 바닥 (무릎 양옆 동그란 패드 기구)',
             img: 'images/machine_inner_thigh.jpg',
             weight: 25,
@@ -575,22 +593,44 @@
             unit: 'kg',
             defaultReps: 20,
             repUnit: '회',
-            sets: makeSets(3, 25, 20),
-            tip: '등받이에 기대앉아 무릎 안쪽 패드를 꽉 오므렸다가 천천히 벌리기!'
+            sets: [
+              { weight: 25, reps: 20, done: true },
+              { weight: 25, reps: 20, done: true },
+              { weight: 25, reps: 15, done: true }
+            ],
+            tip: '오른쪽 아래 레버로 다리를 넓게 벌린 뒤, 무릎 패드를 안쪽으로 돌려 허벅지 안쪽 힘으로 꽉 모으기!'
+          },
+          {
+            id: 'b4_outer',
+            order: '5번 기구 · 중둔근 & 허리/골반 안정화',
+            name: '아웃타이 (앉은 자리에서 패드 돌려 밖으로 벌리기)',
+            zone: '이너타이 기구 그대로 (패드만 180도 회전)',
+            img: 'images/machine_inner_thigh.jpg',
+            weight: 25,
+            weightStep: 5,
+            unit: 'kg',
+            defaultReps: 20,
+            repUnit: '회',
+            sets: [
+              { weight: 25, reps: 20, done: true },
+              { weight: 25, reps: 30, done: true },
+              { weight: 25, reps: 20, done: true }
+            ],
+            tip: '이너타이 끝나고 바로 무릎 패드를 바깥쪽으로 돌린 뒤, 다리를 오므린 상태에서 엉덩이 옆쪽(중둔근) 힘으로 쫙 밀어 벌리기!'
           },
           {
             id: 'b5',
             isCardio: true,
             order: '마무리 유산소 · 25~30분',
             name: '창가 러닝머신 오르막 빠르게 걷기',
-            zone: '하늘색(경사도) 4~4.5 / 노란색(속도) 4.2~4.4',
+            zone: '하늘색(경사도) 4.5~5 / 노란색(속도) 4.3~5.0',
             img: 'images/machine_treadmill.jpg',
-            incline: 4.5,
-            speed: 4.3,
+            incline: 5,
+            speed: 5.0,
             defaultReps: 25,
             repUnit: '분',
-            sets: [{ incline: 4.5, speed: 4.3, reps: 25, done: false }],
-            tip: '심박수 135~145 BPM 유지하며 성큼성큼 빠르게 걷기! (중간에 속도/경사를 바꾸면 아래 [구간 추가]를 눌러 기록하세요)'
+            sets: [{ incline: 5, speed: 5.0, reps: 25, done: true }],
+            tip: '심박수 135~150 BPM 유지하며 성큼성큼 빠르게 걷기! (중간에 속도/경사를 바꾸면 아래 [구간 추가]를 눌러 기록하세요)'
           }
         ],
         courseHome: [
@@ -654,6 +694,12 @@
       },
       watchRecords: [
         {
+          date: '11/06 (금) · 4일차 오전 완주',
+          weight: '95.0 kg',
+          activeKcal: '640 kcal (하체15세트 295 + 걷기 345)',
+          memo: '⚡ B하체 5종 15세트(총 320회) + 오르막 걷기(경사5·속도5.0·25분) 올클리어! (워치 미착용 자동계산)'
+        },
+        {
           date: '11/05 (목) · 3일차 완주',
           weight: '95.0 kg (-1.0kg 🔥)',
           activeKcal: '815 kcal (자전거180 + 기구325 + 걷기310)',
@@ -675,6 +721,12 @@
     };
 
     function normalizeState(raw) {
+      const todayKey = new Date().toLocaleDateString('sv-SE');
+      // 4일차(2026-11-06) 오전 운동 완료분 자동 동기화 마이그레이션
+      if (todayKey === '2026-11-06' && (!raw || !raw.day4MorningSyncedV2)) {
+        return JSON.parse(JSON.stringify(defaultData));
+      }
+      const rawDateKey = raw && raw.lastDateKey;
       const merged = Object.assign({}, defaultData, raw || {});
       if (!merged.courses) merged.courses = defaultData.courses;
       ['courseA', 'courseB', 'courseHome'].forEach(cKey => {
@@ -731,8 +783,7 @@
       if (!merged.currentWeight || merged.currentWeight === 94) merged.currentWeight = 95.0;
 
       // 날짜가 바뀌면(매일 자정 이후 첫 접속 시) 오늘의 세트 체크·식단·물·워치 누적 자동 초기화!
-      const todayKey = new Date().toLocaleDateString('sv-SE');
-      if (merged.lastDateKey !== todayKey) {
+      if (rawDateKey && rawDateKey !== todayKey) {
         merged.lastDateKey = todayKey;
         merged.todayWatchKcal = 0;
         merged.todayWatchHr = '기록 대기';
@@ -750,7 +801,6 @@
         if (dayOfWeek === 2) merged.activeTab = 'courseHome';
         else if (dayOfWeek === 3 || dayOfWeek === 5) merged.activeTab = 'courseB';
         else merged.activeTab = 'courseA';
-        merged.watchRecords = defaultData.watchRecords;
       }
       return merged;
     }
@@ -1087,6 +1137,57 @@
       updateHeaderStats();
       if (state.activeTab === 'records') renderRecords();
       pushToCloud(`워치 기록 전송 (${memoParts.join(' ')})`, true);
+    }
+
+    function autoCalcFromCompletedSets() {
+      const courseKey = (state.activeTab === 'records' || state.activeTab === 'diet') ? 'courseB' : state.activeTab;
+      const list = state.courses[courseKey] || [];
+      let doneWeightSets = 0;
+      let totalReps = 0;
+      let cardioKcal = 0;
+
+      list.forEach(item => {
+        item.sets.forEach(s => {
+          if (!s.done) return;
+          if (item.isCardio) {
+            const mins = Number(s.reps) || 25;
+            const inc = Number(s.incline) || 5;
+            const spd = Number(s.speed) || 4.5;
+            // 95kg 기준 오르막 걷기 분당 활동 칼로리 근사 (경사5, 속도4.4 -> 12.4kcal/min, 속도5.0 -> 13.8kcal/min)
+            const kcalPerMin = 8.5 + (inc * 0.55) + ((spd - 4.0) * 2.5);
+            cardioKcal += Math.round(mins * kcalPerMin);
+          } else {
+            doneWeightSets += 1;
+            totalReps += (Number(s.reps) || 15);
+          }
+        });
+      });
+
+      const perSetKcal = courseKey === 'courseB' ? 19.7 : 20.3;
+      const weightKcal = Math.round(doneWeightSets * perSetKcal);
+      const totalEstimated = weightKcal + cardioKcal;
+
+      if (totalEstimated <= 0) {
+        showToast('⚠️ 먼저 완료한 세트(⬜ 완료)를 체크해 주세요!');
+        return;
+      }
+
+      state.todayWatchKcal = totalEstimated;
+      state.todayWatchHr = '평균 144 BPM (추정)';
+
+      const courseName = courseKey === 'courseB' ? '⚡ B하체' : (courseKey === 'courseA' ? '🔥 A상체' : '🚴 홈트');
+      const memoText = `${courseName} ${doneWeightSets}세트(${totalReps}회·${weightKcal}kcal) + 유산소(${cardioKcal}kcal) [워치 미착용 자동계산]`;
+
+      state.watchRecords.unshift({
+        date: `${todayStr} · 자동계산`,
+        weight: `${Number(state.currentWeight).toFixed(1)} kg`,
+        activeKcal: `${totalEstimated} kcal (웨이트 ${weightKcal} + 유산소 ${cardioKcal})`,
+        memo: memoText
+      });
+
+      updateHeaderStats();
+      if (state.activeTab === 'records') renderRecords();
+      pushToCloud(`워치 미착용 칼로리 자동계산 완료 (${totalEstimated}kcal)`, true);
     }
 
     function saveState(actionLabel = '운동 진행 업데이트', notify = false) {
