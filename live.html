@@ -1844,30 +1844,38 @@
     function ingestHealthAppUrlParams() {
       try {
         const params = new URLSearchParams(window.location.search);
-        const kcalParam = parseInt(params.get('kcal') || '0', 10);
+        if (!params.has('kcal') && !params.has('mode') && !params.has('weight')) return;
+
+        const rawKcalStr = params.get('kcal') || '0';
+        const nums = (rawKcalStr.match(/\d+(\.\d+)?/g) || []).map(Number);
+        const kcalParam = Math.round(nums.reduce((a, b) => a + b, 0));
         const hrParam = parseInt(params.get('hr') || '0', 10);
         const weightParam = parseFloat(params.get('weight') || '0');
         const mode = params.get('mode') || 'add';
 
-        if ((!isNaN(kcalParam) && kcalParam > 0) || (!isNaN(weightParam) && weightParam > 40)) {
-          if (!isNaN(kcalParam) && kcalParam > 0) {
-            state.todayWatchKcal = mode === 'total' ? kcalParam : ((state.todayWatchKcal || 0) + kcalParam);
-          }
-          if (!isNaN(hrParam) && hrParam > 50) {
-            state.todayWatchHr = `평균 ${hrParam} BPM`;
-          }
-          if (!isNaN(weightParam) && weightParam > 40) {
-            state.currentWeight = weightParam;
-          }
+        if (!isNaN(kcalParam) && kcalParam > 0) {
+          state.todayWatchKcal = mode === 'total' ? Math.max(state.todayWatchKcal || 0, kcalParam) : ((state.todayWatchKcal || 0) + kcalParam);
+        }
+        if (!isNaN(hrParam) && hrParam > 50) {
+          state.todayWatchHr = `평균 ${hrParam} BPM`;
+        }
+        if (!isNaN(weightParam) && weightParam > 40) {
+          state.currentWeight = weightParam;
+        }
+
+        if (kcalParam > 0) {
           state.watchRecords.unshift({
             date: `${todayStr} · 건강앱 연동`,
             weight: `${Number(state.currentWeight).toFixed(1)} kg`,
-            activeKcal: `${state.todayWatchKcal} kcal (아이폰 건강앱 자동수신)`,
-            memo: `❤️ 아이폰 건강앱 단축어 자동 동기화 완료`
+            activeKcal: `${kcalParam} kcal (오늘 누적 ${state.todayWatchKcal} kcal)`,
+            memo: `❤️ 아이폰 건강앱 단축어 자동 동기화 완료 (워치 ${kcalParam}kcal)`
           });
-          window.history.replaceState({}, document.title, window.location.pathname);
-          saveState(`❤️ 아이폰 건강앱 자동 동기화 (${state.todayWatchKcal}kcal)`, true);
         }
+
+        window.history.replaceState({}, document.title, window.location.pathname);
+        updateHeaderStats();
+        if (state.activeTab === 'records') renderRecords();
+        saveState(`❤️ 건강앱 단축어 연동 성공! (워치:${kcalParam}kcal / 앱누적:${state.todayWatchKcal}kcal)`, true);
       } catch (e) {}
     }
 
