@@ -466,15 +466,26 @@
       updatedAt: Date.now(),
       lastDateKey: '2026-11-06',
       day4MorningSyncedV2: true,
-      lastAction: '4일차 (금) 오전 B하체 15세트 + 오르막걷기 25분 완주 (640 kcal 자동계산)',
+      day4LunchSyncedV1: true,
+      lastAction: '4일차 (금) 점심: 닭가슴살 2덩어리 + 펩시 제로 프리바이오틱 기록 완료',
       currentWeight: 95.0,
       todayWatchKcal: 640,
       todayWatchHr: '평균 144 BPM (추정)',
-      waterCups: 2,
+      waterCups: 3,
       psylliumLunch: false,
       psylliumDinner: false,
-      todayMeals: [],
-      activeTab: 'courseB',
+      todayMeals: [
+        {
+          id: 1793937200000,
+          time: '12:50',
+          name: '🥩 닭가슴살 2덩어리 + 펩시 제로 프리바이오틱',
+          kcal: 227,
+          carb: 4,
+          protein: 46,
+          fat: 2
+        }
+      ],
+      activeTab: 'diet',
       courses: {
         courseA: [
           {
@@ -765,8 +776,8 @@
 
     function normalizeState(raw) {
       const todayKey = new Date().toLocaleDateString('sv-SE');
-      // 4일차(2026-11-06) 오전 운동 완료분 자동 동기화 마이그레이션
-      if (todayKey === '2026-11-06' && (!raw || !raw.day4MorningSyncedV2)) {
+      // 4일차(2026-11-06) 오전 운동 및 점심 식단 자동 동기화 마이그레이션
+      if (todayKey === '2026-11-06' && (!raw || !raw.day4LunchSyncedV1)) {
         return JSON.parse(JSON.stringify(defaultData));
       }
       const rawDateKey = raw && raw.lastDateKey;
