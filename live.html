@@ -467,14 +467,33 @@
       lastDateKey: '2026-11-06',
       day4MorningSyncedV2: true,
       day4LunchSyncedV2: true,
-      lastAction: '4일차 (금) 점심: 닭가슴살 2덩어리 + 얼티브 프로틴 밤맛 + 펩시 제로 기록 완료',
+      day4DinnerSyncedV1: true,
+      lastAction: '4일차 (금) 저녁: 소고기 스테이크·육회·구운채소 + 부르고뉴 피노누아 기록 완료',
       currentWeight: 95.0,
       todayWatchKcal: 640,
       todayWatchHr: '평균 144 BPM (추정)',
-      waterCups: 3,
-      psylliumLunch: false,
-      psylliumDinner: false,
+      waterCups: 6,
+      psylliumLunch: true,
+      psylliumDinner: true,
       todayMeals: [
+        {
+          id: 1793967900002,
+          time: '20:30',
+          name: '🍷 부르고뉴 1er Cru 피노누아 레드와인 (드라이)',
+          kcal: 380,
+          carb: 4,
+          protein: 0,
+          fat: 0
+        },
+        {
+          id: 1793967900001,
+          time: '20:00',
+          name: '🥩 수비드 소고기 스테이크 + 한우 육회 + 구운채소·포카치아(1/2)',
+          kcal: 770,
+          carb: 44,
+          protein: 63,
+          fat: 35
+        },
         {
           id: 1793937500000,
           time: '12:55',
@@ -785,8 +804,8 @@
 
     function normalizeState(raw) {
       const todayKey = new Date().toLocaleDateString('sv-SE');
-      // 4일차(2026-11-06) 오전 운동 및 점심 식단 자동 동기화 마이그레이션
-      if (todayKey === '2026-11-06' && (!raw || !raw.day4LunchSyncedV2)) {
+      // 4일차(2026-11-06) 오전 운동 및 점심·저녁 식단 자동 동기화 마이그레이션
+      if (todayKey === '2026-11-06' && (!raw || !raw.day4DinnerSyncedV1)) {
         return JSON.parse(JSON.stringify(defaultData));
       }
       const rawDateKey = raw && raw.lastDateKey;
