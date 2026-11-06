@@ -149,15 +149,15 @@
             🚀 워치 숫자 전송
           </button>
           <button onclick="autoCalcFromCompletedSets()" class="py-2.5 rounded-2xl text-xs font-extrabold bg-indigo-600 text-white border border-indigo-400 shadow active:scale-98 transition">
-            ⚡ 워치 없을 때 자동계산
+            ⚡ 완료세트로 칼로리 자동계산
           </button>
         </div>
-        <div class="grid grid-cols-3 gap-1.5">
-          <a href="shortcuts://run-shortcut?name=%EC%8A%AC%EB%A6%BC76%EA%B1%B4%EA%B0%95%EC%97%B0%EB%8F%99" class="col-span-2 py-2 rounded-xl text-xs font-extrabold bg-rose-500/20 text-rose-300 border border-rose-500/40 text-center active:scale-95 transition">
-            ❤️ 아이폰 건강앱 1초 불러오기
-          </a>
-          <button onclick="toggleHealthGuideModal(true)" class="py-2 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 border border-slate-700 active:scale-95 transition">
-            ⚙️ 연동 설정법
+        <div class="grid grid-cols-2 gap-1.5">
+          <button onclick="quickAddPresetWorkout('🚴 실내자전거 20분', 180, 135)" class="py-2 rounded-xl text-xs font-extrabold bg-sky-500/20 text-sky-300 border border-sky-500/40 text-center active:scale-95 transition">
+            🚴 자전거 20분 (+180kcal)
+          </button>
+          <button onclick="toggleHealthGuideModal(true)" class="py-2 rounded-xl text-xs font-bold bg-rose-500/20 text-rose-300 border border-rose-500/40 active:scale-95 transition">
+            ❤️ 건강앱 연동 안내 (선택)
           </button>
         </div>
       </div>
@@ -1448,10 +1448,43 @@
       saveState(`${item.name.split(' ')[0]} 세트/구간 축소 (총 ${item.sets.length}개)`, true);
     }
 
+    function quickAddPresetWorkout(label, kcal, bpm) {
+      state.todayWatchKcal = (state.todayWatchKcal || 0) + kcal;
+      state.todayWatchHr = `평균 ${bpm} BPM`;
+      state.watchRecords.unshift({
+        date: `${todayStr} · 원터치`,
+        weight: `${Number(state.currentWeight).toFixed(1)} kg`,
+        activeKcal: `${kcal} kcal (오늘 누적 ${state.todayWatchKcal} kcal)`,
+        memo: `${label} / ${kcal}kcal / 평균 ${bpm}BPM`
+      });
+      updateHeaderStats();
+      if (state.activeTab === 'records') renderRecords();
+      pushToCloud(`${label} (+${kcal}kcal) 원터치 추가`, true);
+    }
+
     function toggleSet(courseKey, idx, setIdx) {
       const item = state.courses[courseKey][idx];
       const setObj = item.sets[setIdx];
       setObj.done = !setObj.done;
+
+      // 세트/유산소 체크 시 자동으로 칼로리 실시간 가감! (워치 입력 불필요)
+      let setKcalDelta = 20;
+      if (item.isCardio) {
+        const mins = Number(setObj.reps) || 25;
+        const inc = Number(setObj.incline) || 5;
+        const spd = Number(setObj.speed) || 4.5;
+        const kcalPerMin = 8.5 + (inc * 0.55) + ((spd - 4.0) * 2.5);
+        setKcalDelta = Math.round(mins * kcalPerMin);
+      }
+      if (setObj.done) {
+        state.todayWatchKcal = (state.todayWatchKcal || 0) + setKcalDelta;
+        if (!state.todayWatchHr || state.todayWatchHr === '기록 대기') {
+          state.todayWatchHr = item.isCardio ? '평균 146 BPM (추정)' : '평균 136 BPM (추정)';
+        }
+      } else {
+        state.todayWatchKcal = Math.max(0, (state.todayWatchKcal || 0) - setKcalDelta);
+      }
+
       if (setObj.done && !item.isCardio) {
         activeTimerTarget = { courseKey, idx, setIdx };
         startRestTimer(40);
@@ -1461,12 +1494,12 @@
       renderWorkoutList();
       if (item.isCardio) {
         saveState(
-          `러닝머신 ${setIdx + 1}구간 (경사도 ${setObj.incline} · 속도 ${setObj.speed}km/h · ${setObj.reps}분) ${setObj.done ? '완료!' : '취소'}`,
+          `러닝머신 ${setIdx + 1}구간 (경사도 ${setObj.incline} · 속도 ${setObj.speed}km/h · ${setObj.reps}분) ${setObj.done ? `완료! (+${setKcalDelta}kcal 자동적립)` : '취소'}`,
           true
         );
       } else {
         saveState(
-          `${item.name.split(' ')[0]} ${setIdx + 1}세트 (${setObj.weight}${item.unit} × ${setObj.reps}${item.repUnit}) ${setObj.done ? '완료!' : '취소'}`,
+          `${item.name.split(' ')[0]} ${setIdx + 1}세트 (${setObj.weight}${item.unit} × ${setObj.reps}${item.repUnit}) ${setObj.done ? `완료! (+${setKcalDelta}kcal 자동적립)` : '취소'}`,
           true
         );
       }

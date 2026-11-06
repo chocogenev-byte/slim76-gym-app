@@ -1,4 +1,4 @@
-const CACHE_NAME = 'slim76-gym-v12';
+const CACHE_NAME = 'slim76-gym-v13';
 const ASSETS = [
   './',
   './index.html',
