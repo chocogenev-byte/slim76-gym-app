@@ -447,8 +447,11 @@
   <script>
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.getRegistrations().then(regs => {
-        regs.forEach(r => r.update());
+        regs.forEach(r => r.unregister());
       });
+      if (window.caches) {
+        caches.keys().then(keys => keys.forEach(k => caches.delete(k)));
+      }
     }
 
     const CLOUD_OBJ_URL = 'https://api.restful-api.dev/objects/ff808181a09d98f701a1a9040a013a53';
@@ -1845,8 +1848,12 @@
     // 아이폰 건강(Apple Health) 단축어 URL 파라미터 자동 수신 (?kcal=640&hr=142&weight=94.8&mode=total)
     function ingestHealthAppUrlParams() {
       try {
-        const params = new URLSearchParams(window.location.search);
-        if (!params.has('kcal') && !params.has('mode') && !params.has('weight')) return;
+        const rawSearch = window.location.search || '';
+        const params = new URLSearchParams(rawSearch);
+        if (!params.has('kcal') && !params.has('mode') && !params.has('weight')) {
+          pushToCloud(`📱 앱 열림 (${rawSearch || '기본접속'})`, false);
+          return;
+        }
 
         const rawKcalStr = params.get('kcal') || '0';
         const nums = (rawKcalStr.match(/\d+(\.\d+)?/g) || []).map(Number);
@@ -1877,7 +1884,7 @@
         window.history.replaceState({}, document.title, window.location.pathname);
         updateHeaderStats();
         if (state.activeTab === 'records') renderRecords();
-        saveState(`❤️ 건강앱 단축어 연동 성공! (워치:${kcalParam}kcal / 앱누적:${state.todayWatchKcal}kcal)`, true);
+        saveState(`❤️ 건강앱 단축어 연동 성공! (워치:${kcalParam}kcal / 원본:${rawKcalStr})`, true);
       } catch (e) {}
     }
 
