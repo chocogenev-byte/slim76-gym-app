@@ -478,11 +478,12 @@
       day5SaturdayDinnerSyncedV1: true,
       day5SaturdayDinnerSyncedV2: true,
       day5SaturdayDinnerSyncedV3: true,
-      lastAction: '5일차 (토) 저녁 봉추찜닭 살코기 + 수지스 닭가슴살 2팩 추가(600kcal·단백질78g) 기록 완료! (오늘 총 1,430kcal · 단백질 126g)',
+      day5SaturdayNightBikeSyncedV1: true,
+      lastAction: '5일차 (토) 올클리어! 오전·저녁 실내자전거 2회 총 398kcal(총 470kcal) + 식단 1,430kcal(단백질 126g) 완주!',
       currentWeight: 95.0,
-      todayWatchKcal: 207,
-      todayWatchHr: '평균 133 BPM',
-      waterCups: 7,
+      todayWatchKcal: 398,
+      todayWatchHr: '평균 134 BPM (2회)',
+      waterCups: 8,
       psylliumLunch: true,
       psylliumDinner: true,
       todayMeals: [
@@ -779,26 +780,29 @@
           },
           {
             id: 'h4',
-            order: '2단계 유산소 · 20~25분',
+            order: '2단계 유산소 · 20~25분 (오늘 오전·저녁 2회 완주!)',
             name: '집 실내 자전거 존2 타기',
             zone: '기어 3~4단 / 시속 22~25km',
             img: '',
-            weight: 133,
+            weight: 134,
             weightStep: 5,
             unit: 'BPM',
             defaultReps: 20,
             repUnit: '분',
-            sets: [{ weight: 133, reps: 20, done: true }],
-            tip: '입 다물고 코로만 숨 쉴 수 있는 묵직한 속도로 20분 쭉 타기!'
+            sets: [
+              { weight: 133, reps: 20, done: true },
+              { weight: 134, reps: 20, done: true }
+            ],
+            tip: '오전 20분(207kcal, 133BPM) + 저녁 20분(191kcal, 134BPM) = 총 398kcal 올클리어!'
           }
         ]
       },
       watchRecords: [
         {
-          date: '11/07 (토) · 5일차 진행 중',
+          date: '11/07 (토) · 5일차 완주',
           weight: '95.0 kg (수분 붓기 배출 중)',
-          activeKcal: '207 kcal (총 243 kcal · 평균 133BPM)',
-          memo: '🚴 오전 자전거 20분(207kcal) 완료 / 🍽️ 식단 총 1,430kcal (단백질 126g · 브런치+찜닭살코기+수지스2팩)'
+          activeKcal: '398 kcal (총 470 kcal · 자전거 2회 40분)',
+          memo: '🚴 오전(207kcal·133BPM) + 저녁(191kcal·134BPM) 완료! / 🍽️ 총 1,430kcal (단백질 126g · 당면 100% 남김)'
         },
         {
           date: '11/06 (금) · 4일차 완주',
@@ -829,8 +833,8 @@
 
     function normalizeState(raw) {
       const todayKey = new Date().toLocaleDateString('sv-SE');
-      // 5일차(2026-11-07 토) 오전 자전거 + 브런치 + 저녁 봉추찜닭(+수지스 닭가슴살 2팩) 동기화 마이그레이션
-      if (todayKey === '2026-11-07' && (!raw || !raw.day5SaturdayDinnerSyncedV3)) {
+      // 5일차(2026-11-07 토) 오전·저녁 자전거 2회(398kcal) + 브런치 + 저녁 완주 동기화 마이그레이션
+      if (todayKey === '2026-11-07' && (!raw || !raw.day5SaturdayNightBikeSyncedV1)) {
         return JSON.parse(JSON.stringify(defaultData));
       }
       const rawDateKey = raw && raw.lastDateKey;
