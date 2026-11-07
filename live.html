@@ -471,15 +471,16 @@
       day5SaturdaySyncedV1: true,
       day5SaturdaySyncedV2: true,
       day5SaturdaySyncedV3: true,
-      lastAction: '5일차 (토) 오전 차전자피 1포 + 물 2컵 복용 완료 (12시 A상체 준비)',
+      day5SaturdayBikeSyncedV1: true,
+      lastAction: '5일차 (토) 오전 실내 사이클링 20분 17초 (207 kcal · 133 BPM) 기록 완료!',
       currentWeight: 95.0,
-      todayWatchKcal: 0,
-      todayWatchHr: '기록 대기',
-      waterCups: 3,
+      todayWatchKcal: 207,
+      todayWatchHr: '평균 133 BPM',
+      waterCups: 4,
       psylliumLunch: true,
       psylliumDinner: false,
       todayMeals: [],
-      activeTab: 'courseA',
+      activeTab: 'diet',
       courses: {
         courseA: [
           {
@@ -730,17 +731,23 @@
             name: '집 실내 자전거 존2 타기',
             zone: '기어 3~4단 / 시속 22~25km',
             img: '',
-            weight: 135,
+            weight: 133,
             weightStep: 5,
             unit: 'BPM',
             defaultReps: 20,
             repUnit: '분',
-            sets: [{ weight: 135, reps: 20, done: false }],
+            sets: [{ weight: 133, reps: 20, done: true }],
             tip: '입 다물고 코로만 숨 쉴 수 있는 묵직한 속도로 20분 쭉 타기!'
           }
         ]
       },
       watchRecords: [
+        {
+          date: '11/07 (토) · 5일차 오전 완주',
+          weight: '95.0 kg (수분 붓기 배출 중)',
+          activeKcal: '207 kcal (총 243 kcal · 평균 133BPM)',
+          memo: '🚴 공복 실내 사이클링 20분 17초 완주! (20분 기준 최고 칼로리 207kcal 경신 🔥)'
+        },
         {
           date: '11/06 (금) · 4일차 완주',
           weight: '95.0 kg',
@@ -770,8 +777,8 @@
 
     function normalizeState(raw) {
       const todayKey = new Date().toLocaleDateString('sv-SE');
-      // 5일차(2026-11-07 토) 일일 자동 초기화 마이그레이션
-      if (todayKey === '2026-11-07' && (!raw || !raw.day5SaturdaySyncedV3)) {
+      // 5일차(2026-11-07 토) 오전 자전거 완료 자동 동기화 마이그레이션
+      if (todayKey === '2026-11-07' && (!raw || !raw.day5SaturdayBikeSyncedV1)) {
         return JSON.parse(JSON.stringify(defaultData));
       }
       const rawDateKey = raw && raw.lastDateKey;
