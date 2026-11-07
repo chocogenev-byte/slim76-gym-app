@@ -479,7 +479,8 @@
       day5SaturdayDinnerSyncedV2: true,
       day5SaturdayDinnerSyncedV3: true,
       day5SaturdayNightBikeSyncedV1: true,
-      lastAction: '5일차 (토) 올클리어! 오전·저녁 실내자전거 2회 총 398kcal(총 470kcal) + 식단 1,430kcal(단백질 126g) 완주!',
+      day5SaturdayShoulderPressSyncedV1: true,
+      lastAction: '5일차 (토) 올클리어 + 내일(일) A상체 코스에 숄더프레스 머신 4세트(어깨 확장) 추가 완료!',
       currentWeight: 95.0,
       todayWatchKcal: 398,
       todayWatchHr: '평균 134 BPM (2회)',
@@ -601,8 +602,27 @@
             tip: '양옆 긴 손잡이를 잡고 큰 나무를 안듯이 가슴 앞으로 모았다가 천천히 벌리기!'
           },
           {
+            id: 'a5_shoulder',
+            order: '5번 기구 · 어깨 프레임 넓히기 (4세트 집중 🔥)',
+            name: '숄더 프레스 머신 (바깥쪽 넓은 손잡이 밀기)',
+            zone: '나무 바닥 펙덱 플라이 바로 옆 기구',
+            img: 'images/machine_shoulder_press.jpg',
+            weight: 10,
+            weightStep: 5,
+            unit: 'kg',
+            defaultReps: 18,
+            repUnit: '회',
+            sets: [
+              { weight: 10, reps: 20, done: false },
+              { weight: 10, reps: 20, done: false },
+              { weight: 10, reps: 18, done: false },
+              { weight: 10, reps: 18, done: false }
+            ],
+            tip: '등과 엉덩이를 등받이에 100% 붙이고(허리 뜨지 않게!), 바깥쪽 넓은 손잡이를 잡아 귀 높이(90도)까지만 내렸다가 위로 밀어 올리면 옆어깨가 확 넓어집니다!'
+          },
+          {
             id: 'a5',
-            order: '5번 기구 · 팔 앞쪽 탄력',
+            order: '6번 기구 · 팔 앞쪽 탄력',
             name: '암 컬 머신 (팔뚝 패드 접기)',
             zone: '나무 바닥 (비스듬한 네모 패드 의자)',
             img: 'images/machine_arm_curl.jpg',
@@ -833,16 +853,16 @@
 
     function normalizeState(raw) {
       const todayKey = new Date().toLocaleDateString('sv-SE');
-      // 5일차(2026-11-07 토) 오전·저녁 자전거 2회(398kcal) + 브런치 + 저녁 완주 동기화 마이그레이션
-      if (todayKey === '2026-11-07' && (!raw || !raw.day5SaturdayNightBikeSyncedV1)) {
+      // 5일차(2026-11-07 토) 오전·저녁 자전거 2회(398kcal) + A상체 숄더프레스 4세트 추가 동기화 마이그레이션
+      if (todayKey === '2026-11-07' && (!raw || !raw.day5SaturdayShoulderPressSyncedV1)) {
         return JSON.parse(JSON.stringify(defaultData));
       }
       const rawDateKey = raw && raw.lastDateKey;
       const merged = Object.assign({}, defaultData, raw || {});
       if (!merged.courses) merged.courses = defaultData.courses;
       ['courseA', 'courseB', 'courseHome'].forEach(cKey => {
-        if (!merged.courses[cKey]) {
-          merged.courses[cKey] = defaultData.courses[cKey];
+        if (!merged.courses[cKey] || merged.courses[cKey].length !== defaultData.courses[cKey].length) {
+          merged.courses[cKey] = JSON.parse(JSON.stringify(defaultData.courses[cKey]));
           return;
         }
         merged.courses[cKey] = merged.courses[cKey].map((item, idx) => {
