@@ -467,7 +467,8 @@
       lastDateKey: '2026-11-07',
       day5SaturdaySyncedV1: true,
       day5SaturdaySyncedV2: true,
-      lastAction: '5일차 (토) 오전 차전자피 1포 + 물 2컵 복용 완료',
+      day5SaturdaySyncedV3: true,
+      lastAction: '5일차 (토) 오전 차전자피 1포 + 물 2컵 복용 완료 (12시 A상체 준비)',
       currentWeight: 95.0,
       todayWatchKcal: 0,
       todayWatchHr: '기록 대기',
@@ -475,7 +476,7 @@
       psylliumLunch: true,
       psylliumDinner: false,
       todayMeals: [],
-      activeTab: 'courseHome',
+      activeTab: 'courseA',
       courses: {
         courseA: [
           {
@@ -767,7 +768,7 @@
     function normalizeState(raw) {
       const todayKey = new Date().toLocaleDateString('sv-SE');
       // 5일차(2026-11-07 토) 일일 자동 초기화 마이그레이션
-      if (todayKey === '2026-11-07' && (!raw || !raw.day5SaturdaySyncedV2)) {
+      if (todayKey === '2026-11-07' && (!raw || !raw.day5SaturdaySyncedV3)) {
         return JSON.parse(JSON.stringify(defaultData));
       }
       const rawDateKey = raw && raw.lastDateKey;
