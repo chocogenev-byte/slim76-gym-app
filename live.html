@@ -475,14 +475,24 @@
       day5SaturdayBrunchSyncedV1: true,
       day5SaturdayBrunchSyncedV2: true,
       day5SaturdayBrunchSyncedV3: true,
-      lastAction: '5일차 (토) 오전 자전거(207kcal) + 점심 브런치(680kcal) + 오후 3:30 남은 샐러드 간식(150kcal) 완료!',
+      day5SaturdayDinnerSyncedV1: true,
+      lastAction: '5일차 (토) 저녁 봉추찜닭 반마리(살코기+감자 · 550kcal) 기록 완료! (오늘 총 1,380kcal · 단백질 101g)',
       currentWeight: 95.0,
       todayWatchKcal: 207,
       todayWatchHr: '평균 133 BPM',
-      waterCups: 5,
+      waterCups: 7,
       psylliumLunch: true,
-      psylliumDinner: false,
+      psylliumDinner: true,
       todayMeals: [
+        {
+          id: 1794041524001,
+          time: '오후 05:52',
+          name: '🍗 봉추찜닭 뼈 반마리 (살코기 전부 + 감자·채소 · 당면/국물 제외)',
+          kcal: 550,
+          carb: 26,
+          protein: 53,
+          fat: 22
+        },
         {
           id: 1794021172004,
           time: '오후 03:35',
@@ -786,7 +796,7 @@
           date: '11/07 (토) · 5일차 진행 중',
           weight: '95.0 kg (수분 붓기 배출 중)',
           activeKcal: '207 kcal (총 243 kcal · 평균 133BPM)',
-          memo: '🚴 공복 실내 자전거 20분(207kcal) 완료! / 🥪 브런치+오후 샐러드 완식 (830kcal · 단48g)'
+          memo: '🚴 오전 자전거 20분(207kcal) 완료 / 🍽️ 식단 총 1,380kcal (단백질 101g · 브런치+봉추찜닭 살코기)'
         },
         {
           date: '11/06 (금) · 4일차 완주',
@@ -817,8 +827,8 @@
 
     function normalizeState(raw) {
       const todayKey = new Date().toLocaleDateString('sv-SE');
-      // 5일차(2026-11-07 토) 오전 자전거 + 브런치 + 오후 샐러드 간식 동기화 마이그레이션
-      if (todayKey === '2026-11-07' && (!raw || !raw.day5SaturdayBrunchSyncedV3)) {
+      // 5일차(2026-11-07 토) 오전 자전거 + 브런치 + 저녁 봉추찜닭 동기화 마이그레이션
+      if (todayKey === '2026-11-07' && (!raw || !raw.day5SaturdayDinnerSyncedV1)) {
         return JSON.parse(JSON.stringify(defaultData));
       }
       const rawDateKey = raw && raw.lastDateKey;
