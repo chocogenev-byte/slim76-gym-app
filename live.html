@@ -472,14 +472,43 @@
       day5SaturdaySyncedV2: true,
       day5SaturdaySyncedV3: true,
       day5SaturdayBikeSyncedV1: true,
-      lastAction: '5일차 (토) 오전 실내 사이클링 20분 17초 (207 kcal · 133 BPM) 기록 완료!',
+      day5SaturdayBrunchSyncedV1: true,
+      lastAction: '5일차 (토) 오전 자전거(207kcal) + 그로서리스터프 브런치(830kcal·단백질48g) 기록 완료!',
       currentWeight: 95.0,
       todayWatchKcal: 207,
       todayWatchHr: '평균 133 BPM',
-      waterCups: 4,
+      waterCups: 5,
       psylliumLunch: true,
       psylliumDinner: false,
-      todayMeals: [],
+      todayMeals: [
+        {
+          id: 1794021172001,
+          time: '오후 12:12',
+          name: '🥪 그로서리스터프 프레시 샌드위치 (수제잠봉·스위스치즈·토마토)',
+          kcal: 460,
+          carb: 42,
+          protein: 26,
+          fat: 19
+        },
+        {
+          id: 1794021172002,
+          time: '오후 12:12',
+          name: '🥗 시즌샐러드 (수제잠봉·계란·리코타치즈·당근라페·깜빠뉴)',
+          kcal: 360,
+          carb: 22,
+          protein: 21,
+          fat: 20
+        },
+        {
+          id: 1794021172003,
+          time: '오후 12:12',
+          name: '☕ 아이스 아메리카노',
+          kcal: 10,
+          carb: 1,
+          protein: 1,
+          fat: 0
+        }
+      ],
       activeTab: 'diet',
       courses: {
         courseA: [
@@ -743,10 +772,10 @@
       },
       watchRecords: [
         {
-          date: '11/07 (토) · 5일차 오전 완주',
+          date: '11/07 (토) · 5일차 진행 중',
           weight: '95.0 kg (수분 붓기 배출 중)',
           activeKcal: '207 kcal (총 243 kcal · 평균 133BPM)',
-          memo: '🚴 공복 실내 사이클링 20분 17초 완주! (20분 기준 최고 칼로리 207kcal 경신 🔥)'
+          memo: '🚴 공복 실내 자전거 20분(207kcal) 완료! / 🥪 브런치: 프레시 샌드위치+시즌샐러드+아아 (830kcal · 단48g)'
         },
         {
           date: '11/06 (금) · 4일차 완주',
@@ -777,8 +806,8 @@
 
     function normalizeState(raw) {
       const todayKey = new Date().toLocaleDateString('sv-SE');
-      // 5일차(2026-11-07 토) 오전 자전거 완료 자동 동기화 마이그레이션
-      if (todayKey === '2026-11-07' && (!raw || !raw.day5SaturdayBikeSyncedV1)) {
+      // 5일차(2026-11-07 토) 오전 자전거 + 브런치 식단 완료 자동 동기화 마이그레이션
+      if (todayKey === '2026-11-07' && (!raw || !raw.day5SaturdayBrunchSyncedV1)) {
         return JSON.parse(JSON.stringify(defaultData));
       }
       const rawDateKey = raw && raw.lastDateKey;
