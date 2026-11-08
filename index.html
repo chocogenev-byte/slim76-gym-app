@@ -283,6 +283,10 @@
             <div class="text-xs font-extrabold text-white">🌰 얼티브 프로틴 밤맛</div>
             <div class="text-[11px] text-emerald-400 font-bold">115 kcal · 단백질 21g</div>
           </button>
+          <button onclick="addPresetMeal('🥤 더:단백 드링크 카라멜맛 (당류0.5g)', 105, 4, 20, 1)" class="p-2.5 rounded-2xl bg-slate-900 hover:bg-slate-800 border border-emerald-500/40 text-left active:scale-95 transition">
+            <div class="text-xs font-extrabold text-white">🥤 더:단백 카라멜맛</div>
+            <div class="text-[11px] text-emerald-400 font-bold">105 kcal · 단백질 20g</div>
+          </button>
           <button onclick="addPresetMeal('🍚 일반 한식 (건더기 위주·밥 1/2)', 580, 62, 28, 22)" class="p-2.5 rounded-2xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-left active:scale-95 transition">
             <div class="text-xs font-extrabold text-white">🍚 한식 (밥 반공기)</div>
             <div class="text-[11px] text-amber-300 font-bold">580 kcal · 단백질 28g</div>
@@ -481,7 +485,8 @@
       day6SundayLunchSyncedV1: true,
       day6SundayIso100SyncedV1: true,
       day6SundayDinnerSyncedV1: true,
-      lastAction: '6일차 (일) 저녁 대방어회 0.5kg(와사비+간장+쌈·밥제외) & 차전자피+물 2L(총 1,065kcal·단백질 114g) 완료!',
+      day6SundayDessertSyncedV1: true,
+      lastAction: '6일차 (일) 저녁 대방어회 0.5kg + 초밥밥 3알 + 더단백 카라멜맛 & 무화과(하루 총 1,340kcal · 단백질 136g!) 완벽 마감!',
       currentWeight: 95.0,
       todayWatchKcal: 404,
       todayWatchHr: '평균 140 BPM',
@@ -515,6 +520,15 @@
           carb: 22,
           protein: 49,
           fat: 34
+        },
+        {
+          id: 1794129758004,
+          time: '오후 06:15',
+          name: '🥤 더:단백 드링크 카라멜맛 + 생무화과 디저트',
+          kcal: 185,
+          carb: 20,
+          protein: 21,
+          fat: 1
         }
       ],
       activeTab: 'courseA',
@@ -854,8 +868,8 @@
 
     function normalizeState(raw) {
       const todayKey = new Date().toLocaleDateString('sv-SE');
-      // 6일차(2026-11-08 일) 낮 운동 완주 + 점심 부채살 포케/ISO100 + 저녁 대방어회 0.5kg 식단 동기화 마이그레이션
-      if (todayKey === '2026-11-08' && (!raw || !raw.day6SundayDinnerSyncedV1)) {
+      // 6일차(2026-11-08 일) 낮 운동 완주 + 점심 부채살 포케/ISO100 + 저녁 대방어회 0.5kg & 더단백/무화과 동기화 마이그레이션
+      if (todayKey === '2026-11-08' && (!raw || !raw.day6SundayDessertSyncedV1)) {
         return JSON.parse(JSON.stringify(defaultData));
       }
       const rawDateKey = raw && raw.lastDateKey;
