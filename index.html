@@ -392,16 +392,16 @@
   <div class="fixed bottom-0 inset-x-0 z-40 bg-slate-900/95 backdrop-blur-md border-t border-slate-800 px-2 py-2" style="padding-bottom: calc(env(safe-area-inset-bottom) + 8px);">
     <div class="max-w-md mx-auto grid grid-cols-5 gap-1">
       <button onclick="switchTab('courseA', true)" id="tab-courseA" class="py-2 px-0.5 rounded-2xl text-[11px] font-extrabold bg-indigo-600 text-white transition">
-        🔥 A상체<br><span class="font-normal opacity-90 text-[10px]">월·목</span>
+        🔥 A상체<br><span class="font-normal opacity-90 text-[10px]">일·수·금</span>
       </button>
       <button onclick="switchTab('courseB', true)" id="tab-courseB" class="py-2 px-0.5 rounded-2xl text-[11px] font-bold text-slate-400 transition">
-        ⚡ B하체<br><span class="font-normal opacity-80 text-[10px]">수·금</span>
+        ⚡ B하체<br><span class="font-normal opacity-80 text-[10px]">월·목</span>
       </button>
       <button onclick="switchTab('diet', true)" id="tab-diet" class="py-2 px-0.5 rounded-2xl text-[11px] font-bold text-slate-400 transition">
         🥗 식단·물<br><span class="font-normal opacity-80 text-[10px]">필라이즈</span>
       </button>
       <button onclick="switchTab('courseHome', true)" id="tab-courseHome" class="py-2 px-0.5 rounded-2xl text-[11px] font-bold text-slate-400 transition">
-        🚴 홈트<br><span class="font-normal opacity-80 text-[10px]">화요일</span>
+        🚴 홈트<br><span class="font-normal opacity-80 text-[10px]">화·토</span>
       </button>
       <button onclick="switchTab('records', true)" id="tab-records" class="py-2 px-0.5 rounded-2xl text-[11px] font-bold text-slate-400 transition">
         📈 기록장<br><span class="font-normal opacity-80 text-[10px]">체중·워치</span>
@@ -869,10 +869,10 @@
             (item.sets || []).forEach(s => { s.done = false; });
           });
         });
-        // 요일별 자동 코스 탭 선택 (화=홈트, 수/금=B하체, 그외=A상체)
+        // 요일별 자동 코스 탭 선택 (화·토=홈트, 월·목=B하체, 일·수·금=A상체)
         const dayOfWeek = new Date().getDay();
-        if (dayOfWeek === 2) merged.activeTab = 'courseHome';
-        else if (dayOfWeek === 3 || dayOfWeek === 5) merged.activeTab = 'courseB';
+        if (dayOfWeek === 2 || dayOfWeek === 6) merged.activeTab = 'courseHome';
+        else if (dayOfWeek === 1 || dayOfWeek === 4) merged.activeTab = 'courseB';
         else merged.activeTab = 'courseA';
       }
       return merged;
