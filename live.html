@@ -480,13 +480,14 @@
       day6SundayWorkoutDoneV1: true,
       day6SundayLunchSyncedV1: true,
       day6SundayIso100SyncedV1: true,
-      lastAction: '6일차 (일) 점심 부채살 포케(메밀면) + 제로콜라 + 다이마타이즈 ISO100 1.5스쿱(단백질 총 66g!) 완료!',
+      day6SundayDinnerSyncedV1: true,
+      lastAction: '6일차 (일) 저녁 대방어회 0.5kg(와사비+간장+쌈·밥제외) & 차전자피+물 2L(총 1,065kcal·단백질 114g) 완료!',
       currentWeight: 95.0,
       todayWatchKcal: 404,
       todayWatchHr: '평균 140 BPM',
-      waterCups: 6,
+      waterCups: 8,
       psylliumLunch: true,
-      psylliumDinner: false,
+      psylliumDinner: true,
       todayMeals: [
         {
           id: 1794112412001,
@@ -505,6 +506,15 @@
           carb: 2,
           protein: 38,
           fat: 0
+        },
+        {
+          id: 1794125900003,
+          time: '오후 06:00',
+          name: '🐟 대방어회 0.5kg (순살 240g · 와사비+간장+쌈 · 초밥밥/초장 제외)',
+          kcal: 520,
+          carb: 2,
+          protein: 48,
+          fat: 34
         }
       ],
       activeTab: 'courseA',
@@ -844,8 +854,8 @@
 
     function normalizeState(raw) {
       const todayKey = new Date().toLocaleDateString('sv-SE');
-      // 6일차(2026-11-08 일) 낮 운동 완주 + 점심 부채살 포케 & 다이마타이즈 ISO100 1.5스쿱 식단 동기화 마이그레이션
-      if (todayKey === '2026-11-08' && (!raw || !raw.day6SundayIso100SyncedV1)) {
+      // 6일차(2026-11-08 일) 낮 운동 완주 + 점심 부채살 포케/ISO100 + 저녁 대방어회 0.5kg 식단 동기화 마이그레이션
+      if (todayKey === '2026-11-08' && (!raw || !raw.day6SundayDinnerSyncedV1)) {
         return JSON.parse(JSON.stringify(defaultData));
       }
       const rawDateKey = raw && raw.lastDateKey;
