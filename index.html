@@ -469,11 +469,12 @@
       updatedAt: Date.now(),
       lastDateKey: '2026-11-08',
       day6SundaySyncedV1: true,
-      lastAction: '6일차 (일) 시작! 낮 12:15 A상체 코스(6종 19세트 · 숄더프레스 4세트 추가) + 저염 클린 데이 대기 중!',
+      day6SundayWorkoutDoneV1: true,
+      lastAction: '6일차 (일) 낮 A상체 19세트(150kcal) + 오르막 걷기 27분(254kcal·140BPM) = 총 404kcal(총 506kcal) 완주!',
       currentWeight: 95.0,
-      todayWatchKcal: 0,
-      todayWatchHr: '기록 대기',
-      waterCups: 2,
+      todayWatchKcal: 404,
+      todayWatchHr: '평균 140 BPM',
+      waterCups: 4,
       psylliumLunch: false,
       psylliumDinner: false,
       todayMeals: [],
@@ -492,15 +493,16 @@
             defaultReps: 20,
             repUnit: '회',
             sets: [
-              { weight: 25, reps: 20, done: false },
-              { weight: 30, reps: 20, done: false },
-              { weight: 35, reps: 18, done: false }
+              { weight: 25, reps: 20, done: true },
+              { weight: 30, reps: 20, done: true },
+              { weight: 35, reps: 10, done: true },
+              { weight: 25, reps: 15, done: true }
             ],
             tip: '위 손잡이 양 끝을 잡고 가슴 위쪽으로 당긴 뒤 맨 아래서 1초 멈추고 천천히 올리기! (선풍기 옆 원판 기구로 할 땐 양쪽 15kg으로 변경)'
           },
           {
             id: 'a2',
-            order: '2번 기구 · 등 중부',
+            order: '2번 기구 · 등 중부 & 말린 어깨 펴기',
             name: '시티드 로우 (가슴 받침대 기구)',
             zone: '검은 바닥 (창문 보고 거꾸로 앉기)',
             img: 'images/machine_seated_row.jpg',
@@ -510,25 +512,29 @@
             defaultReps: 15,
             repUnit: '회',
             sets: [
-              { weight: 15, reps: 15, done: false },
-              { weight: 15, reps: 15, done: false },
-              { weight: 15, reps: 15, done: false }
+              { weight: 15, reps: 15, done: true },
+              { weight: 15, reps: 15, done: true },
+              { weight: 15, reps: 16, done: true }
             ],
-            tip: '가슴과 명치를 앞 패드에 딱 붙인 채(허리 보호 100%) 손잡이를 당기며 날개뼈 모으기!'
+            tip: '✋ [손잡이 공식] 1·2세트는 가운데 길게 튀어나온 『11자 세로 손잡이(악수 그립)』로 등 전체 조이기! 마지막 3세트는 『바깥쪽 가로 손잡이(손등이 위로)』를 잡아 말린 어깨와 등 상부 넓히기!'
           },
           {
             id: 'a3',
             order: '3번 기구 · 가슴 메인',
-            name: '체스트 프레스 (가슴 앞으로 밀기)',
-            zone: '나무 바닥 (긴 등받이 + 앞 손잡이)',
-            img: 'images/machine_chest_press.jpg',
+            name: '체스트 프레스 (발밑 검은 곡선 발판 · 앞으로 밀기)',
+            zone: '나무 바닥 펙덱 플라이 옆 (위에서 앞으로 미는 기구)',
+            img: 'images/machine_shoulder_press.jpg',
             weight: 30,
             weightStep: 5,
             unit: 'kg',
             defaultReps: 15,
             repUnit: '회',
-            sets: makeSets(3, 30, 15),
-            tip: '발밑 검은 레버를 밟아 손잡이를 앞으로 꺼내 잡고, 등을 등받이에 붙인 채 앞으로 쭉 밀기!'
+            sets: [
+              { weight: 30, reps: 15, done: true },
+              { weight: 30, reps: 15, done: true },
+              { weight: 20, reps: 15, done: true }
+            ],
+            tip: '발밑 긴 검은 레버를 밟아 손잡이를 앞으로 꺼내 잡고, 등을 등받이에 붙인 채 가슴 앞으로 수평으로 쭉 밀기!'
           },
           {
             id: 'a4',
@@ -536,32 +542,36 @@
             name: '펙덱 플라이 (양팔 가슴 앞으로 모으기)',
             zone: '나무 바닥 거울 앞 (긴 세로 손잡이)',
             img: 'images/machine_pec_deck.jpg',
-            weight: 20,
+            weight: 25,
             weightStep: 5,
             unit: 'kg',
             defaultReps: 15,
             repUnit: '회',
-            sets: makeSets(3, 20, 15),
+            sets: [
+              { weight: 30, reps: 15, done: true },
+              { weight: 25, reps: 15, done: true },
+              { weight: 20, reps: 17, done: true }
+            ],
             tip: '양옆 긴 손잡이를 잡고 큰 나무를 안듯이 가슴 앞으로 모았다가 천천히 벌리기!'
           },
           {
             id: 'a5_shoulder',
             order: '5번 기구 · 어깨 프레임 넓히기 (4세트 집중 🔥)',
-            name: '숄더 프레스 머신 (바깥쪽 넓은 손잡이 밀기)',
-            zone: '나무 바닥 펙덱 플라이 바로 옆 기구',
-            img: 'images/machine_shoulder_press.jpg',
-            weight: 10,
+            name: '숄더 프레스 머신 (바닥 도르래 · 위로 밀기)',
+            zone: '나무 바닥 (아래에서 위로 미는 어깨 기구 · 가벼운 무게 필수!)',
+            img: 'images/machine_chest_press.jpg',
+            weight: 15,
             weightStep: 5,
             unit: 'kg',
-            defaultReps: 18,
+            defaultReps: 15,
             repUnit: '회',
             sets: [
-              { weight: 10, reps: 20, done: false },
-              { weight: 10, reps: 20, done: false },
-              { weight: 10, reps: 18, done: false },
+              { weight: 30, reps: 8, done: true },
+              { weight: 25, reps: 10, done: true },
+              { weight: 20, reps: 13, done: true },
               { weight: 10, reps: 18, done: false }
             ],
-            tip: '등과 엉덩이를 등받이에 100% 붙이고(허리 뜨지 않게!), 바깥쪽 넓은 손잡이를 잡아 귀 높이(90도)까지만 내렸다가 위로 밀어 올리면 옆어깨가 확 넓어집니다!'
+            tip: '어깨는 작은 근육이라 체스트보다 훨씬 무겁습니다! 다음번엔 10~15kg으로 가볍게 꽂고 바깥쪽 손잡이를 잡아 위로 밀어 올리세요!'
           },
           {
             id: 'a5',
@@ -574,7 +584,11 @@
             unit: 'kg',
             defaultReps: 15,
             repUnit: '회',
-            sets: makeSets(3, 10, 15),
+            sets: [
+              { weight: 10, reps: 20, done: true },
+              { weight: 10, reps: 15, done: true },
+              { weight: 10, reps: 15, done: true }
+            ],
             tip: '전완근(아래 팔뚝)이 먼저 아픈 걸 막으려면 손잡이를 주먹으로 꽉 쥐지 말고 손바닥 아랫부분에 걸친 채, 손목을 절대 안쪽으로 꺾지 말고 접어 올리세요!'
           },
           {
@@ -585,10 +599,10 @@
             zone: '하늘색(경사도) 4~6 / 노란색(속도) 4.5~5.0',
             img: 'images/machine_treadmill.jpg',
             incline: 5,
-            speed: 4.8,
-            defaultReps: 25,
+            speed: 5.3,
+            defaultReps: 27,
             repUnit: '분',
-            sets: [{ incline: 5, speed: 4.8, reps: 25, done: false }],
+            sets: [{ incline: 5, speed: 5.3, reps: 27, done: true }],
             tip: '절대 뛰지 말 것! 손잡이에서 손을 떼고 팔을 흔들며 심박수 135~145 BPM 유지! (중간에 속도/경사를 바꾸면 아래 [구간 추가]를 눌러 기록하세요)'
           }
         ],
@@ -761,6 +775,12 @@
       },
       watchRecords: [
         {
+          date: '11/08 (일) · 6일차 낮 완주',
+          weight: '95.0 kg (수분 배출 데이)',
+          activeKcal: '404 kcal (총 506 kcal · 기구150 + 걷기254)',
+          memo: '🔥 A상체 6종 19세트(284회) 완주 + 오르막 걷기 27분(2.42km · 140BPM) 완료!'
+        },
+        {
           date: '11/07 (토) · 5일차 완주',
           weight: '95.0 kg (수분 붓기 배출 중)',
           activeKcal: '398 kcal (총 470 kcal · 자전거 2회 40분)',
@@ -795,8 +815,8 @@
 
     function normalizeState(raw) {
       const todayKey = new Date().toLocaleDateString('sv-SE');
-      // 6일차(2026-11-08 일) A상체 숄더프레스 4세트 추가 및 일요일 자동 초기화 동기화 마이그레이션
-      if (todayKey === '2026-11-08' && (!raw || !raw.day6SundaySyncedV1)) {
+      // 6일차(2026-11-08 일) 낮 상체 19세트 + 오르막 걷기 27분 완주 및 기구 사진/팁 교정 동기화 마이그레이션
+      if (todayKey === '2026-11-08' && (!raw || !raw.day6SundayWorkoutDoneV1)) {
         return JSON.parse(JSON.stringify(defaultData));
       }
       const rawDateKey = raw && raw.lastDateKey;
