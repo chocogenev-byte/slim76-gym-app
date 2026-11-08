@@ -470,14 +470,34 @@
       lastDateKey: '2026-11-08',
       day6SundaySyncedV1: true,
       day6SundayWorkoutDoneV1: true,
-      lastAction: '6일차 (일) 낮 A상체 19세트(150kcal) + 오르막 걷기 27분(254kcal·140BPM) = 총 404kcal(총 506kcal) 완주!',
+      day6SundayLunchSyncedV1: true,
+      lastAction: '6일차 (일) 낮 운동(404kcal) + 점심 부채살 스테이크 포케(메밀면) & 단백질 쉐이크 기록 완료!',
       currentWeight: 95.0,
       todayWatchKcal: 404,
       todayWatchHr: '평균 140 BPM',
-      waterCups: 4,
-      psylliumLunch: false,
+      waterCups: 5,
+      psylliumLunch: true,
       psylliumDinner: false,
-      todayMeals: [],
+      todayMeals: [
+        {
+          id: 1794112412001,
+          time: '오후 01:50',
+          name: '🥗 부채살 스테이크 포케 (메밀면 · 마늘간장 1/2 · 스리라차양배추 제외)',
+          kcal: 380,
+          carb: 34,
+          protein: 28,
+          fat: 14
+        },
+        {
+          id: 1794112412002,
+          time: '오후 04:00 (예정)',
+          name: '🥤 단백질 파우더 쉐이크 1스쿱 (물에 타서)',
+          kcal: 120,
+          carb: 3,
+          protein: 24,
+          fat: 1
+        }
+      ],
       activeTab: 'courseA',
       courses: {
         courseA: [
@@ -775,10 +795,10 @@
       },
       watchRecords: [
         {
-          date: '11/08 (일) · 6일차 낮 완주',
+          date: '11/08 (일) · 6일차 진행 중',
           weight: '95.0 kg (수분 배출 데이)',
           activeKcal: '404 kcal (총 506 kcal · 기구150 + 걷기254)',
-          memo: '🔥 A상체 6종 19세트(284회) 완주 + 오르막 걷기 27분(2.42km · 140BPM) 완료!'
+          memo: '🔥 A상체 19세트 + 걷기 27분(140BPM) 완료! / 🥗 점심: 부채살 스테이크 포케(메밀면)+프로틴 (500kcal · 단52g)'
         },
         {
           date: '11/07 (토) · 5일차 완주',
@@ -815,8 +835,8 @@
 
     function normalizeState(raw) {
       const todayKey = new Date().toLocaleDateString('sv-SE');
-      // 6일차(2026-11-08 일) 낮 상체 19세트 + 오르막 걷기 27분 완주 및 기구 사진/팁 교정 동기화 마이그레이션
-      if (todayKey === '2026-11-08' && (!raw || !raw.day6SundayWorkoutDoneV1)) {
+      // 6일차(2026-11-08 일) 낮 운동 완주 + 점심 부채살 포케 & 프로틴 식단 동기화 마이그레이션
+      if (todayKey === '2026-11-08' && (!raw || !raw.day6SundayLunchSyncedV1)) {
         return JSON.parse(JSON.stringify(defaultData));
       }
       const rawDateKey = raw && raw.lastDateKey;
