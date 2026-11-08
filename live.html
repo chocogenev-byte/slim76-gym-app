@@ -467,74 +467,17 @@
 
     const defaultData = {
       updatedAt: Date.now(),
-      lastDateKey: '2026-11-07',
-      day5SaturdaySyncedV1: true,
-      day5SaturdaySyncedV2: true,
-      day5SaturdaySyncedV3: true,
-      day5SaturdayBikeSyncedV1: true,
-      day5SaturdayBrunchSyncedV1: true,
-      day5SaturdayBrunchSyncedV2: true,
-      day5SaturdayBrunchSyncedV3: true,
-      day5SaturdayDinnerSyncedV1: true,
-      day5SaturdayDinnerSyncedV2: true,
-      day5SaturdayDinnerSyncedV3: true,
-      day5SaturdayNightBikeSyncedV1: true,
-      day5SaturdayShoulderPressSyncedV1: true,
-      lastAction: '5일차 (토) 올클리어 + 내일(일) A상체 코스에 숄더프레스 머신 4세트(어깨 확장) 추가 완료!',
+      lastDateKey: '2026-11-08',
+      day6SundaySyncedV1: true,
+      lastAction: '6일차 (일) 시작! 낮 12:15 A상체 코스(6종 19세트 · 숄더프레스 4세트 추가) + 저염 클린 데이 대기 중!',
       currentWeight: 95.0,
-      todayWatchKcal: 398,
-      todayWatchHr: '평균 134 BPM (2회)',
-      waterCups: 8,
-      psylliumLunch: true,
-      psylliumDinner: true,
-      todayMeals: [
-        {
-          id: 1794041524001,
-          time: '오후 05:52',
-          name: '🍗 봉추찜닭 살코기 + 수지스 닭가슴살 2팩 추가 (당면/국물 제외)',
-          kcal: 600,
-          carb: 20,
-          protein: 78,
-          fat: 18
-        },
-        {
-          id: 1794021172004,
-          time: '오후 03:35',
-          name: '🥗 남은 시즌샐러드 마저 섭취 (오후 클린 간식)',
-          kcal: 150,
-          carb: 12,
-          protein: 6,
-          fat: 8
-        },
-        {
-          id: 1794021172001,
-          time: '오후 12:12',
-          name: '🥪 그로서리스터프 프레시 샌드위치 (수제잠봉·스위스치즈·토마토)',
-          kcal: 460,
-          carb: 42,
-          protein: 26,
-          fat: 19
-        },
-        {
-          id: 1794021172002,
-          time: '오후 12:12',
-          name: '🥗 시즌샐러드 (점심에 2/3 섭취)',
-          kcal: 210,
-          carb: 10,
-          protein: 15,
-          fat: 12
-        },
-        {
-          id: 1794021172003,
-          time: '오후 12:12',
-          name: '☕ 아이스 아메리카노',
-          kcal: 10,
-          carb: 1,
-          protein: 1,
-          fat: 0
-        }
-      ],
-      activeTab: 'diet',
+      todayWatchKcal: 0,
+      todayWatchHr: '기록 대기',
+      waterCups: 2,
+      psylliumLunch: false,
+      psylliumDinner: false,
+      todayMeals: [],
+      activeTab: 'courseA',
       courses: {
         courseA: [
           {
@@ -800,7 +743,7 @@
           },
           {
             id: 'h4',
-            order: '2단계 유산소 · 20~25분 (오늘 오전·저녁 2회 완주!)',
+            order: '2단계 유산소 · 20~25분',
             name: '집 실내 자전거 존2 타기',
             zone: '기어 3~4단 / 시속 22~25km',
             img: '',
@@ -810,10 +753,9 @@
             defaultReps: 20,
             repUnit: '분',
             sets: [
-              { weight: 133, reps: 20, done: true },
-              { weight: 134, reps: 20, done: true }
+              { weight: 134, reps: 20, done: false }
             ],
-            tip: '오전 20분(207kcal, 133BPM) + 저녁 20분(191kcal, 134BPM) = 총 398kcal 올클리어!'
+            tip: '입 다물고 코로만 숨 쉴 수 있는 묵직한 속도로 20분 쭉 타기!'
           }
         ]
       },
@@ -853,8 +795,8 @@
 
     function normalizeState(raw) {
       const todayKey = new Date().toLocaleDateString('sv-SE');
-      // 5일차(2026-11-07 토) 오전·저녁 자전거 2회(398kcal) + A상체 숄더프레스 4세트 추가 동기화 마이그레이션
-      if (todayKey === '2026-11-07' && (!raw || !raw.day5SaturdayShoulderPressSyncedV1)) {
+      // 6일차(2026-11-08 일) A상체 숄더프레스 4세트 추가 및 일요일 자동 초기화 동기화 마이그레이션
+      if (todayKey === '2026-11-08' && (!raw || !raw.day6SundaySyncedV1)) {
         return JSON.parse(JSON.stringify(defaultData));
       }
       const rawDateKey = raw && raw.lastDateKey;
