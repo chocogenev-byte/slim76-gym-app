@@ -512,12 +512,13 @@
       day7MondayWorkoutDoneV1: true,
       day7MondayPreWorkoutResetV1: true,
       day7MondayAshatchuV1: true,
-      lastAction: '7일차 (월) 운동 전 부스터 🍹 아샷추 제로(15kcal) 장착 완료! ⚡ B하체 출격!',
+      day7MondayPsylliumSpongeV1: true,
+      lastAction: '7일차 (월) 차전자피 1포(스펀지 요법) 완료! ⚡ B하체 출격 대기!',
       currentWeight: 95.2,
       todayWatchKcal: 0,
       todayWatchHr: '기록 대기',
       waterCups: 2,
-      psylliumLunch: false,
+      psylliumLunch: true,
       psylliumDinner: false,
       todayMeals: [
         {
@@ -867,8 +868,8 @@
 
     function normalizeState(raw) {
       const todayKey = new Date().toLocaleDateString('sv-SE');
-      // 7일차(2026-11-09 월) 운동 전 아샷추 제로(15kcal) 부스터 반영 마이그레이션
-      if (todayKey === '2026-11-09' && (!raw || !raw.day7MondayAshatchuV1)) {
+      // 7일차(2026-11-09 월) 차전자피 스펀지 요법(1포) 체크 반영 마이그레이션
+      if (todayKey === '2026-11-09' && (!raw || !raw.day7MondayPsylliumSpongeV1)) {
         return JSON.parse(JSON.stringify(defaultData));
       }
       const rawDateKey = raw && raw.lastDateKey;
