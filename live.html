@@ -255,6 +255,14 @@
           <span class="text-[11px] text-indigo-300 font-semibold">터치 즉시 기록 & 전송</span>
         </div>
         <div class="grid grid-cols-2 gap-2">
+          <button onclick="addPresetMeal('🥗 연어/새우 포케 (메밀면·드레싱 반만)', 410, 38, 34, 12)" class="p-2.5 rounded-2xl bg-slate-900 hover:bg-slate-800 border border-emerald-500/40 text-left active:scale-95 transition">
+            <div class="text-xs font-extrabold text-white">🥗 연어/새우 포케(메밀면)</div>
+            <div class="text-[11px] text-emerald-400 font-bold">410 kcal · 단백질 34g</div>
+          </button>
+          <button onclick="addPresetMeal('🥪 써브웨이 로스트치킨 15cm (위트·더블미트)', 460, 40, 44, 9)" class="p-2.5 rounded-2xl bg-slate-900 hover:bg-slate-800 border border-emerald-500/40 text-left active:scale-95 transition">
+            <div class="text-xs font-extrabold text-white">🥪 써브웨이 로스트치킨</div>
+            <div class="text-[11px] text-emerald-400 font-bold">460 kcal · 단백질 44g</div>
+          </button>
           <button onclick="addPresetMeal('🥩 와규 부채살(200g)+관자·숙주구이', 450, 5, 48, 22)" class="p-2.5 rounded-2xl bg-slate-900 hover:bg-slate-800 border border-emerald-500/40 text-left active:scale-95 transition">
             <div class="text-xs font-extrabold text-white">🥩 와규 부채살+관자·숙주</div>
             <div class="text-[11px] text-emerald-400 font-bold">450 kcal · 단백질 48g</div>
@@ -267,9 +275,9 @@
             <div class="text-xs font-extrabold text-white">🥩 육우 갈비살+관자·숙주</div>
             <div class="text-[11px] text-emerald-400 font-bold">480 kcal · 단백질 44g</div>
           </button>
-          <button onclick="addPresetMeal('🥗 포케 (연어/닭가슴살·밥반공기)', 520, 45, 38, 18)" class="p-2.5 rounded-2xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-left active:scale-95 transition">
-            <div class="text-xs font-extrabold text-white">🥗 포케 (밥 절반)</div>
-            <div class="text-[11px] text-emerald-400 font-bold">520 kcal · 단백질 38g</div>
+          <button onclick="addPresetMeal('🍳 관자살(8알)+훈제연어+계란3개 홈브런치', 420, 4, 46, 22)" class="p-2.5 rounded-2xl bg-slate-900 hover:bg-slate-800 border border-emerald-500/40 text-left active:scale-95 transition">
+            <div class="text-xs font-extrabold text-white">🍳 관자+훈제연어+계란3</div>
+            <div class="text-[11px] text-emerald-400 font-bold">420 kcal · 단백질 46g</div>
           </button>
           <button onclick="addPresetMeal('🍗 굽네 오리지널/고추바사삭 반마리', 480, 8, 52, 24)" class="p-2.5 rounded-2xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-left active:scale-95 transition">
             <div class="text-xs font-extrabold text-white">🍗 굽네치킨 반마리</div>
@@ -501,15 +509,16 @@
       day7MondaySyncedV1: true,
       day7MondayWeightSyncedV1: true,
       day7MondayWeight952V1: true,
-      lastAction: '7일차 (월) 화장실 후 진짜 공복 체중 95.2kg 달성!! (94kg대 진입 D-0.3kg!)',
+      day7MondayWorkoutDoneV1: true,
+      lastAction: '7일차 (월) ⚡ B하체 4종 12세트(이너타이 보호 패스) + 오르막 걷기 25분 완주! (약 420kcal 소모 🔥)',
       currentWeight: 95.2,
-      todayWatchKcal: 0,
-      todayWatchHr: '기록 대기',
-      waterCups: 1,
+      todayWatchKcal: 420,
+      todayWatchHr: '워치 미착용 (자동환산 완료 · 총 520kcal)',
+      waterCups: 2,
       psylliumLunch: false,
       psylliumDinner: false,
       todayMeals: [],
-      activeTab: 'courseB',
+      activeTab: 'diet',
       courses: {
         courseA: [
           {
@@ -650,9 +659,9 @@
             defaultReps: 20,
             repUnit: '회',
             sets: [
-              { weight: 55, reps: 20, done: false },
-              { weight: 55, reps: 20, done: false },
-              { weight: 55, reps: 23, done: false }
+              { weight: 55, reps: 20, done: true },
+              { weight: 55, reps: 20, done: true },
+              { weight: 55, reps: 23, done: true }
             ],
             tip: '1~2세트 55kg×20회, 3세트 55kg×23회 완주! 무릎은 다 펴지 말고 90%만 펴서 관절 보호하기!'
           },
@@ -668,9 +677,9 @@
             defaultReps: 20,
             repUnit: '회',
             sets: [
-              { weight: 25, reps: 20, done: false },
-              { weight: 25, reps: 20, done: false },
-              { weight: 25, reps: 24, done: false }
+              { weight: 25, reps: 20, done: true },
+              { weight: 25, reps: 20, done: true },
+              { weight: 25, reps: 24, done: true }
             ],
             tip: '25kg 20·20·24회 완주! 다리를 끝까지 들어 올려 맨 위에서 1초 멈췄다 내리기!'
           },
@@ -686,15 +695,15 @@
             defaultReps: 20,
             repUnit: '회',
             sets: [
-              { weight: 20, reps: 20, done: false },
-              { weight: 20, reps: 23, done: false },
-              { weight: 20, reps: 25, done: false }
+              { weight: 20, reps: 20, done: true },
+              { weight: 20, reps: 23, done: true },
+              { weight: 20, reps: 25, done: true }
             ],
             tip: '무릎뼈가 벤치 끝단 밖으로 살짝 나오게 내려 눕고, 발끝을 정강이 쪽으로 당겨(ㄱ자) 접어 올리면 패드가 절대 안 말려 올라갑니다!'
           },
           {
             id: 'b4',
-            order: '4번 기구 · 허벅지 안쪽 라인 (⚠️ 아픈 날은 스킵 가능!)',
+            order: '4번 기구 · 허벅지 안쪽 라인 (⚠️ 오늘 내전근 회복 패스 완료)',
             name: '이너타이 (무릎 패드 안으로 모으기)',
             zone: '나무 바닥 (무릎 양옆 동그란 패드 기구)',
             img: 'images/machine_inner_thigh.jpg',
@@ -708,7 +717,7 @@
               { weight: 20, reps: 15, done: false },
               { weight: 20, reps: 15, done: false }
             ],
-            tip: '⚠️ [오늘 주의!] 금요일 허벅지 안쪽 알배김이 아직 아프다면 오늘 이 기구는 과감히 패스하고 5번(아웃타이)으로 바로 넘어가세요!'
+            tip: '⚠️ [오늘 내전근 회복 패스!] 금요일 허벅지 안쪽 근육통이 100% 나을 때까지 쉬어주고, 다음 목요일 하체 날부터 20kg×15회 3세트로 진행하세요!'
           },
           {
             id: 'b4_outer',
@@ -722,9 +731,9 @@
             defaultReps: 20,
             repUnit: '회',
             sets: [
-              { weight: 25, reps: 20, done: false },
-              { weight: 25, reps: 30, done: false },
-              { weight: 25, reps: 20, done: false }
+              { weight: 25, reps: 20, done: true },
+              { weight: 25, reps: 30, done: true },
+              { weight: 25, reps: 20, done: true }
             ],
             tip: '무릎 패드를 바깥쪽으로 돌린 뒤, 다리를 오므린 상태에서 엉덩이 옆쪽(중둔근) 힘으로 쫙 밀어 벌리기!'
           },
@@ -739,7 +748,7 @@
             speed: 5.0,
             defaultReps: 25,
             repUnit: '분',
-            sets: [{ incline: 5, speed: 5.0, reps: 25, done: false }],
+            sets: [{ incline: 5, speed: 5.0, reps: 25, done: true }],
             tip: '심박수 135~150 BPM 유지하며 성큼성큼 빠르게 걷기! (중간에 속도/경사를 바꾸면 아래 [구간 추가]를 눌러 기록하세요)'
           }
         ],
@@ -846,8 +855,8 @@
 
     function normalizeState(raw) {
       const todayKey = new Date().toLocaleDateString('sv-SE');
-      // 7일차(2026-11-09 월) 아침 화장실 후 95.2kg 실측 반영 마이그레이션
-      if (todayKey === '2026-11-09' && (!raw || !raw.day7MondayWeight952V1)) {
+      // 7일차(2026-11-09 월) 오전 하체 운동(이너타이 패스 + 4기구 + 오르막 걷기) 완주 반영 마이그레이션
+      if (todayKey === '2026-11-09' && (!raw || !raw.day7MondayWorkoutDoneV1)) {
         return JSON.parse(JSON.stringify(defaultData));
       }
       const rawDateKey = raw && raw.lastDateKey;
