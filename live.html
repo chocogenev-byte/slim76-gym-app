@@ -513,11 +513,12 @@
       day7MondayPreWorkoutResetV1: true,
       day7MondayAshatchuV1: true,
       day7MondayPsylliumSpongeV1: true,
-      lastAction: '7일차 (월) 차전자피 1포(스펀지 요법) 완료! ⚡ B하체 출격 대기!',
+      day7MondayAllClearV1: true,
+      lastAction: '7일차 (월) ⚡ B하체 5기구 15세트(313회!) + 러닝머신 걷기 올클리어! (540kcal 소모 🔥)',
       currentWeight: 95.2,
-      todayWatchKcal: 0,
-      todayWatchHr: '기록 대기',
-      waterCups: 2,
+      todayWatchKcal: 540,
+      todayWatchHr: '평균 136 BPM (하체15세트 300 + 걷기 240kcal)',
+      waterCups: 3,
       psylliumLunch: true,
       psylliumDinner: false,
       todayMeals: [
@@ -531,7 +532,7 @@
           f: 0
         }
       ],
-      activeTab: 'courseB',
+      activeTab: 'diet',
       courses: {
         courseA: [
           {
@@ -672,11 +673,11 @@
             defaultReps: 20,
             repUnit: '회',
             sets: [
-              { weight: 55, reps: 20, done: false },
-              { weight: 55, reps: 20, done: false },
-              { weight: 55, reps: 23, done: false }
+              { weight: 55, reps: 20, done: true },
+              { weight: 55, reps: 25, done: true },
+              { weight: 55, reps: 23, done: true }
             ],
-            tip: '1~2세트 55kg×20회, 3세트 55kg×23회 완주! 무릎은 다 펴지 말고 90%만 펴서 관절 보호하기!'
+            tip: '55kg 20·25·23회 완주! 무릎은 다 펴지 말고 90%만 펴서 관절 보호하기!'
           },
           {
             id: 'b2',
@@ -690,11 +691,11 @@
             defaultReps: 20,
             repUnit: '회',
             sets: [
-              { weight: 25, reps: 20, done: false },
-              { weight: 25, reps: 20, done: false },
-              { weight: 25, reps: 24, done: false }
+              { weight: 25, reps: 20, done: true },
+              { weight: 25, reps: 25, done: true },
+              { weight: 30, reps: 24, done: true }
             ],
-            tip: '25kg 20·20·24회 완주! 다리를 끝까지 들어 올려 맨 위에서 1초 멈췄다 내리기!'
+            tip: '25·25·30kg 20·25·24회 완주! 다리를 끝까지 들어 올려 맨 위에서 1초 멈췄다 내리기!'
           },
           {
             id: 'b3',
@@ -708,15 +709,15 @@
             defaultReps: 20,
             repUnit: '회',
             sets: [
-              { weight: 20, reps: 20, done: false },
-              { weight: 20, reps: 23, done: false },
-              { weight: 20, reps: 25, done: false }
+              { weight: 20, reps: 20, done: true },
+              { weight: 20, reps: 25, done: true },
+              { weight: 20, reps: 22, done: true }
             ],
             tip: '무릎뼈가 벤치 끝단 밖으로 살짝 나오게 내려 눕고, 발끝을 정강이 쪽으로 당겨(ㄱ자) 접어 올리면 패드가 절대 안 말려 올라갑니다!'
           },
           {
             id: 'b4',
-            order: '4번 기구 · 허벅지 안쪽 라인 (⚠️ 아픈 날은 스킵 가능!)',
+            order: '4번 기구 · 허벅지 안쪽 라인 (⚠️ 골반 통증 시 15~20kg으로 감량!)',
             name: '이너타이 (무릎 패드 안으로 모으기)',
             zone: '나무 바닥 (무릎 양옆 동그란 패드 기구)',
             img: 'images/machine_inner_thigh.jpg',
@@ -726,11 +727,11 @@
             defaultReps: 15,
             repUnit: '회',
             sets: [
-              { weight: 20, reps: 15, done: false },
-              { weight: 20, reps: 15, done: false },
-              { weight: 20, reps: 15, done: false }
+              { weight: 30, reps: 20, done: true },
+              { weight: 30, reps: 15, done: true },
+              { weight: 25, reps: 15, done: true }
             ],
-            tip: '⚠️ [오늘 주의!] 금요일 허벅지 안쪽 알배김이 아직 아프다면 오늘 이 기구는 과감히 패스하고 5번(아웃타이)으로 바로 넘어가세요!'
+            tip: '⚠️ [골반 보호 팁] 30kg은 내전근·골반(고관절)에 과부하가 걸려 골반 통증을 유발합니다! 다음 목요일엔 반드시 15~20kg으로 가볍게 진행하세요!'
           },
           {
             id: 'b4_outer',
@@ -744,9 +745,9 @@
             defaultReps: 20,
             repUnit: '회',
             sets: [
-              { weight: 25, reps: 20, done: false },
-              { weight: 25, reps: 30, done: false },
-              { weight: 25, reps: 20, done: false }
+              { weight: 20, reps: 15, done: true },
+              { weight: 25, reps: 24, done: true },
+              { weight: 30, reps: 20, done: true }
             ],
             tip: '무릎 패드를 바깥쪽으로 돌린 뒤, 다리를 오므린 상태에서 엉덩이 옆쪽(중둔근) 힘으로 쫙 밀어 벌리기!'
           },
@@ -761,7 +762,7 @@
             speed: 5.0,
             defaultReps: 25,
             repUnit: '분',
-            sets: [{ incline: 5, speed: 5.0, reps: 25, done: false }],
+            sets: [{ incline: 5, speed: 5.0, reps: 23, done: true }],
             tip: '심박수 135~150 BPM 유지하며 성큼성큼 빠르게 걷기! (중간에 속도/경사를 바꾸면 아래 [구간 추가]를 눌러 기록하세요)'
           }
         ],
@@ -868,8 +869,8 @@
 
     function normalizeState(raw) {
       const todayKey = new Date().toLocaleDateString('sv-SE');
-      // 7일차(2026-11-09 월) 차전자피 스펀지 요법(1포) 체크 반영 마이그레이션
-      if (todayKey === '2026-11-09' && (!raw || !raw.day7MondayPsylliumSpongeV1)) {
+      // 7일차(2026-11-09 월) 하체 5기구 15세트(313회) + 러닝머신 올클리어 반영 마이그레이션
+      if (todayKey === '2026-11-09' && (!raw || !raw.day7MondayAllClearV1)) {
         return JSON.parse(JSON.stringify(defaultData));
       }
       const rawDateKey = raw && raw.lastDateKey;
