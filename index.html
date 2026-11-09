@@ -514,8 +514,9 @@
       day7MondayAshatchuV1: true,
       day7MondayPsylliumSpongeV1: true,
       day7MondayAllClearV1: true,
-      lastAction: '7일차 (월) ⚡ B하체 5기구 15세트(313회!) + 러닝머신 걷기 올클리어! (540kcal 소모 🔥)',
-      currentWeight: 95.2,
+      day7MondayWeight950V1: true,
+      lastAction: '7일차 (월) 화장실+하체운동 후 95.0kg 재탈환!! (94kg대 진입 D-0.1kg 🔥)',
+      currentWeight: 95.0,
       todayWatchKcal: 540,
       todayWatchHr: '평균 136 BPM (하체15세트 300 + 걷기 240kcal)',
       waterCups: 3,
@@ -869,8 +870,8 @@
 
     function normalizeState(raw) {
       const todayKey = new Date().toLocaleDateString('sv-SE');
-      // 7일차(2026-11-09 월) 하체 5기구 15세트(313회) + 러닝머신 올클리어 반영 마이그레이션
-      if (todayKey === '2026-11-09' && (!raw || !raw.day7MondayAllClearV1)) {
+      // 7일차(2026-11-09 월) 95.0kg 재탈환 + 하체 15세트 올클리어 반영 마이그레이션
+      if (todayKey === '2026-11-09' && (!raw || !raw.day7MondayWeight950V1)) {
         return JSON.parse(JSON.stringify(defaultData));
       }
       const rawDateKey = raw && raw.lastDateKey;
