@@ -370,7 +370,7 @@
       <div class="bg-slate-800 border border-emerald-500/40 rounded-3xl p-4 space-y-3">
         <div class="flex items-center justify-between">
           <h2 class="text-base font-extrabold text-white">📉 체중 감량 추이 (96kg → 76kg)</h2>
-          <span class="text-xs font-extrabold text-emerald-400">현재 -1.0kg 달성 🔥</span>
+          <span class="text-xs font-extrabold text-emerald-400">현재 -1.2kg 달성 (94.8kg 돌파! 🔥)</span>
         </div>
         <div id="weightTrendChart" class="grid grid-cols-4 gap-2 pt-2 items-end h-28 bg-slate-900/90 rounded-2xl p-3 border border-slate-700"></div>
       </div>
@@ -511,7 +511,7 @@
 
     const defaultData = {
       updatedAt: Date.now(),
-      lastDateKey: '2026-11-09',
+      lastDateKey: '2026-11-10',
       day6SundaySyncedV1: true,
       day6SundayWorkoutDoneV1: true,
       day6SundayLunchSyncedV1: true,
@@ -528,43 +528,16 @@
       day7MondayAllClearV1: true,
       day7MondayWeight950V1: true,
       day7MondayLunchSyncedV1: true,
-      lastAction: '7일차 (월) 점심 🥗 부채살 포케 + 🥤 더:단백 카라멜맛 완료! (누적 500kcal · 단백질 48g)',
-      currentWeight: 95.0,
-      todayWatchKcal: 540,
-      todayWatchHr: '평균 136 BPM (하체15세트 300 + 걷기 240kcal)',
-      waterCups: 4,
-      psylliumLunch: true,
+      day8Tuesday948SyncedV1: true,
+      lastAction: '8일차 (화) 아침 공복 94.8kg 돌파!! (95kg 벽 격파 · 시작 대비 -1.2kg 달성 🔥)',
+      currentWeight: 94.8,
+      todayWatchKcal: 0,
+      todayWatchHr: '기록 대기 (오늘 화요일: 집 실내자전거 회복 데이 🚴)',
+      waterCups: 1,
+      psylliumLunch: false,
       psylliumDinner: false,
-      todayMeals: [
-        {
-          id: 1794182700001,
-          time: '오전 11:44',
-          name: '🍹 아샷추 제로 (운동 전 카페인 부스터)',
-          kcal: 15,
-          c: 3,
-          p: 0,
-          f: 0
-        },
-        {
-          id: 1794195700002,
-          time: '오후 3:20',
-          name: '🥗 부채살 스테이크 포케',
-          kcal: 380,
-          c: 36,
-          p: 28,
-          f: 13
-        },
-        {
-          id: 1794195700003,
-          time: '오후 3:22',
-          name: '🥤 더:단백 드링크 카라멜맛 (당류 0.5g)',
-          kcal: 105,
-          c: 4,
-          p: 20,
-          f: 1
-        }
-      ],
-      activeTab: 'diet',
+      todayMeals: [],
+      activeTab: 'courseHome',
       courses: {
         courseA: [
           {
@@ -705,9 +678,9 @@
             defaultReps: 20,
             repUnit: '회',
             sets: [
-              { weight: 55, reps: 20, done: true },
-              { weight: 55, reps: 25, done: true },
-              { weight: 55, reps: 23, done: true }
+              { weight: 55, reps: 20, done: false },
+              { weight: 55, reps: 25, done: false },
+              { weight: 55, reps: 23, done: false }
             ],
             tip: '55kg 20·25·23회 완주! 무릎은 다 펴지 말고 90%만 펴서 관절 보호하기!'
           },
@@ -723,9 +696,9 @@
             defaultReps: 20,
             repUnit: '회',
             sets: [
-              { weight: 25, reps: 20, done: true },
-              { weight: 25, reps: 25, done: true },
-              { weight: 30, reps: 24, done: true }
+              { weight: 25, reps: 20, done: false },
+              { weight: 25, reps: 25, done: false },
+              { weight: 30, reps: 24, done: false }
             ],
             tip: '25·25·30kg 20·25·24회 완주! 다리를 끝까지 들어 올려 맨 위에서 1초 멈췄다 내리기!'
           },
@@ -741,9 +714,9 @@
             defaultReps: 15,
             repUnit: '회',
             sets: [
-              { weight: 20, reps: 20, done: true },
-              { weight: 20, reps: 25, done: true },
-              { weight: 20, reps: 22, done: true }
+              { weight: 15, reps: 15, done: false },
+              { weight: 15, reps: 15, done: false },
+              { weight: 15, reps: 15, done: false }
             ],
             tip: '🚨 [꼬리뼈 위 허리 보호 필수 공식] 1) 다음번엔 15kg으로 낮추기! 2) 발뒤꿈치를 엉덩이까지 끝까지 당기면 엉덩이가 들리며 허리가 꺾입니다! 종아리가 바닥과 수직(90도 ㄱ자) 될 때까지만 접고, 치골(아랫배)을 벤치에 꾹 눌러 붙이세요!'
           },
@@ -759,9 +732,9 @@
             defaultReps: 15,
             repUnit: '회',
             sets: [
-              { weight: 30, reps: 20, done: true },
-              { weight: 30, reps: 15, done: true },
-              { weight: 25, reps: 15, done: true }
+              { weight: 20, reps: 15, done: false },
+              { weight: 20, reps: 15, done: false },
+              { weight: 20, reps: 15, done: false }
             ],
             tip: '⚠️ [골반 보호 팁] 30kg은 내전근·골반(고관절)에 과부하가 걸려 골반 통증을 유발합니다! 다음 목요일엔 반드시 15~20kg으로 가볍게 진행하세요!'
           },
@@ -777,9 +750,9 @@
             defaultReps: 20,
             repUnit: '회',
             sets: [
-              { weight: 20, reps: 15, done: true },
-              { weight: 25, reps: 24, done: true },
-              { weight: 30, reps: 20, done: true }
+              { weight: 20, reps: 15, done: false },
+              { weight: 25, reps: 20, done: false },
+              { weight: 25, reps: 20, done: false }
             ],
             tip: '무릎 패드를 바깥쪽으로 돌린 뒤, 다리를 오므린 상태에서 엉덩이 옆쪽(중둔근) 힘으로 쫙 밀어 벌리기!'
           },
@@ -794,7 +767,7 @@
             speed: 5.0,
             defaultReps: 25,
             repUnit: '분',
-            sets: [{ incline: 5, speed: 5.0, reps: 23, done: true }],
+            sets: [{ incline: 5, speed: 5.0, reps: 25, done: false }],
             tip: '심박수 135~150 BPM 유지하며 성큼성큼 빠르게 걷기! (중간에 속도/경사를 바꾸면 아래 [구간 추가]를 눌러 기록하세요)'
           }
         ],
@@ -861,6 +834,12 @@
       },
       watchRecords: [
         {
+          date: '11/09 (월) · 7일차 완주',
+          weight: '95.2 → 95.0 kg',
+          activeKcal: '540 kcal (총 640 kcal · 하체15세트 300 + 걷기 240)',
+          memo: '⚡ B하체 5기구 15세트(313회!) + 러닝머신 걷기 완료! / 🍽️ 총 1,360kcal (포케+더단백+육전·두부김치·제육 방어 성공!)'
+        },
+        {
           date: '11/08 (일) · 6일차 완주',
           weight: '95.0 kg (수분 배출 완료)',
           activeKcal: '404 kcal (총 506 kcal · 기구150 + 걷기254)',
@@ -901,8 +880,8 @@
 
     function normalizeState(raw) {
       const todayKey = new Date().toLocaleDateString('sv-SE');
-      // 7일차(2026-11-09 월) 점심(부채살 포케 + 더:단백 카라멜맛) 반영 마이그레이션
-      if (todayKey === '2026-11-09' && (!raw || !raw.day7MondayLunchSyncedV1)) {
+      // 8일차(2026-11-10 화) 아침 94.8kg 돌파 반영 마이그레이션
+      if (todayKey === '2026-11-10' && (!raw || !raw.day8Tuesday948SyncedV1)) {
         return JSON.parse(JSON.stringify(defaultData));
       }
       const rawDateKey = raw && raw.lastDateKey;
@@ -1902,8 +1881,8 @@
       const chartEl = document.getElementById('weightTrendChart');
       if (chartEl) {
         const points = [
-          { label: '어제(2일차)', w: 96.0, highlight: false },
-          { label: '오늘(3일차)', w: state.currentWeight || 95.0, highlight: true },
+          { label: '시작(2일차)', w: 96.0, highlight: false },
+          { label: '현재(8일차)', w: state.currentWeight || 94.8, highlight: true },
           { label: '1차목표', w: 88.0, highlight: false },
           { label: '최종목표', w: 76.0, highlight: false }
         ];
