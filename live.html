@@ -515,11 +515,12 @@
       day7MondayPsylliumSpongeV1: true,
       day7MondayAllClearV1: true,
       day7MondayWeight950V1: true,
-      lastAction: '7일차 (월) 화장실+하체운동 후 95.0kg 재탈환!! (94kg대 진입 D-0.1kg 🔥)',
+      day7MondayLunchSyncedV1: true,
+      lastAction: '7일차 (월) 점심 🥗 부채살 포케 + 🥤 더:단백 카라멜맛 완료! (누적 500kcal · 단백질 48g)',
       currentWeight: 95.0,
       todayWatchKcal: 540,
       todayWatchHr: '평균 136 BPM (하체15세트 300 + 걷기 240kcal)',
-      waterCups: 3,
+      waterCups: 4,
       psylliumLunch: true,
       psylliumDinner: false,
       todayMeals: [
@@ -531,6 +532,24 @@
           c: 3,
           p: 0,
           f: 0
+        },
+        {
+          id: 1794195700002,
+          time: '오후 3:20',
+          name: '🥗 부채살 스테이크 포케',
+          kcal: 380,
+          c: 36,
+          p: 28,
+          f: 13
+        },
+        {
+          id: 1794195700003,
+          time: '오후 3:22',
+          name: '🥤 더:단백 드링크 카라멜맛 (당류 0.5g)',
+          kcal: 105,
+          c: 4,
+          p: 20,
+          f: 1
         }
       ],
       activeTab: 'diet',
@@ -870,8 +889,8 @@
 
     function normalizeState(raw) {
       const todayKey = new Date().toLocaleDateString('sv-SE');
-      // 7일차(2026-11-09 월) 95.0kg 재탈환 + 하체 15세트 올클리어 반영 마이그레이션
-      if (todayKey === '2026-11-09' && (!raw || !raw.day7MondayWeight950V1)) {
+      // 7일차(2026-11-09 월) 점심(부채살 포케 + 더:단백 카라멜맛) 반영 마이그레이션
+      if (todayKey === '2026-11-09' && (!raw || !raw.day7MondayLunchSyncedV1)) {
         return JSON.parse(JSON.stringify(defaultData));
       }
       const rawDateKey = raw && raw.lastDateKey;
