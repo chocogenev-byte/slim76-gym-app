@@ -532,11 +532,12 @@
       day8TuesdayLunchGomtangV1: true,
       day8Tuesday942SyncedV1: true,
       day8TuesdayEggFigV1: true,
-      lastAction: '8일차 (화) 🍲 거대곰탕 + 🥚 맥반석 계란 1개 + 🍑 생무화과 기록 완료! (누적 595kcal)',
+      day8TuesdaySnackIsoEggV1: true,
+      lastAction: '8일차 (화) 오후 간식 🥤 ISO100 1.5스쿱 + 🥚 맥반석 계란 완료! (누적 835kcal · 단백질 82g)',
       currentWeight: 94.2,
       todayWatchKcal: 0,
-      todayWatchHr: '기록 대기 (오늘 화요일: 완전 회복 데이 🛋️)',
-      waterCups: 3,
+      todayWatchHr: '기록 대기 (오늘 화요일: 완전 회복 또는 저녁 자전거 20분)',
+      waterCups: 4,
       psylliumLunch: false,
       psylliumDinner: false,
       todayMeals: [
@@ -552,7 +553,7 @@
         {
           id: 1794276800002,
           time: '오후 1:30',
-          name: '🥚 맥반석 구운계란 1개',
+          name: '🥚 맥반석 구운계란 1개 (1차)',
           kcal: 75,
           c: 1,
           p: 6,
@@ -566,6 +567,24 @@
           c: 26,
           p: 2,
           f: 0
+        },
+        {
+          id: 1794281000004,
+          time: '오후 3:03',
+          name: '🥤 다이마타이즈 ISO100 바닐라맛 1.5스쿱',
+          kcal: 165,
+          c: 2,
+          p: 38,
+          f: 0
+        },
+        {
+          id: 1794281000005,
+          time: '오후 3:03',
+          name: '🥚 맥반석 구운계란 1개 (2차)',
+          kcal: 75,
+          c: 1,
+          p: 6,
+          f: 5
         }
       ],
       activeTab: 'diet',
@@ -911,8 +930,8 @@
 
     function normalizeState(raw) {
       const todayKey = new Date().toLocaleDateString('sv-SE');
-      // 8일차(2026-11-10 화) 맥반석 계란 1개 + 무화과 2개 반영 마이그레이션
-      if (todayKey === '2026-11-10' && (!raw || !raw.day8TuesdayEggFigV1)) {
+      // 8일차(2026-11-10 화) 오후 간식(ISO100 1.5스쿱 + 맥반석 계란 2차) 반영 마이그레이션
+      if (todayKey === '2026-11-10' && (!raw || !raw.day8TuesdaySnackIsoEggV1)) {
         return JSON.parse(JSON.stringify(defaultData));
       }
       const rawDateKey = raw && raw.lastDateKey;
