@@ -529,15 +529,26 @@
       day7MondayWeight950V1: true,
       day7MondayLunchSyncedV1: true,
       day8Tuesday948SyncedV1: true,
-      lastAction: '8일차 (화) 아침 공복 94.8kg 돌파!! (95kg 벽 격파 · 시작 대비 -1.2kg 달성 🔥)',
+      day8TuesdayLunchGomtangV1: true,
+      lastAction: '8일차 (화) 점심 🍲 해운대 거대곰탕 + 밥 반공기 완료! (410kcal · 단백질 30g)',
       currentWeight: 94.8,
       todayWatchKcal: 0,
       todayWatchHr: '기록 대기 (오늘 화요일: 집 실내자전거 회복 데이 🚴)',
-      waterCups: 1,
+      waterCups: 2,
       psylliumLunch: false,
       psylliumDinner: false,
-      todayMeals: [],
-      activeTab: 'courseHome',
+      todayMeals: [
+        {
+          id: 1794272300001,
+          time: '오후 12:38',
+          name: '🍲 해운대 거대곰탕 + 따뜻한 밥 반공기',
+          kcal: 410,
+          c: 34,
+          p: 30,
+          f: 14
+        }
+      ],
+      activeTab: 'diet',
       courses: {
         courseA: [
           {
@@ -880,8 +891,8 @@
 
     function normalizeState(raw) {
       const todayKey = new Date().toLocaleDateString('sv-SE');
-      // 8일차(2026-11-10 화) 아침 94.8kg 돌파 반영 마이그레이션
-      if (todayKey === '2026-11-10' && (!raw || !raw.day8Tuesday948SyncedV1)) {
+      // 8일차(2026-11-10 화) 점심 거대곰탕+밥반공기 반영 마이그레이션
+      if (todayKey === '2026-11-10' && (!raw || !raw.day8TuesdayLunchGomtangV1)) {
         return JSON.parse(JSON.stringify(defaultData));
       }
       const rawDateKey = raw && raw.lastDateKey;
