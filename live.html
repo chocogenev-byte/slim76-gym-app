@@ -541,10 +541,11 @@
       day8TuesdayDinnerWagyuSyncedV1: true,
       day8TuesdayApple3SlicesV1: true,
       day8TuesdayBikeDoneV1: true,
-      lastAction: '8일차 (화) 식후 실내자전거 21분(160kcal·총 198kcal·122BPM) 완주! 오늘 올클리어 🏆',
+      day8TuesdayBikeRound2DoneV1: true,
+      lastAction: '8일차 (화) 미니바이크 1차(21분)+2차(15분·1,024바퀴) 총 36분 완주! 오늘 올클리어 🏆',
       currentWeight: 94.2,
-      todayWatchKcal: 160,
-      todayWatchHr: '평균 122 BPM (최고 143 · 총 198kcal)',
+      todayWatchKcal: 240,
+      todayWatchHr: '평균 122 BPM (1차 21분 + 2차 15분 · 총 36분 완주)',
       waterCups: 8,
       psylliumLunch: false,
       psylliumDinner: true,
@@ -892,19 +893,20 @@
           },
           {
             id: 'h4',
-            order: '2단계 유산소 · 20~25분',
-            name: '집 실내 자전거 존2 타기',
-            zone: '기어 3~4단 / 시속 22~25km',
+            order: '2단계 유산소 · 하루 2회 분할 (총 36분 완료!)',
+            name: '집 이고진 미니 바이크 타기',
+            zone: '1차 21분 + 2차 15분(1,024바퀴)',
             img: '',
             weight: 122,
             weightStep: 5,
             unit: 'BPM',
-            defaultReps: 21,
+            defaultReps: 20,
             repUnit: '분',
             sets: [
-              { weight: 122, reps: 21, done: true }
+              { weight: 122, reps: 21, done: true },
+              { weight: 122, reps: 15, done: true }
             ],
-            tip: '입 다물고 코로만 숨 쉴 수 있는 묵직한 속도로 20분 쭉 타기!'
+            tip: '소파에 눕듯이 타지 말고 허리 뒤에 쿠션을 받쳐 상체를 세운 뒤, 1회 20분 이내로 1,000바퀴 이상 빠르게 굴리기!'
           }
         ]
       },
@@ -912,8 +914,8 @@
         {
           date: '11/10 (화) · 8일차 완주',
           weight: '94.8 → 94.2 kg (-1.8kg 최저점 돌파 🔥)',
-          activeKcal: '160 kcal (총 198 kcal · 식후 실내자전거 21분 · 122BPM)',
-          memo: '🚴 19:10~19:32 식후 혈당 피크 컷 실내자전거 21분 완료! / 🍽️ 총 1,595kcal (단백질 147g · 거대곰탕+ISO100+와규부채살·관자·숙주+감홍사과 3조각 · 위스키 0ml 방어!)'
+          activeKcal: '240 kcal (미니바이크 1차 21분 + 2차 15분[1,024바퀴] · 총 36분)',
+          memo: '🚴 1차(19:10 21분) + 2차(21:10 15분·1,024회전) 총 36분 완료! / 🍽️ 총 1,595kcal (단백질 147g · 거대곰탕+ISO100+와규부채살·관자·숙주+감홍사과 3조각 · 위스키 0ml 방어!)'
         },
         {
           date: '11/09 (월) · 7일차 완주',
@@ -962,8 +964,8 @@
 
     function normalizeState(raw) {
       const todayKey = new Date().toLocaleDateString('sv-SE');
-      // 8일차(2026-11-10 화) 저녁 식후 실내자전거 21분(160kcal, 총 198kcal, 122BPM) 완주 반영 마이그레이션
-      if (todayKey === '2026-11-10' && (!raw || !raw.day8TuesdayBikeDoneV1)) {
+      // 8일차(2026-11-10 화) 저녁 미니바이크 2차전(15분 1,024바퀴) 추가 완주 반영 마이그레이션
+      if (todayKey === '2026-11-10' && (!raw || !raw.day8TuesdayBikeRound2DoneV1)) {
         return JSON.parse(JSON.stringify(defaultData));
       }
       const rawDateKey = raw && raw.lastDateKey;
