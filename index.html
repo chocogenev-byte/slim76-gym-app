@@ -515,7 +515,7 @@
 
     const defaultData = {
       updatedAt: Date.now(),
-      lastDateKey: '2026-11-10',
+      lastDateKey: '2026-11-11',
       day6SundaySyncedV1: true,
       day6SundayWorkoutDoneV1: true,
       day6SundayLunchSyncedV1: true,
@@ -542,79 +542,16 @@
       day8TuesdayApple3SlicesV1: true,
       day8TuesdayBikeDoneV1: true,
       day8TuesdayBikeRound2DoneV1: true,
-      lastAction: '8일차 (화) 미니바이크 1차(21분)+2차(15분·1,024바퀴) 총 36분 완주! 오늘 올클리어 🏆',
+      day9WednesdayInitV1: true,
+      lastAction: '9일차 (수) 🔥 A상체 코스 + 호카 마하 6 오르막 걷기 준비 완료!',
       currentWeight: 94.2,
-      todayWatchKcal: 240,
-      todayWatchHr: '평균 122 BPM (1차 21분 + 2차 15분 · 총 36분 완주)',
-      waterCups: 8,
+      todayWatchKcal: 0,
+      todayWatchHr: '기록 대기 (오늘 수요일: 🔥 A상체 6기구 + 오르막 걷기 예정)',
+      waterCups: 1,
       psylliumLunch: false,
-      psylliumDinner: true,
-      todayMeals: [
-        {
-          id: 1794292500007,
-          time: '오후 6:15',
-          name: '🍎 감홍 사과 3조각 (식후 입가심 · 1/3개)',
-          kcal: 50,
-          carb: 12,
-          protein: 0,
-          fat: 0
-        },
-        {
-          id: 1794291300006,
-          time: '오후 5:55',
-          name: '🥩 와규 BMS 9 부채살(200g) + 가리비 관자살 + 숙주볶음 + 밥 반공기',
-          kcal: 640,
-          carb: 37,
-          protein: 51,
-          fat: 31
-        },
-        {
-          id: 1794281000004,
-          time: '오후 3:03',
-          name: '🥤 다이마타이즈 ISO100 바닐라맛 1.5스쿱',
-          kcal: 165,
-          carb: 2,
-          protein: 38,
-          fat: 0
-        },
-        {
-          id: 1794281000005,
-          time: '오후 3:03',
-          name: '🥚 맥반석 구운계란 1개 (2차)',
-          kcal: 75,
-          carb: 1,
-          protein: 6,
-          fat: 5
-        },
-        {
-          id: 1794276800003,
-          time: '오후 1:55',
-          name: '🍑 생무화과 2개 (얼굴 붓기 배출 칼륨 보충)',
-          kcal: 110,
-          carb: 26,
-          protein: 2,
-          fat: 0
-        },
-        {
-          id: 1794276800002,
-          time: '오후 1:30',
-          name: '🥚 맥반석 구운계란 1개 (1차)',
-          kcal: 75,
-          carb: 1,
-          protein: 6,
-          fat: 5
-        },
-        {
-          id: 1794272300001,
-          time: '오후 12:38',
-          name: '🍲 해운대 거대곰탕 + 가리비 관자살 + 밥 반공기',
-          kcal: 480,
-          carb: 35,
-          protein: 44,
-          fat: 14
-        }
-      ],
-      activeTab: 'diet',
+      psylliumDinner: false,
+      todayMeals: [],
+      activeTab: 'courseA',
       courses: {
         courseA: [
           {
@@ -893,9 +830,9 @@
           },
           {
             id: 'h4',
-            order: '2단계 유산소 · 하루 2회 분할 (총 36분 완료!)',
+            order: '2단계 유산소 · 1회 20분 이내',
             name: '집 이고진 미니 바이크 타기',
-            zone: '1차 21분 + 2차 15분(1,024바퀴)',
+            zone: '기어 적당히 조이고 15분에 1,000바퀴 이상',
             img: '',
             weight: 122,
             weightStep: 5,
@@ -903,8 +840,7 @@
             defaultReps: 20,
             repUnit: '분',
             sets: [
-              { weight: 122, reps: 21, done: true },
-              { weight: 122, reps: 15, done: true }
+              { weight: 122, reps: 20, done: false }
             ],
             tip: '소파에 눕듯이 타지 말고 허리 뒤에 쿠션을 받쳐 상체를 세운 뒤, 1회 20분 이내로 1,000바퀴 이상 빠르게 굴리기!'
           }
@@ -964,8 +900,8 @@
 
     function normalizeState(raw) {
       const todayKey = new Date().toLocaleDateString('sv-SE');
-      // 8일차(2026-11-10 화) 저녁 미니바이크 2차전(15분 1,024바퀴) 추가 완주 반영 마이그레이션
-      if (todayKey === '2026-11-10' && (!raw || !raw.day8TuesdayBikeRound2DoneV1)) {
+      // 9일차(2026-11-11 수) 아침 초기화 (8일차 기록은 watchRecords에 안전 보관!)
+      if (todayKey === '2026-11-11' && (!raw || !raw.day9WednesdayInitV1)) {
         return JSON.parse(JSON.stringify(defaultData));
       }
       const rawDateKey = raw && raw.lastDateKey;
