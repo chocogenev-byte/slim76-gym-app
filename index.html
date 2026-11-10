@@ -543,8 +543,9 @@
       day8TuesdayBikeDoneV1: true,
       day8TuesdayBikeRound2DoneV1: true,
       day9WednesdayInitV1: true,
-      lastAction: '9일차 (수) 🔥 A상체 코스 + 호카 마하 6 오르막 걷기 준비 완료!',
-      currentWeight: 94.2,
+      day9WednesdayMorningWeight944V1: true,
+      lastAction: '9일차 (수) 오전 8:57 기상 체중 94.4kg 기록! (어제 동시간대 94.8kg 대비 -0.4kg 하락 🔥)',
+      currentWeight: 94.4,
       todayWatchKcal: 0,
       todayWatchHr: '기록 대기 (오늘 수요일: 🔥 A상체 6기구 + 오르막 걷기 예정)',
       waterCups: 1,
@@ -900,8 +901,8 @@
 
     function normalizeState(raw) {
       const todayKey = new Date().toLocaleDateString('sv-SE');
-      // 9일차(2026-11-11 수) 아침 초기화 (8일차 기록은 watchRecords에 안전 보관!)
-      if (todayKey === '2026-11-11' && (!raw || !raw.day9WednesdayInitV1)) {
+      // 9일차(2026-11-11 수) 아침 기상 체중 94.4kg 반영 마이그레이션
+      if (todayKey === '2026-11-11' && (!raw || !raw.day9WednesdayMorningWeight944V1)) {
         return JSON.parse(JSON.stringify(defaultData));
       }
       const rawDateKey = raw && raw.lastDateKey;
