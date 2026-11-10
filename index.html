@@ -539,14 +539,24 @@
       day8TuesdaySnackIsoEggV1: true,
       day8TuesdayScallopAddedV1: true,
       day8TuesdayDinnerWagyuSyncedV1: true,
-      lastAction: '8일차 (화) 저녁 와규부채살+관자+숙주+밥반공기 완료! (오늘 총 1,545kcal · 단백질 147g 달성 🔥)',
+      day8TuesdayApple3SlicesV1: true,
+      lastAction: '8일차 (화) 저녁 디저트 감홍사과 3조각 마감! (오늘 최종 1,595kcal · 단백질 147g 달성 🔥)',
       currentWeight: 94.2,
       todayWatchKcal: 0,
-      todayWatchHr: '기록 대기 (오늘 화요일: 저녁 식후 7시~7시30분 실내자전거 20분 예정 🚴)',
+      todayWatchHr: '기록 대기 (오늘 화요일: 오후 7시~7시30분 실내자전거 20분 예정 🚴)',
       waterCups: 6,
       psylliumLunch: false,
       psylliumDinner: true,
       todayMeals: [
+        {
+          id: 1794292500007,
+          time: '오후 6:15',
+          name: '🍎 감홍 사과 3조각 (식후 입가심 · 1/3개)',
+          kcal: 50,
+          carb: 12,
+          protein: 0,
+          fat: 0
+        },
         {
           id: 1794291300006,
           time: '오후 5:55',
@@ -945,8 +955,8 @@
 
     function normalizeState(raw) {
       const todayKey = new Date().toLocaleDateString('sv-SE');
-      // 8일차(2026-11-10 화) 저녁 와규부채살+관자+숙주+밥반공기(총 1,545kcal · 단백질 147g) 반영 마이그레이션
-      if (todayKey === '2026-11-10' && (!raw || !raw.day8TuesdayDinnerWagyuSyncedV1)) {
+      // 8일차(2026-11-10 화) 저녁 디저트 감홍사과 3조각(오늘 최종 1,595kcal · 단백질 147g) 반영 마이그레이션
+      if (todayKey === '2026-11-10' && (!raw || !raw.day8TuesdayApple3SlicesV1)) {
         return JSON.parse(JSON.stringify(defaultData));
       }
       const rawDateKey = raw && raw.lastDateKey;
