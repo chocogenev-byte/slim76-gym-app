@@ -537,10 +537,11 @@
       day8Tuesday942SyncedV1: true,
       day8TuesdayEggFigV1: true,
       day8TuesdaySnackIsoEggV1: true,
-      lastAction: '8일차 (화) 오후 간식 🥤 ISO100 1.5스쿱 + 🥚 맥반석 계란 완료! (누적 835kcal · 단백질 82g)',
+      day8TuesdayScallopAddedV1: true,
+      lastAction: '8일차 (화) 점심 거대곰탕+관자살 반영! (현재 누적 905kcal · 단백질 96g 달성 🔥)',
       currentWeight: 94.2,
       todayWatchKcal: 0,
-      todayWatchHr: '기록 대기 (오늘 화요일: 완전 회복 또는 저녁 자전거 20분)',
+      todayWatchHr: '기록 대기 (오늘 화요일: 저녁 식후 실내자전거 20분 예정 🚴)',
       waterCups: 4,
       psylliumLunch: false,
       psylliumDinner: false,
@@ -548,10 +549,10 @@
         {
           id: 1794272300001,
           time: '오후 12:38',
-          name: '🍲 해운대 거대곰탕 + 따뜻한 밥 반공기',
-          kcal: 410,
-          c: 34,
-          p: 30,
+          name: '🍲 해운대 거대곰탕 + 가리비 관자살 + 밥 반공기',
+          kcal: 480,
+          c: 35,
+          p: 44,
           f: 14
         },
         {
@@ -934,8 +935,8 @@
 
     function normalizeState(raw) {
       const todayKey = new Date().toLocaleDateString('sv-SE');
-      // 8일차(2026-11-10 화) 오후 간식(ISO100 1.5스쿱 + 맥반석 계란 2차) 반영 마이그레이션
-      if (todayKey === '2026-11-10' && (!raw || !raw.day8TuesdaySnackIsoEggV1)) {
+      // 8일차(2026-11-10 화) 점심 거대곰탕 관자살 추가(단백질 96g) 반영 마이그레이션
+      if (todayKey === '2026-11-10' && (!raw || !raw.day8TuesdayScallopAddedV1)) {
         return JSON.parse(JSON.stringify(defaultData));
       }
       const rawDateKey = raw && raw.lastDateKey;
