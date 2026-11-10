@@ -540,11 +540,12 @@
       day8TuesdayScallopAddedV1: true,
       day8TuesdayDinnerWagyuSyncedV1: true,
       day8TuesdayApple3SlicesV1: true,
-      lastAction: '8일차 (화) 저녁 디저트 감홍사과 3조각 마감! (오늘 최종 1,595kcal · 단백질 147g 달성 🔥)',
+      day8TuesdayBikeDoneV1: true,
+      lastAction: '8일차 (화) 식후 실내자전거 21분(160kcal·총 198kcal·122BPM) 완주! 오늘 올클리어 🏆',
       currentWeight: 94.2,
-      todayWatchKcal: 0,
-      todayWatchHr: '기록 대기 (오늘 화요일: 오후 7시~7시30분 실내자전거 20분 예정 🚴)',
-      waterCups: 6,
+      todayWatchKcal: 160,
+      todayWatchHr: '평균 122 BPM (최고 143 · 총 198kcal)',
+      waterCups: 8,
       psylliumLunch: false,
       psylliumDinner: true,
       todayMeals: [
@@ -895,19 +896,25 @@
             name: '집 실내 자전거 존2 타기',
             zone: '기어 3~4단 / 시속 22~25km',
             img: '',
-            weight: 134,
+            weight: 122,
             weightStep: 5,
             unit: 'BPM',
-            defaultReps: 20,
+            defaultReps: 21,
             repUnit: '분',
             sets: [
-              { weight: 134, reps: 20, done: false }
+              { weight: 122, reps: 21, done: true }
             ],
             tip: '입 다물고 코로만 숨 쉴 수 있는 묵직한 속도로 20분 쭉 타기!'
           }
         ]
       },
       watchRecords: [
+        {
+          date: '11/10 (화) · 8일차 완주',
+          weight: '94.8 → 94.2 kg (-1.8kg 최저점 돌파 🔥)',
+          activeKcal: '160 kcal (총 198 kcal · 식후 실내자전거 21분 · 122BPM)',
+          memo: '🚴 19:10~19:32 식후 혈당 피크 컷 실내자전거 21분 완료! / 🍽️ 총 1,595kcal (단백질 147g · 거대곰탕+ISO100+와규부채살·관자·숙주+감홍사과 3조각 · 위스키 0ml 방어!)'
+        },
         {
           date: '11/09 (월) · 7일차 완주',
           weight: '95.2 → 95.0 kg',
@@ -955,8 +962,8 @@
 
     function normalizeState(raw) {
       const todayKey = new Date().toLocaleDateString('sv-SE');
-      // 8일차(2026-11-10 화) 저녁 디저트 감홍사과 3조각(오늘 최종 1,595kcal · 단백질 147g) 반영 마이그레이션
-      if (todayKey === '2026-11-10' && (!raw || !raw.day8TuesdayApple3SlicesV1)) {
+      // 8일차(2026-11-10 화) 저녁 식후 실내자전거 21분(160kcal, 총 198kcal, 122BPM) 완주 반영 마이그레이션
+      if (todayKey === '2026-11-10' && (!raw || !raw.day8TuesdayBikeDoneV1)) {
         return JSON.parse(JSON.stringify(defaultData));
       }
       const rawDateKey = raw && raw.lastDateKey;
