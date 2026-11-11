@@ -594,11 +594,12 @@
       day9WednesdayWorkoutAllClearV1: true,
       day9WednesdayEgg1SyncedV1: true,
       day9WednesdaySalmonPokeSyncedV1: true,
-      lastAction: '9일차 (수) 점심 🐟 생연어 포케 + 🥚 구운계란 1개 완료! (누적 485kcal · 단백질 40g)',
+      day9WednesdayTheDanbaekSyncedV1: true,
+      lastAction: '9일차 (수) 오후 간식 🥤 더:단백 카라멜맛 완료! (누적 590kcal · 단백질 60g 🔥)',
       currentWeight: 94.0,
       todayWatchKcal: 594,
       todayWatchHr: '웨이트 118 / 걷기 145 BPM (총 719kcal)',
-      waterCups: 5,
+      waterCups: 6,
       psylliumLunch: false,
       psylliumDinner: false,
       todayMeals: [
@@ -619,6 +620,15 @@
           carb: 1,
           protein: 6,
           fat: 5
+        },
+        {
+          id: 1794383100003,
+          time: '오후 4:45',
+          name: '🥤 더:단백 드링크 카라멜맛 (당류0.5g)',
+          kcal: 105,
+          carb: 4,
+          protein: 20,
+          fat: 1
         }
       ],
       activeTab: 'diet',
@@ -1012,8 +1022,8 @@
 
     function normalizeState(raw) {
       const todayKey = new Date().toLocaleDateString('sv-SE');
-      // 9일차(2026-11-11 수) 생연어 포케 + 구운계란 1개 반영 마이그레이션
-      if (todayKey === '2026-11-11' && (!raw || !raw.day9WednesdaySalmonPokeSyncedV1)) {
+      // 9일차(2026-11-11 수) 생연어 포케 + 구운계란 1개 + 더단백 반영 마이그레이션
+      if (todayKey === '2026-11-11' && (!raw || !raw.day9WednesdayTheDanbaekSyncedV1)) {
         const fresh = JSON.parse(JSON.stringify(defaultData));
         if (raw && raw.lastDateKey === '2026-11-11') {
           if (raw.waterCups && raw.waterCups > fresh.waterCups) fresh.waterCups = raw.waterCups;
