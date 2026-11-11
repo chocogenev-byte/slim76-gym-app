@@ -596,10 +596,11 @@
       day9WednesdaySalmonPokeSyncedV1: true,
       day9WednesdayTheDanbaekSyncedV1: true,
       day9WednesdayDinnerChuckSyncedV1: true,
-      lastAction: '9일차 (수) 저녁 만찬 완료! 오늘 총 1,590kcal · 단백질 143g 퍼펙트 마감 🏆',
+      day9WednesdayEgojinDoneV1: true,
+      lastAction: '9일차 (수) 식후 이고진 15분 10초(1,020바퀴) 혈당컷 완주! 오늘 활동 674kcal 올클리어 🏆',
       currentWeight: 94.0,
-      todayWatchKcal: 594,
-      todayWatchHr: '웨이트 118 / 걷기 145 BPM (총 719kcal)',
+      todayWatchKcal: 674,
+      todayWatchHr: '웨이트 118 / 걷기 145 BPM + 식후 이고진 15분(1,020바퀴)',
       waterCups: 8,
       psylliumLunch: false,
       psylliumDinner: true,
@@ -965,17 +966,17 @@
           },
           {
             id: 'h4',
-            order: '2단계 유산소 · 1회 20분 이내',
+            order: '2단계 유산소 · 식후 혈당컷 완주 (15분 10초 · 1,020바퀴!)',
             name: '집 이고진 미니 바이크 타기',
             zone: '기어 적당히 조이고 15분에 1,000바퀴 이상',
             img: '',
-            weight: 122,
+            weight: 120,
             weightStep: 5,
             unit: 'BPM',
-            defaultReps: 20,
+            defaultReps: 15,
             repUnit: '분',
             sets: [
-              { weight: 122, reps: 20, done: false }
+              { weight: 120, reps: 15, done: true }
             ],
             tip: '소파에 눕듯이 타지 말고 허리 뒤에 쿠션을 받쳐 상체를 세운 뒤, 1회 20분 이내로 1,000바퀴 이상 빠르게 굴리기!'
           }
@@ -983,10 +984,10 @@
       },
       watchRecords: [
         {
-          date: '11/11 (수) · 9일차 완주',
+          date: '11/11 (수) · 9일차 올클리어',
           weight: '94.0 kg (-2.0kg 최저점 돌파 🔥)',
-          activeKcal: '594 kcal (총 719 kcal · 상체26세트 283 + 걷기29분 311)',
-          memo: '🔥 A상체 26세트(플랭크80초+사레레60회+6기구 총 375회!) + 👟 오르막걷기 29분(145BPM) / 🍽️ 총 1,590kcal (단백질 143g · 연어포케+계란+더단백+척아이롤300g·관자·숙주·발아현미밥1공기+사과2쪽)'
+          activeKcal: '674 kcal (총 800+ kcal · 상체 283 + 걷기 311 + 식후 이고진 80)',
+          memo: '🔥 A상체 26세트 + 👟 오르막걷기 29분(145BPM) + 🚴 식후 이고진 15분10초(1,020바퀴) 완주! / 🍽️ 총 1,590kcal (단백질 143g · 금주 2일차 완승!)'
         },
         {
           date: '11/10 (화) · 8일차 완주',
@@ -1041,8 +1042,8 @@
 
     function normalizeState(raw) {
       const todayKey = new Date().toLocaleDateString('sv-SE');
-      // 9일차(2026-11-11 수) 저녁 척아이롤300g+관자+숙주+발아현미밥1공기+사과2쪽 마감 마이그레이션
-      if (todayKey === '2026-11-11' && (!raw || !raw.day9WednesdayDinnerChuckSyncedV1)) {
+      // 9일차(2026-11-11 수) 식후 이고진 15분 10초(1,020바퀴) 혈당컷 완주 마이그레이션
+      if (todayKey === '2026-11-11' && (!raw || !raw.day9WednesdayEgojinDoneV1)) {
         const fresh = JSON.parse(JSON.stringify(defaultData));
         if (raw && raw.lastDateKey === '2026-11-11') {
           if (raw.waterCups && raw.waterCups > fresh.waterCups) fresh.waterCups = raw.waterCups;
