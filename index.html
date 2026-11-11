@@ -592,14 +592,25 @@
       day9WednesdayCourseABalanceV1: true,
       day9WednesdayWideShoulderV1: true,
       day9WednesdayWorkoutAllClearV1: true,
-      lastAction: '9일차 (수) 🔥 A상체 26세트(283kcal) + 걷기 29분(311kcal·145BPM) = 활동 594kcal(총 719kcal) 올클리어!! 🏆',
+      day9WednesdayEgg1SyncedV1: true,
+      lastAction: '9일차 (수) 운동 후 구운계란 1개 보충 완료! (오늘 워치 활동 594kcal · 총 719kcal 🔥)',
       currentWeight: 94.0,
       todayWatchKcal: 594,
       todayWatchHr: '웨이트 118 / 걷기 145 BPM (총 719kcal)',
-      waterCups: 4,
+      waterCups: 5,
       psylliumLunch: false,
       psylliumDinner: false,
-      todayMeals: [],
+      todayMeals: [
+        {
+          id: 1794379400001,
+          time: '오후 3:40',
+          name: '🥚 맥반석 구운계란 1개',
+          kcal: 75,
+          carb: 1,
+          protein: 6,
+          fat: 5
+        }
+      ],
       activeTab: 'diet',
       courses: {
         courseA: [
@@ -991,11 +1002,10 @@
 
     function normalizeState(raw) {
       const todayKey = new Date().toLocaleDateString('sv-SE');
-      // 9일차(2026-11-11 수) A상체 26세트 + 오르막 걷기 29분(활동 594kcal / 총 719kcal) 완주 반영 마이그레이션
-      if (todayKey === '2026-11-11' && (!raw || !raw.day9WednesdayWorkoutAllClearV1)) {
+      // 9일차(2026-11-11 수) 구운계란 1개 추가 반영 마이그레이션
+      if (todayKey === '2026-11-11' && (!raw || !raw.day9WednesdayEgg1SyncedV1)) {
         const fresh = JSON.parse(JSON.stringify(defaultData));
         if (raw && raw.lastDateKey === '2026-11-11') {
-          if (raw.todayMeals && raw.todayMeals.length > 0) fresh.todayMeals = raw.todayMeals;
           if (raw.waterCups && raw.waterCups > fresh.waterCups) fresh.waterCups = raw.waterCups;
           if (raw.psylliumLunch) fresh.psylliumLunch = raw.psylliumLunch;
           if (raw.psylliumDinner) fresh.psylliumDinner = raw.psylliumDinner;
