@@ -595,13 +595,14 @@
       day9WednesdayEgg1SyncedV1: true,
       day9WednesdaySalmonPokeSyncedV1: true,
       day9WednesdayTheDanbaekSyncedV1: true,
-      lastAction: '9일차 (수) 오후 간식 🥤 더:단백 카라멜맛 완료! (누적 590kcal · 단백질 60g 🔥)',
+      day9WednesdayDinnerChuckSyncedV1: true,
+      lastAction: '9일차 (수) 저녁 만찬 완료! 오늘 총 1,590kcal · 단백질 143g 퍼펙트 마감 🏆',
       currentWeight: 94.0,
       todayWatchKcal: 594,
       todayWatchHr: '웨이트 118 / 걷기 145 BPM (총 719kcal)',
-      waterCups: 6,
+      waterCups: 8,
       psylliumLunch: false,
-      psylliumDinner: false,
+      psylliumDinner: true,
       todayMeals: [
         {
           id: 1794378200001,
@@ -629,6 +630,24 @@
           carb: 4,
           protein: 20,
           fat: 1
+        },
+        {
+          id: 1794391200004,
+          time: '오후 7:00',
+          name: '🥩 프라임 척아이롤(300g) + 관자살 + 숙주볶음 + 발아현미밥 1공기',
+          kcal: 965,
+          carb: 72,
+          protein: 83,
+          fat: 38
+        },
+        {
+          id: 1794392000005,
+          time: '오후 7:12',
+          name: '🍎 감홍 사과 2쪽 (식후 입가심)',
+          kcal: 35,
+          carb: 9,
+          protein: 0,
+          fat: 0
         }
       ],
       activeTab: 'diet',
@@ -964,10 +983,10 @@
       },
       watchRecords: [
         {
-          date: '11/11 (수) · 9일차 헬스 완주',
+          date: '11/11 (수) · 9일차 완주',
           weight: '94.0 kg (-2.0kg 최저점 돌파 🔥)',
           activeKcal: '594 kcal (총 719 kcal · 상체26세트 283 + 걷기29분 311)',
-          memo: '🔥 A상체 26세트(플랭크80초+사레레60회+6기구 총 375회! 118BPM) + 👟 오르막걷기 29분(2.23km·145BPM) 역대 최고 기록!'
+          memo: '🔥 A상체 26세트(플랭크80초+사레레60회+6기구 총 375회!) + 👟 오르막걷기 29분(145BPM) / 🍽️ 총 1,590kcal (단백질 143g · 연어포케+계란+더단백+척아이롤300g·관자·숙주·발아현미밥1공기+사과2쪽)'
         },
         {
           date: '11/10 (화) · 8일차 완주',
@@ -1022,13 +1041,12 @@
 
     function normalizeState(raw) {
       const todayKey = new Date().toLocaleDateString('sv-SE');
-      // 9일차(2026-11-11 수) 생연어 포케 + 구운계란 1개 + 더단백 반영 마이그레이션
-      if (todayKey === '2026-11-11' && (!raw || !raw.day9WednesdayTheDanbaekSyncedV1)) {
+      // 9일차(2026-11-11 수) 저녁 척아이롤300g+관자+숙주+발아현미밥1공기+사과2쪽 마감 마이그레이션
+      if (todayKey === '2026-11-11' && (!raw || !raw.day9WednesdayDinnerChuckSyncedV1)) {
         const fresh = JSON.parse(JSON.stringify(defaultData));
         if (raw && raw.lastDateKey === '2026-11-11') {
           if (raw.waterCups && raw.waterCups > fresh.waterCups) fresh.waterCups = raw.waterCups;
           if (raw.psylliumLunch) fresh.psylliumLunch = raw.psylliumLunch;
-          if (raw.psylliumDinner) fresh.psylliumDinner = raw.psylliumDinner;
         }
         return fresh;
       }
