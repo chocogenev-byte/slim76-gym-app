@@ -546,7 +546,8 @@
       day9WednesdayMorningWeight944V1: true,
       day9WednesdayWeight940V1: true,
       day9WednesdayCourseABalanceV1: true,
-      lastAction: '9일차 (수) 94.0kg(-2.0kg)! 🔥 A상체 좌우·코어 밸런스 업그레이드 세팅 완료!',
+      day9WednesdayWideShoulderV1: true,
+      lastAction: '9일차 (수) 94.0kg(-2.0kg)! 🔥 어깨 가로 폭 확장(시티드 사레레 3세트) 앱 탑재 완료!',
       currentWeight: 94.0,
       todayWatchKcal: 0,
       todayWatchHr: '기록 대기 (오늘 오후 2시: 🔥 A상체 + 호카 마하 6 오르막 걷기)',
@@ -649,7 +650,7 @@
           },
           {
             id: 'a5_shoulder',
-            order: '5번 기구 · 어깨 프레임 넓히기 (4세트 집중 🔥)',
+            order: '5-1번 기구 · 어깨 전체 볼륨 (4세트 🔥)',
             name: '숄더 프레스 머신 (바닥 도르래 · 위로 밀기)',
             zone: '나무 바닥 (아래에서 위로 미는 어깨 기구 · 10~15kg 정자세!)',
             img: 'images/machine_chest_press.jpg',
@@ -665,6 +666,24 @@
               { weight: 10, reps: 15, done: false }
             ],
             tip: '⚖️ [승모근 개입 차단] 무게 욕심내면 목·승모근만 뭉칩니다! 15kg·10kg으로 귀와 어깨를 멀리 떨어뜨린 채 양쪽 바깥 손잡이를 좌우 수평 맞춰 위로 밀어 올리세요!'
+          },
+          {
+            id: 'a5_lateral',
+            order: '5-2번 필살기 · 정면 어깨 가로 폭 넓히기 (옆뽕 직격타 🔥)',
+            name: '시티드 덤벨 사이드 레터럴 레이즈 (의자에 등 기대고 사레레)',
+            zone: '검은 바닥 덤벨존 (등받이 의자 세워 앉기 · 2~4kg 초경량 아령!)',
+            img: '',
+            weight: 3,
+            weightStep: 1,
+            unit: 'kg(양손)',
+            defaultReps: 20,
+            repUnit: '회',
+            sets: [
+              { weight: 3, reps: 20, done: false },
+              { weight: 3, reps: 20, done: false },
+              { weight: 3, reps: 20, done: false }
+            ],
+            tip: '🔥 [어깨 넓어지는 1등 운동 · 허리부담 0%] 반드시 등받이 벤치에 엉덩이와 등을 딱 붙이고 앉으세요! 3kg 작은 아령을 들고 어깨(승모근)는 아래로 내린 채, 팔꿈치를 양옆 벽 쪽으로 멀리 던지듯이 어깨높이 살짝 아래까지만 올렸다 천천히 내리세요!'
           },
           {
             id: 'a5',
@@ -920,8 +939,8 @@
 
     function normalizeState(raw) {
       const todayKey = new Date().toLocaleDateString('sv-SE');
-      // 9일차(2026-11-11 수) A상체 좌우·코어 밸런스 업그레이드(0번 플랭크 + 중량/팁 보강) 마이그레이션
-      if (todayKey === '2026-11-11' && (!raw || !raw.day9WednesdayCourseABalanceV1)) {
+      // 9일차(2026-11-11 수) 어깨 가로 폭 확장(시티드 덤벨 사레레 3세트) 추가 마이그레이션
+      if (todayKey === '2026-11-11' && (!raw || !raw.day9WednesdayWideShoulderV1)) {
         const fresh = JSON.parse(JSON.stringify(defaultData));
         // 만약 오늘 이미 기록한 식단/물이 있다면 보존!
         if (raw && raw.lastDateKey === '2026-11-11') {
