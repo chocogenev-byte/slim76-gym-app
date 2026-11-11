@@ -1050,7 +1050,7 @@
           });
         });
       });
-      if (!merged.currentWeight || merged.currentWeight === 94) merged.currentWeight = 95.0;
+      if (!merged.currentWeight) merged.currentWeight = 94.0;
 
       // 날짜가 바뀌면(매일 자정 이후 첫 접속 시) 오늘의 세트 체크·식단·물·워치 누적 자동 초기화!
       if (rawDateKey && rawDateKey !== todayKey) {
@@ -2120,43 +2120,82 @@
       }
     }
 
+    let timerEndAt = 0;
+
+    function persistTimerState() {
+      try {
+        if (timerEndAt > 0) {
+          localStorage.setItem('slim76RestTimerV1', JSON.stringify({ timerEndAt, activeTimerTarget }));
+        } else {
+          localStorage.removeItem('slim76RestTimerV1');
+        }
+      } catch (e) {}
+    }
+
+    function syncRestTimerTick() {
+      if (!timerEndAt) return;
+      const display = document.getElementById('timerDisplay');
+      const title = document.getElementById('timerTitle');
+      const nextRemaining = Math.max(0, Math.ceil((timerEndAt - Date.now()) / 1000));
+
+      if (nextRemaining > 0) {
+        if (remainingSeconds !== nextRemaining) {
+          remainingSeconds = nextRemaining;
+          display.textContent = remainingSeconds + '초';
+          display.className = 'w-12 h-12 rounded-2xl bg-amber-500 text-slate-950 flex items-center justify-center text-base font-black shadow-inner';
+          title.textContent = '⏱️ 휴식 중! (다른 앱 갔다 와도 초 계속 흐름!)';
+          updateInlineTimerUI();
+        }
+      } else {
+        clearInterval(timerInterval);
+        timerInterval = null;
+        timerEndAt = 0;
+        remainingSeconds = 0;
+        persistTimerState();
+        display.textContent = 'GO!';
+        display.className = 'w-12 h-12 rounded-2xl bg-emerald-500 text-slate-950 flex items-center justify-center text-base font-black animate-bounce';
+        title.textContent = '🔥 휴식 끝! 바로 다음 세트 출발!';
+        updateInlineTimerUI();
+        if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
+      }
+    }
+
     function startRestTimer(seconds, customTarget = null) {
       clearInterval(timerInterval);
       if (customTarget) activeTimerTarget = customTarget;
+      timerEndAt = Date.now() + (seconds * 1000);
       remainingSeconds = seconds;
+      persistTimerState();
+
       const display = document.getElementById('timerDisplay');
       const title = document.getElementById('timerTitle');
-
       display.textContent = remainingSeconds + '초';
       display.className = 'w-12 h-12 rounded-2xl bg-amber-500 text-slate-950 flex items-center justify-center text-base font-black shadow-inner';
       title.textContent = '⏱️ 휴식 중! 물 두 모금 마시세요!';
       updateInlineTimerUI();
 
-      timerInterval = setInterval(() => {
-        remainingSeconds--;
-        if (remainingSeconds > 0) {
-          display.textContent = remainingSeconds + '초';
-          updateInlineTimerUI();
-        } else {
-          clearInterval(timerInterval);
-          display.textContent = 'GO!';
-          display.className = 'w-12 h-12 rounded-2xl bg-emerald-500 text-slate-950 flex items-center justify-center text-base font-black animate-bounce';
-          title.textContent = '🔥 40초 휴식 끝! 다음 세트 출발!';
-          updateInlineTimerUI();
-          if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
-        }
-      }, 1000);
+      timerInterval = setInterval(syncRestTimerTick, 250);
     }
 
     function resetRestTimer() {
       clearInterval(timerInterval);
+      timerInterval = null;
+      timerEndAt = 0;
       activeTimerTarget = null;
+      persistTimerState();
       const display = document.getElementById('timerDisplay');
       display.textContent = '40초';
       display.className = 'w-12 h-12 rounded-2xl bg-indigo-600 text-white flex items-center justify-center text-base font-extrabold shadow-inner';
       document.getElementById('timerTitle').textContent = '세트 완료 시 40초 자동 타이머';
       renderWorkoutList();
     }
+
+    // 멀티태스킹 앱 전환 / 화면 잠금 해제 / 새로고침 복귀 시 실제 흐른 시간 즉시 반영!
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) syncRestTimerTick();
+    });
+    window.addEventListener('focus', syncRestTimerTick);
+    window.addEventListener('pageshow', syncRestTimerTick);
 
     function renderWorkoutList() {
       const container = document.getElementById('workoutListContainer');
@@ -2470,6 +2509,17 @@
     }
 
     switchTab(state.activeTab || 'courseA', false);
+    try {
+      const savedTimer = JSON.parse(localStorage.getItem('slim76RestTimerV1') || 'null');
+      if (savedTimer && savedTimer.timerEndAt > Date.now()) {
+        activeTimerTarget = savedTimer.activeTimerTarget || null;
+        timerEndAt = savedTimer.timerEndAt;
+        syncRestTimerTick();
+        timerInterval = setInterval(syncRestTimerTick, 250);
+      } else {
+        localStorage.removeItem('slim76RestTimerV1');
+      }
+    } catch (e) {}
     ingestHealthAppUrlParams();
   </script>
 </body>
