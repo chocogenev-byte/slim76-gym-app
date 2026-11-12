@@ -259,7 +259,7 @@
               ↩️ 방금 1개 취소
             </button>
             <button onclick="restoreTodayDefaultMeals()" class="py-2 px-2 rounded-xl text-[11px] font-extrabold bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 active:scale-95 transition">
-              🔄 오늘식단(1,425) 복구
+              🔄 오늘식단(1,530) 복구
             </button>
             <button onclick="clearTodayMealsOnly()" class="py-2 px-2 rounded-xl text-[11px] font-extrabold bg-rose-500/20 text-rose-300 border border-rose-500/50 active:scale-95 transition">
               🗑️ 음식 전체 0kcal
@@ -697,7 +697,8 @@
       day10ThursdayCleanAccidentalMealsV1: true,
       day10ThursdayDinnerMokgumeong400V1: true,
       day10ThursdayDinnerFullRiceSsamV1: true,
-      lastAction: '10일차 (목) 저녁 완료! 🥩 목구멍 특목살 400g+쌈·마늘·쌈장 + 🍚 발아현미밥 1공기 (오늘 총 1,425kcal · 단백질 124g 🏆)',
+      day10ThursdayTheDanbaekAddedV1: true,
+      lastAction: '10일차 (목) 식단 올클리어! 🥗포케+사과 + 🥤더단백 + 🥩목구멍특목살400g+발아현미밥1공기 (총 1,530kcal · 단백질 144g 🏆)',
       currentWeight: 93.9,
       todayWatchKcal: 435,
       todayWatchHr: '하체 112 / 걷기 143 BPM (총 536kcal 🔥)',
@@ -722,6 +723,15 @@
           carb: 18,
           protein: 82,
           fat: 35
+        },
+        {
+          id: 1794468000005,
+          time: '오후 4:30',
+          name: '🥤 더:단백 드링크 카라멜맛 (당류 0.5g)',
+          kcal: 105,
+          carb: 4,
+          protein: 20,
+          fat: 1
         },
         {
           id: 1794461400001,
@@ -1092,7 +1102,7 @@
           date: '11/12 (목) · 10일차 헬스 & 식단 완주',
           weight: '93.9 kg (-2.1kg · 93kg대 첫 입성! 🏆)',
           activeKcal: '435 kcal (총 536 kcal · 하체15세트 148 + 걷기27분 287)',
-          memo: '⚡ B하체 15세트(총 323회 신기록!) + 👟 오르막걷기 27분(2.25km·143BPM) 완료! / 🍽️ 식단: 점심 닭가슴살포케+사과2쪽(410) + 저녁 목구멍 특목살 400g·쌈·마늘·발아현미밥1공기(1,015) = 총 1,425kcal (단백질 124g · 금주 3일차 완승!)'
+          memo: '⚡ B하체 15세트(총 323회 신기록!) + 👟 오르막걷기 27분(2.25km·143BPM) 완료! / 🍽️ 식단: 포케+사과2쪽(410) + 더단백(105) + 목구멍 특목살400g·쌈·마늘·발아현미밥1공기(1,015) = 총 1,530kcal (단백질 144g · 금주 3일차 완승!)'
         },
         {
           date: '11/11 (수) · 9일차 올클리어',
@@ -1153,8 +1163,8 @@
 
     function normalizeState(raw) {
       const todayKey = new Date().toLocaleDateString('sv-SE');
-      // 10일차(2026-11-12 목) 저녁 목구멍 특목살 400g + 쌈·마늘·쌈장 + 발아현미밥 1공기(총 1,425kcal) 반영 마이그레이션
-      if (todayKey === '2026-11-12' && (!raw || !raw.day10ThursdayDinnerFullRiceSsamV1)) {
+      // 10일차(2026-11-12 목) 더단백 카라멜맛 추가 + 목구멍 특목살 400g + 발아현미밥 1공기(총 1,530kcal) 반영 마이그레이션
+      if (todayKey === '2026-11-12' && (!raw || !raw.day10ThursdayTheDanbaekAddedV1)) {
         const fresh = JSON.parse(JSON.stringify(defaultData));
         if (raw && raw.lastDateKey === '2026-11-12') {
           if (raw.waterCups && raw.waterCups > fresh.waterCups) fresh.waterCups = raw.waterCups;
@@ -1410,12 +1420,12 @@
       showToast(`↩️ [${removed.name}] (-${removed.kcal}kcal) 삭제 완료!`);
     }
 
-    // 🔄 오늘 기본 식단(점심 포케+사과2쪽 + 저녁 목구멍 특목살 400g+발아현미밥1공기 = 1,425kcal)으로 즉시 복구
+    // 🔄 오늘 기본 식단(점심 포케+사과2쪽 + 더단백 + 저녁 목구멍 특목살 400g+발아현미밥1공기 = 1,530kcal)으로 즉시 복구
     function restoreTodayDefaultMeals() {
       state.todayMeals = JSON.parse(JSON.stringify(defaultData.todayMeals));
       renderDietTab();
-      saveState('식단 복구: 오늘 기본 식단(1,425kcal)으로 복원', true);
-      showToast('🔄 오늘 기본 식단(1,425kcal · 단백질 124g) 상태로 복구되었습니다!');
+      saveState('식단 복구: 오늘 기본 식단(1,530kcal)으로 복원', true);
+      showToast('🔄 오늘 기본 식단(1,530kcal · 단백질 144g) 상태로 복구되었습니다!');
     }
 
     // 🗑️ 수분 기록은 유지하고 오늘 음식 목록만 0kcal로 비우기
