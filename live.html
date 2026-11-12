@@ -96,10 +96,10 @@
 
       <!-- 필라이즈 스타일: 오늘 섭취 vs 소모 & 실시간 지방 연소량 -->
       <div class="grid grid-cols-4 gap-1.5 text-center">
-        <div class="bg-slate-900/80 border border-slate-700/60 rounded-2xl p-2">
-          <div class="text-[11px] text-slate-400">🥗 오늘 섭취</div>
+        <div class="bg-slate-900/80 border border-emerald-500/40 rounded-2xl p-2 active:scale-95 transition cursor-pointer" onclick="switchTab('diet', true)">
+          <div class="text-[11px] text-emerald-300 font-bold">🥗 오늘 섭취</div>
           <div class="text-xs font-extrabold text-white mt-0.5"><span id="todayDietKcalDisplay">0</span> kcal</div>
-          <div class="text-[10px] text-slate-400">목표 1,700</div>
+          <div class="text-[10px] text-slate-400">터치해 수정/삭제</div>
         </div>
         <div class="bg-slate-900/80 border border-indigo-500/40 rounded-2xl p-2">
           <div class="text-[11px] text-indigo-300 font-bold">⌚ 워치 운동</div>
@@ -246,13 +246,37 @@
         <div id="dietFeedbackBox" class="text-xs text-slate-200 bg-slate-900/90 rounded-2xl p-3 border border-slate-700">
           💡 아래 <strong>원터치 자주 먹는 메뉴 버튼</strong>을 누르면 탄·단·지와 칼로리가 자동 계산되어 AI 코치에게 실시간 전송됩니다!
         </div>
+
+        <!-- ⚡ 실수 방지: 1초 취소 / 초기화 & 오늘 먹은 식단 목록 (맨 위 배치!) -->
+        <div class="pt-3 border-t border-slate-700/80 space-y-2.5">
+          <div class="flex items-center justify-between">
+            <h3 class="text-xs font-extrabold text-white">📋 오늘 기록된 식단 (개별 [🗑️빼기] 가능)</h3>
+            <span class="text-[11px] text-amber-300 font-bold">잘못 눌렀다면 아래 버튼 터치!</span>
+          </div>
+
+          <div class="grid grid-cols-3 gap-1.5">
+            <button onclick="undoLastMeal()" class="py-2 px-2 rounded-xl text-[11px] font-extrabold bg-amber-500/20 text-amber-300 border border-amber-500/50 active:scale-95 transition">
+              ↩️ 방금 1개 취소
+            </button>
+            <button onclick="restoreTodayDefaultMeals()" class="py-2 px-2 rounded-xl text-[11px] font-extrabold bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 active:scale-95 transition">
+              🔄 점심(410kcal) 복구
+            </button>
+            <button onclick="clearTodayMealsOnly()" class="py-2 px-2 rounded-xl text-[11px] font-extrabold bg-rose-500/20 text-rose-300 border border-rose-500/50 active:scale-95 transition">
+              🗑️ 음식 전체 0kcal
+            </button>
+          </div>
+
+          <div id="todayMealsList" class="space-y-2"></div>
+        </div>
       </div>
 
       <!-- 3. 1초 원터치 식단 프리셋 버튼 -->
       <div class="bg-slate-800 border border-slate-700 rounded-3xl p-4 space-y-3">
         <div class="flex items-center justify-between">
           <h3 class="text-sm font-extrabold text-white">⚡ 자주 먹는 식단 1초 원터치 추가</h3>
-          <span class="text-[11px] text-indigo-300 font-semibold">터치 즉시 기록 & 전송</span>
+          <button onclick="undoLastMeal()" class="text-[11px] font-extrabold text-amber-300 bg-amber-500/20 border border-amber-500/40 px-2.5 py-1 rounded-xl active:scale-95">
+            ↩️ 방금 추가 취소
+          </button>
         </div>
         <div class="grid grid-cols-2 gap-2">
           <button onclick="addPresetMeal('🍎 감홍 사과 반 개 (1/2개·껍질째)', 75, 18, 0, 0)" class="p-2.5 rounded-2xl bg-slate-900 hover:bg-slate-800 border border-emerald-500/40 text-left active:scale-95 transition">
@@ -356,15 +380,6 @@
             + 내 식단 기록 & AI 코치에게 실시간 공유
           </button>
         </div>
-      </div>
-
-      <!-- 4. 오늘 먹은 식단 타임라인 -->
-      <div class="bg-slate-800 border border-slate-700 rounded-3xl p-4">
-        <div class="flex items-center justify-between mb-3">
-          <h3 class="text-sm font-extrabold text-white">📋 오늘 기록한 식단 목록</h3>
-          <button onclick="clearTodayDiet()" class="text-xs text-rose-400 underline font-semibold">오늘 식단/물 초기화</button>
-        </div>
-        <div id="todayMealsList" class="space-y-2"></div>
       </div>
     </div>
 
@@ -601,7 +616,8 @@
       day10ThursdayLowerStrengthDoneV1: true,
       day10ThursdayWorkoutAllClearV1: true,
       day10ThursdayLunchChickenPokeV1: true,
-      lastAction: '10일차 (목) 점심 🥗 수비드 닭가슴살 포케 + 🍎 감홍 사과 2쪽 완료! (410kcal · 단백질 36g)',
+      day10ThursdayCleanAccidentalMealsV1: true,
+      lastAction: '10일차 (목) 점심 🥗 수비드 닭가슴살 포케 + 🍎 감홍 사과 2쪽 (410kcal · 오터치 식단 정리 완료!)',
       currentWeight: 93.9,
       todayWatchKcal: 435,
       todayWatchHr: '하체 112 / 걷기 143 BPM (총 536kcal 🔥)',
@@ -1039,8 +1055,8 @@
 
     function normalizeState(raw) {
       const todayKey = new Date().toLocaleDateString('sv-SE');
-      // 10일차(2026-11-12 목) 점심 수비드 닭가슴살 포케 + 감홍 사과 2쪽 반영 마이그레이션
-      if (todayKey === '2026-11-12' && (!raw || !raw.day10ThursdayLunchChickenPokeV1)) {
+      // 10일차(2026-11-12 목) 오터치 식단 초기화 & 점심 수비드 닭가슴살 포케 + 감홍 사과 2쪽(410kcal) 복구 마이그레이션
+      if (todayKey === '2026-11-12' && (!raw || !raw.day10ThursdayCleanAccidentalMealsV1)) {
         const fresh = JSON.parse(JSON.stringify(defaultData));
         if (raw && raw.lastDateKey === '2026-11-12') {
           if (raw.waterCups && raw.waterCups > fresh.waterCups) fresh.waterCups = raw.waterCups;
@@ -1262,11 +1278,17 @@
       }
     }
 
-    // 🥗 프리셋 식단 추가
+    // 🥗 프리셋 식단 추가 (스크롤 중 연속 오터치 방지 450ms 가드 포함)
+    let lastPresetTapAt = 0;
     function addPresetMeal(name, kcal, carb, protein, fat) {
+      const now = Date.now();
+      if (now - lastPresetTapAt < 450) {
+        return;
+      }
+      lastPresetTapAt = now;
       const timeStr = new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
       state.todayMeals.unshift({
-        id: Date.now(),
+        id: now,
         time: timeStr,
         name,
         kcal,
@@ -1276,6 +1298,35 @@
       });
       renderDietTab();
       saveState(`식단 기록: ${name} (${kcal}kcal)`, true);
+      showToast(`➕ ${name} (+${kcal}kcal) 추가! 잘못 눌렀다면 [↩️방금 1개 취소] 터치`);
+    }
+
+    // ↩️ 방금 추가한 식단 1개 즉시 취소
+    function undoLastMeal() {
+      if (!state.todayMeals || state.todayMeals.length === 0) {
+        showToast('ℹ️ 취소할 오늘 식단 기록이 없습니다.');
+        return;
+      }
+      const removed = state.todayMeals.shift();
+      renderDietTab();
+      saveState(`식단 방금 추가 취소: ${removed.name} (-${removed.kcal}kcal)`, true);
+      showToast(`↩️ [${removed.name}] (-${removed.kcal}kcal) 삭제 완료!`);
+    }
+
+    // 🔄 오늘 기본 점심(수비드 닭가슴살 포케 + 감홍 사과 2쪽 = 410kcal)으로 즉시 복구
+    function restoreTodayDefaultMeals() {
+      state.todayMeals = JSON.parse(JSON.stringify(defaultData.todayMeals));
+      renderDietTab();
+      saveState('식단 복구: 오늘 점심(포케+사과2쪽 410kcal)으로 복원', true);
+      showToast('🔄 오늘 점심(포케+사과2쪽 410kcal) 상태로 깔끔하게 복구되었습니다!');
+    }
+
+    // 🗑️ 수분 기록은 유지하고 오늘 음식 목록만 0kcal로 비우기
+    function clearTodayMealsOnly() {
+      state.todayMeals = [];
+      renderDietTab();
+      saveState('오늘 식단(음식) 목록 전체 0kcal 초기화', true);
+      showToast('🗑️ 오늘 음식 기록이 0kcal로 초기화되었습니다! (물 기록은 유지됨)');
     }
 
     // ✍️ 직접 입력 식단 추가
@@ -1310,9 +1361,13 @@
     }
 
     function removeMeal(id) {
+      const target = (state.todayMeals || []).find(m => m.id === id);
       state.todayMeals = (state.todayMeals || []).filter(m => m.id !== id);
       renderDietTab();
-      saveState('식단 항목 삭제', true);
+      saveState(`식단 항목 삭제: ${target ? target.name : ''}`, true);
+      if (target) {
+        showToast(`🗑️ [${target.name}] (-${target.kcal}kcal) 삭제 완료!`);
+      }
     }
 
     function clearTodayDiet() {
@@ -1390,15 +1445,15 @@
 
       const listEl = document.getElementById('todayMealsList');
       if (!state.todayMeals || state.todayMeals.length === 0) {
-        listEl.innerHTML = `<div class="text-xs text-slate-400 text-center py-4">아직 오늘 기록된 식단이 없습니다. 위 메뉴 버튼을 터치해 보세요!</div>`;
+        listEl.innerHTML = `<div class="text-xs text-slate-400 text-center py-3 bg-slate-900/60 rounded-2xl border border-slate-800">현재 기록된 음식이 없습니다 (0 kcal). 아래 메뉴 버튼을 터치해 추가하세요!</div>`;
       } else {
         listEl.innerHTML = state.todayMeals.map(m => `
-          <div class="flex items-center justify-between bg-slate-900 border border-slate-700 rounded-2xl p-3">
-            <div>
+          <div class="flex items-center justify-between bg-slate-900 border border-slate-700 rounded-2xl p-2.5">
+            <div class="pr-2">
               <div class="text-xs font-extrabold text-white">${m.name} <span class="text-[10px] font-normal text-slate-400">(${m.time})</span></div>
               <div class="text-[11px] text-emerald-400 font-bold mt-0.5">${m.kcal} kcal · 탄 ${m.carb}g / 단 ${m.protein}g / 지 ${m.fat}g</div>
             </div>
-            <button onclick="removeMeal(${m.id})" class="text-xs text-slate-400 hover:text-rose-400 px-2 py-1">✕</button>
+            <button onclick="removeMeal(${m.id})" class="shrink-0 text-xs font-extrabold text-rose-300 bg-rose-500/20 border border-rose-500/40 hover:bg-rose-500/30 px-2.5 py-1.5 rounded-xl active:scale-95 transition">🗑️ 빼기</button>
           </div>
         `).join('');
       }
