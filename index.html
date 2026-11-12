@@ -270,6 +270,84 @@
         </div>
       </div>
 
+      <!-- 2-2. 🛵 배달 건강식 추천 목록 & 주문 꿀팁 (터치 시 1초 기록) -->
+      <div class="bg-slate-800 border border-indigo-500/40 rounded-3xl p-4 space-y-2.5 shadow-md">
+        <div class="flex items-center justify-between">
+          <div>
+            <span class="text-[11px] font-bold text-indigo-300">배민 · 쿠팡이츠 살 안 찌는 메뉴판</span>
+            <h3 class="text-sm font-extrabold text-white">🛵 배달 추천 건강식 목록 (터치 시 기록)</h3>
+          </div>
+          <span class="text-[11px] text-emerald-400 font-bold">주문 꿀팁 포함</span>
+        </div>
+        <div class="grid grid-cols-1 gap-2">
+          <button onclick="addPresetMeal('🥪 써브웨이 스테이크&치즈/로스트치킨 15cm (위트·더블미트)', 480, 38, 46, 12)" class="p-2.5 rounded-2xl bg-slate-900 hover:bg-slate-800 border border-emerald-500/40 text-left active:scale-98 transition flex items-center justify-between">
+            <div>
+              <div class="text-xs font-extrabold text-white">🥪 써브웨이 15cm (로스트치킨/스테이크 · 더블미트)</div>
+              <div class="text-[11px] text-slate-300 mt-0.5">꿀팁: <span class="text-amber-300 font-bold">위트빵 속 파내기 + 고기추가 + 후추·올리브오일</span></div>
+            </div>
+            <div class="text-right shrink-0 pl-2">
+              <div class="text-xs font-black text-emerald-400">480 kcal</div>
+              <div class="text-[10px] text-white font-bold">단백질 46g</div>
+            </div>
+          </button>
+
+          <button onclick="addPresetMeal('🍲 1인 소고기 샤브샤브 (맑은육수·면/죽 제외)', 460, 14, 42, 24)" class="p-2.5 rounded-2xl bg-slate-900 hover:bg-slate-800 border border-emerald-500/40 text-left active:scale-98 transition flex items-center justify-between">
+            <div>
+              <div class="text-xs font-extrabold text-white">🍲 1인 소고기 샤브샤브 / 월남쌈 (채선당·등촌 등)</div>
+              <div class="text-[11px] text-slate-300 mt-0.5">꿀팁: <span class="text-amber-300 font-bold">맑은육수 + 고기·숙주·버섯 완식 (칼국수·죽 패스)</span></div>
+            </div>
+            <div class="text-right shrink-0 pl-2">
+              <div class="text-xs font-black text-emerald-400">460 kcal</div>
+              <div class="text-[10px] text-white font-bold">단백질 42g</div>
+            </div>
+          </button>
+
+          <button onclick="addPresetMeal('🐟 화덕 생선구이 1인 정식 (고등어/삼치 + 밥 1/2)', 530, 36, 42, 22)" class="p-2.5 rounded-2xl bg-slate-900 hover:bg-slate-800 border border-emerald-500/40 text-left active:scale-98 transition flex items-center justify-between">
+            <div>
+              <div class="text-xs font-extrabold text-white">🐟 화덕 생선구이 백반 (고등어·삼치·임연수)</div>
+              <div class="text-[11px] text-slate-300 mt-0.5">꿀팁: <span class="text-amber-300 font-bold">오메가3 폭발! 생선 살코기 다 먹고 밥만 1/2공기</span></div>
+            </div>
+            <div class="text-right shrink-0 pl-2">
+              <div class="text-xs font-black text-emerald-400">530 kcal</div>
+              <div class="text-[10px] text-white font-bold">단백질 42g</div>
+            </div>
+          </button>
+
+          <button onclick="addPresetMeal('🥬 직화 목살/삼겹 쌈밥 또는 보쌈 1인 (살코기·쌈채소)', 560, 22, 46, 32)" class="p-2.5 rounded-2xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-left active:scale-98 transition flex items-center justify-between">
+            <div>
+              <div class="text-xs font-extrabold text-white">🥬 1인 보쌈 정식 / 직화 목살 쌈밥</div>
+              <div class="text-[11px] text-slate-300 mt-0.5">꿀팁: <span class="text-amber-300 font-bold">비계 떼고 살코기 위주 + 상추·깻잎 듬뿍 (막국수 패스)</span></div>
+            </div>
+            <div class="text-right shrink-0 pl-2">
+              <div class="text-xs font-black text-emerald-400">560 kcal</div>
+              <div class="text-[10px] text-white font-bold">단백질 46g</div>
+            </div>
+          </button>
+
+          <button onclick="addPresetMeal('🐟 광어·연어 모둠회 소(小)자 (간장·와사비)', 470, 4, 54, 18)" class="p-2.5 rounded-2xl bg-slate-900 hover:bg-slate-800 border border-emerald-500/40 text-left active:scale-98 transition flex items-center justify-between">
+            <div>
+              <div class="text-xs font-extrabold text-white">🐟 광어 · 연어 모둠회 소(小)자</div>
+              <div class="text-[11px] text-slate-300 mt-0.5">꿀팁: <span class="text-amber-300 font-bold">설탕 초장 대신 간장+생와사비+쌈채소! (붓기 제로)</span></div>
+            </div>
+            <div class="text-right shrink-0 pl-2">
+              <div class="text-xs font-black text-emerald-400">470 kcal</div>
+              <div class="text-[10px] text-white font-bold">단백질 54g</div>
+            </div>
+          </button>
+
+          <button onclick="addPresetMeal('🍔 맥도날드 쿼터파운더/더블쿼터파운더 단품 + 제로콜라', 640, 38, 42, 34)" class="p-2.5 rounded-2xl bg-slate-900 hover:bg-slate-800 border border-amber-500/40 text-left active:scale-98 transition flex items-center justify-between">
+            <div>
+              <div class="text-xs font-extrabold text-white">🍔 소고기 버거 단품 (쿼터파운더/와퍼 + 제로콜라)</div>
+              <div class="text-[11px] text-slate-300 mt-0.5">꿀팁: <span class="text-rose-300 font-bold">감자튀김 절대 금지!</span> 단품만 먹으면 감량 100% 유지</div>
+            </div>
+            <div class="text-right shrink-0 pl-2">
+              <div class="text-xs font-black text-amber-300">640 kcal</div>
+              <div class="text-[10px] text-white font-bold">단백질 42g</div>
+            </div>
+          </button>
+        </div>
+      </div>
+
       <!-- 3. 1초 원터치 식단 프리셋 버튼 -->
       <div class="bg-slate-800 border border-slate-700 rounded-3xl p-4 space-y-3">
         <div class="flex items-center justify-between">
