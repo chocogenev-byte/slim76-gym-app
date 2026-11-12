@@ -259,7 +259,7 @@
               ↩️ 방금 1개 취소
             </button>
             <button onclick="restoreTodayDefaultMeals()" class="py-2 px-2 rounded-xl text-[11px] font-extrabold bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 active:scale-95 transition">
-              🔄 점심(410kcal) 복구
+              🔄 오늘식단(1,070) 복구
             </button>
             <button onclick="clearTodayMealsOnly()" class="py-2 px-2 rounded-xl text-[11px] font-extrabold bg-rose-500/20 text-rose-300 border border-rose-500/50 active:scale-95 transition">
               🗑️ 음식 전체 0kcal
@@ -695,14 +695,24 @@
       day10ThursdayWorkoutAllClearV1: true,
       day10ThursdayLunchChickenPokeV1: true,
       day10ThursdayCleanAccidentalMealsV1: true,
-      lastAction: '10일차 (목) 점심 🥗 수비드 닭가슴살 포케 + 🍎 감홍 사과 2쪽 (410kcal · 오터치 식단 정리 완료!)',
+      day10ThursdayDinnerMokgumeong400V1: true,
+      lastAction: '10일차 (목) 저녁 🥩 목구멍 세종점 특목살 400g 주문 반영! (오늘 총 1,070kcal · 단백질 116g)',
       currentWeight: 93.9,
       todayWatchKcal: 435,
       todayWatchHr: '하체 112 / 걷기 143 BPM (총 536kcal 🔥)',
-      waterCups: 5,
+      waterCups: 6,
       psylliumLunch: false,
-      psylliumDinner: false,
+      psylliumDinner: true,
       todayMeals: [
+        {
+          id: 1794473400003,
+          time: '오후 5:50',
+          name: '🥩 목구멍 세종점 특목살 400g (구운 살코기 ~260g + 쌈·와사비)',
+          kcal: 660,
+          carb: 8,
+          protein: 80,
+          fat: 34
+        },
         {
           id: 1794461400001,
           time: '오후 2:25',
@@ -1072,7 +1082,7 @@
           date: '11/12 (목) · 10일차 헬스 완주',
           weight: '93.9 kg (-2.1kg · 93kg대 첫 입성! 🏆)',
           activeKcal: '435 kcal (총 536 kcal · 하체15세트 148 + 걷기27분 287)',
-          memo: '⚡ B하체 15세트(총 323회 신기록!) + 👟 오르막걷기 27분(2.25km·143BPM) 완료! / 🥗 점심: 수비드 닭가슴살 포케+사과2쪽 (410kcal·단36g)'
+          memo: '⚡ B하체 15세트(총 323회 신기록!) + 👟 오르막걷기 27분(2.25km·143BPM) 완료! / 🍽️ 식단: 점심 닭가슴살포케+사과2쪽(410) + 저녁 목구멍 특목살 400g(660) = 총 1,070kcal (단백질 116g!)'
         },
         {
           date: '11/11 (수) · 9일차 올클리어',
@@ -1133,13 +1143,12 @@
 
     function normalizeState(raw) {
       const todayKey = new Date().toLocaleDateString('sv-SE');
-      // 10일차(2026-11-12 목) 오터치 식단 초기화 & 점심 수비드 닭가슴살 포케 + 감홍 사과 2쪽(410kcal) 복구 마이그레이션
-      if (todayKey === '2026-11-12' && (!raw || !raw.day10ThursdayCleanAccidentalMealsV1)) {
+      // 10일차(2026-11-12 목) 저녁 목구멍 세종점 특목살 400g 반영 마이그레이션
+      if (todayKey === '2026-11-12' && (!raw || !raw.day10ThursdayDinnerMokgumeong400V1)) {
         const fresh = JSON.parse(JSON.stringify(defaultData));
         if (raw && raw.lastDateKey === '2026-11-12') {
           if (raw.waterCups && raw.waterCups > fresh.waterCups) fresh.waterCups = raw.waterCups;
           if (raw.psylliumLunch) fresh.psylliumLunch = raw.psylliumLunch;
-          if (raw.psylliumDinner) fresh.psylliumDinner = raw.psylliumDinner;
         }
         return fresh;
       }
@@ -1391,12 +1400,12 @@
       showToast(`↩️ [${removed.name}] (-${removed.kcal}kcal) 삭제 완료!`);
     }
 
-    // 🔄 오늘 기본 점심(수비드 닭가슴살 포케 + 감홍 사과 2쪽 = 410kcal)으로 즉시 복구
+    // 🔄 오늘 기본 식단(점심 포케+사과2쪽 + 저녁 목구멍 특목살 400g = 1,070kcal)으로 즉시 복구
     function restoreTodayDefaultMeals() {
       state.todayMeals = JSON.parse(JSON.stringify(defaultData.todayMeals));
       renderDietTab();
-      saveState('식단 복구: 오늘 점심(포케+사과2쪽 410kcal)으로 복원', true);
-      showToast('🔄 오늘 점심(포케+사과2쪽 410kcal) 상태로 깔끔하게 복구되었습니다!');
+      saveState('식단 복구: 오늘 기본 식단(1,070kcal)으로 복원', true);
+      showToast('🔄 오늘 기본 식단(1,070kcal) 상태로 깔끔하게 복구되었습니다!');
     }
 
     // 🗑️ 수분 기록은 유지하고 오늘 음식 목록만 0kcal로 비우기
