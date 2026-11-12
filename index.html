@@ -600,15 +600,35 @@
       day10ThursdayInit939V1: true,
       day10ThursdayLowerStrengthDoneV1: true,
       day10ThursdayWorkoutAllClearV1: true,
-      lastAction: '10일차 (목) ⚡ B하체 15세트(323회·148kcal) + 걷기 27분(2.25km·287kcal·143BPM) = 활동 435kcal(총 536kcal) 올클리어! 🏆',
+      day10ThursdayLunchChickenPokeV1: true,
+      lastAction: '10일차 (목) 점심 🥗 수비드 닭가슴살 포케 + 🍎 감홍 사과 2쪽 완료! (410kcal · 단백질 36g)',
       currentWeight: 93.9,
       todayWatchKcal: 435,
       todayWatchHr: '하체 112 / 걷기 143 BPM (총 536kcal 🔥)',
-      waterCups: 4,
+      waterCups: 5,
       psylliumLunch: false,
       psylliumDinner: false,
-      todayMeals: [],
-      activeTab: 'courseB',
+      todayMeals: [
+        {
+          id: 1794461400001,
+          time: '오후 2:25',
+          name: '🥗 수비드 닭가슴살 포케 (초저지방·고단백)',
+          kcal: 375,
+          carb: 38,
+          protein: 36,
+          fat: 8
+        },
+        {
+          id: 1794461450002,
+          time: '오후 2:30',
+          name: '🍎 감홍 사과 2쪽 (운동 후 글리코겐 보충)',
+          kcal: 35,
+          carb: 9,
+          protein: 0,
+          fat: 0
+        }
+      ],
+      activeTab: 'diet',
       courses: {
         courseA: [
           {
@@ -958,7 +978,7 @@
           date: '11/12 (목) · 10일차 헬스 완주',
           weight: '93.9 kg (-2.1kg · 93kg대 첫 입성! 🏆)',
           activeKcal: '435 kcal (총 536 kcal · 하체15세트 148 + 걷기27분 287)',
-          memo: '⚡ B하체 15세트(총 323회 신기록! 112BPM) + 👟 오르막걷기 27분09초(2.25km·페이스12\'03"·143BPM) 올클리어!'
+          memo: '⚡ B하체 15세트(총 323회 신기록!) + 👟 오르막걷기 27분(2.25km·143BPM) 완료! / 🥗 점심: 수비드 닭가슴살 포케+사과2쪽 (410kcal·단36g)'
         },
         {
           date: '11/11 (수) · 9일차 올클리어',
@@ -1019,11 +1039,10 @@
 
     function normalizeState(raw) {
       const todayKey = new Date().toLocaleDateString('sv-SE');
-      // 10일차(2026-11-12 목) B하체 15세트(148kcal) + 걷기 27분(287kcal) = 활동 435kcal(총 536kcal) 완주 반영 마이그레이션
-      if (todayKey === '2026-11-12' && (!raw || !raw.day10ThursdayWorkoutAllClearV1)) {
+      // 10일차(2026-11-12 목) 점심 수비드 닭가슴살 포케 + 감홍 사과 2쪽 반영 마이그레이션
+      if (todayKey === '2026-11-12' && (!raw || !raw.day10ThursdayLunchChickenPokeV1)) {
         const fresh = JSON.parse(JSON.stringify(defaultData));
         if (raw && raw.lastDateKey === '2026-11-12') {
-          if (raw.todayMeals && raw.todayMeals.length > 0) fresh.todayMeals = raw.todayMeals;
           if (raw.waterCups && raw.waterCups > fresh.waterCups) fresh.waterCups = raw.waterCups;
           if (raw.psylliumLunch) fresh.psylliumLunch = raw.psylliumLunch;
           if (raw.psylliumDinner) fresh.psylliumDinner = raw.psylliumDinner;
