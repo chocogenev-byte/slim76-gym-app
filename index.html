@@ -374,7 +374,7 @@
       <div class="bg-slate-800 border border-emerald-500/40 rounded-3xl p-4 space-y-3">
         <div class="flex items-center justify-between">
           <h2 class="text-base font-extrabold text-white">📉 체중 감량 추이 (96kg → 76kg)</h2>
-          <span class="text-xs font-extrabold text-emerald-400">현재 -1.8kg 달성 (94.2kg 돌파! 🔥)</span>
+          <span id="recordsWeightDiffLabel" class="text-xs font-extrabold text-emerald-400">현재 -2.1kg 달성 (93.9kg 돌파! 🔥)</span>
         </div>
         <div id="weightTrendChart" class="grid grid-cols-4 gap-2 pt-2 items-end h-28 bg-slate-900/90 rounded-2xl p-3 border border-slate-700"></div>
       </div>
@@ -559,7 +559,7 @@
 
     const defaultData = {
       updatedAt: Date.now(),
-      lastDateKey: '2026-11-11',
+      lastDateKey: '2026-11-12',
       day6SundaySyncedV1: true,
       day6SundayWorkoutDoneV1: true,
       day6SundayLunchSyncedV1: true,
@@ -597,61 +597,16 @@
       day9WednesdayTheDanbaekSyncedV1: true,
       day9WednesdayDinnerChuckSyncedV1: true,
       day9WednesdayEgojinDoneV1: true,
-      lastAction: '9일차 (수) 식후 이고진 15분 10초(1,020바퀴) 혈당컷 완주! 오늘 활동 674kcal 올클리어 🏆',
-      currentWeight: 94.0,
-      todayWatchKcal: 674,
-      todayWatchHr: '웨이트 118 / 걷기 145 BPM + 식후 이고진 15분(1,020바퀴)',
-      waterCups: 8,
+      day10ThursdayInit939V1: true,
+      lastAction: '10일차 (목) 아침 93.9kg 돌파!! (드디어 93kg대 입성 · 시작 대비 -2.1kg 🔥)',
+      currentWeight: 93.9,
+      todayWatchKcal: 0,
+      todayWatchHr: '기록 대기 (오늘 목요일: ⚡ B하체 + 오르막 걷기 데이 🔥)',
+      waterCups: 1,
       psylliumLunch: false,
-      psylliumDinner: true,
-      todayMeals: [
-        {
-          id: 1794378200001,
-          time: '오후 3:10',
-          name: '🐟 생연어 포케 (운동 후 오메가3·단백질 보충)',
-          kcal: 410,
-          carb: 38,
-          protein: 34,
-          fat: 12
-        },
-        {
-          id: 1794379400002,
-          time: '오후 3:40',
-          name: '🥚 맥반석 구운계란 1개',
-          kcal: 75,
-          carb: 1,
-          protein: 6,
-          fat: 5
-        },
-        {
-          id: 1794383100003,
-          time: '오후 4:45',
-          name: '🥤 더:단백 드링크 카라멜맛 (당류0.5g)',
-          kcal: 105,
-          carb: 4,
-          protein: 20,
-          fat: 1
-        },
-        {
-          id: 1794391200004,
-          time: '오후 7:00',
-          name: '🥩 프라임 척아이롤(300g) + 관자살 + 숙주볶음 + 발아현미밥 1공기',
-          kcal: 965,
-          carb: 72,
-          protein: 83,
-          fat: 38
-        },
-        {
-          id: 1794392000005,
-          time: '오후 7:12',
-          name: '🍎 감홍 사과 2쪽 (식후 입가심)',
-          kcal: 35,
-          carb: 9,
-          protein: 0,
-          fat: 0
-        }
-      ],
-      activeTab: 'diet',
+      psylliumDinner: false,
+      todayMeals: [],
+      activeTab: 'courseB',
       courses: {
         courseA: [
           {
@@ -666,14 +621,14 @@
             defaultReps: 40,
             repUnit: '초',
             sets: [
-              { weight: 0, reps: 40, done: true },
-              { weight: 0, reps: 40, done: true }
+              { weight: 0, reps: 40, done: false },
+              { weight: 0, reps: 40, done: false }
             ],
             tip: '⚖️ [속근육 밸런스] 팔꿈치를 어깨 바로 아래 두고 배꼽을 등 쪽으로 당기며 엉덩이에 힘 꽉! 허리가 바닥으로 처지면 즉시 무릎 대고 멈추세요. 이 2세트만 해도 머신 운동 전 몸통 코어가 짱짱하게 잡힙니다!'
           },
           {
             id: 'a1',
-            order: '1번 기구 · 등 상부 (4세트 · 총 82회 완료!)',
+            order: '1번 기구 · 등 상부 (어깨 골격 프레임 넓히기)',
             name: '맥그립 랫풀다운 (나무바닥) 또는 원판 랫풀다운',
             zone: '나무 바닥 창가 쪽 (날개 모양 손잡이)',
             img: 'images/machine_mag_lat.jpg',
@@ -683,10 +638,9 @@
             defaultReps: 20,
             repUnit: '회',
             sets: [
-              { weight: 25, reps: 21, done: true },
-              { weight: 30, reps: 20, done: true },
-              { weight: 30, reps: 20, done: true },
-              { weight: 30, reps: 21, done: true }
+              { weight: 30, reps: 20, done: false },
+              { weight: 30, reps: 20, done: false },
+              { weight: 30, reps: 20, done: false }
             ],
             tip: '⚖️ [좌우 밸런스] 오른팔 힘만 쓰지 않게 약한 쪽(보통 왼손 새끼·약지)에 의식 60%를 두고 좌우 똑같이 가슴 위쪽으로 당긴 뒤 맨 아래서 날개뼈를 1초 꾹 누르세요!'
           },
@@ -702,15 +656,15 @@
             defaultReps: 15,
             repUnit: '회',
             sets: [
-              { weight: 15, reps: 15, done: true },
-              { weight: 15, reps: 13, done: true },
-              { weight: 10, reps: 15, done: true }
+              { weight: 15, reps: 15, done: false },
+              { weight: 15, reps: 15, done: false },
+              { weight: 10, reps: 15, done: false }
             ],
             tip: '⚖️ [후면 어깨 밸런스 핵심] 좌우 팔이 따로 움직이는 최고급 기구입니다! 1·2세트는 『가운데 11자 세로 손잡이』로 등 전체 조이기! 마지막 3세트는 반드시 『바깥쪽 가로 손잡이(손등이 위로)』를 잡아 비기 쉬운 어깨 뒤쪽(후면 삼각근) 밸런스를 채우세요!'
           },
           {
             id: 'a3',
-            order: '3번 기구 · 가슴 메인 (1세트 30kg×20회 폭발!)',
+            order: '3번 기구 · 가슴 메인',
             name: '체스트 프레스 (발밑 검은 곡선 발판 · 앞으로 밀기)',
             zone: '나무 바닥 펙덱 플라이 옆 (위에서 앞으로 미는 기구)',
             img: 'images/machine_shoulder_press.jpg',
@@ -720,11 +674,11 @@
             defaultReps: 15,
             repUnit: '회',
             sets: [
-              { weight: 30, reps: 20, done: true },
-              { weight: 30, reps: 13, done: true },
-              { weight: 25, reps: 11, done: true }
+              { weight: 30, reps: 15, done: false },
+              { weight: 30, reps: 15, done: false },
+              { weight: 25, reps: 15, done: false }
             ],
-            tip: '⚖️ [좌우 밸런스] 발밑 검은 레버를 밟아 손잡이를 꺼내 잡고, 날개뼈를 등받이에 고정한 채 왼손·오른손이 정확히 같은 속도로 나가고 들어오게 수평으로 밀기! (힘 남으면 3세트도 30kg 도전!)'
+            tip: '⚖️ [좌우 밸런스] 발밑 검은 레버를 밟아 손잡이를 꺼내 잡고, 날개뼈를 등받이에 고정한 채 왼손·오른손이 정확히 같은 속도로 나가고 들어오게 수평으로 밀기!'
           },
           {
             id: 'a4',
@@ -738,28 +692,27 @@
             defaultReps: 15,
             repUnit: '회',
             sets: [
-              { weight: 20, reps: 16, done: true },
-              { weight: 20, reps: 10, done: true },
-              { weight: 20, reps: 12, done: true }
+              { weight: 20, reps: 15, done: false },
+              { weight: 20, reps: 15, done: false },
+              { weight: 20, reps: 15, done: false }
             ],
             tip: '⚖️ [좌우 밸런스] 거울을 보면서 양손이 한쪽으로 치우치지 않고 가슴 정중앙 일직선에서 만나도록 큰 나무를 안듯이 모았다가 천천히 버티며 벌리기!'
           },
           {
             id: 'a5_shoulder',
-            order: '5-1번 기구 · 어깨 전체 볼륨 (4세트 드롭세트 완주 🔥)',
+            order: '5-1번 기구 · 어깨 전체 볼륨',
             name: '숄더 프레스 머신 (바닥 도르래 · 위로 밀기)',
             zone: '나무 바닥 (아래에서 위로 미는 어깨 기구 · 10~15kg 정자세!)',
             img: 'images/machine_chest_press.jpg',
-            weight: 15,
+            weight: 10,
             weightStep: 5,
             unit: 'kg',
             defaultReps: 15,
             repUnit: '회',
             sets: [
-              { weight: 15, reps: 15, done: true },
-              { weight: 10, reps: 6, done: true },
-              { weight: 10, reps: 10, done: true },
-              { weight: 5, reps: 10, done: true }
+              { weight: 15, reps: 15, done: false },
+              { weight: 10, reps: 15, done: false },
+              { weight: 10, reps: 15, done: false }
             ],
             tip: '⚖️ [승모근 개입 차단] 무게 욕심내면 목·승모근만 뭉칩니다! 15kg·10kg으로 귀와 어깨를 멀리 떨어뜨린 채 양쪽 바깥 손잡이를 좌우 수평 맞춰 위로 밀어 올리세요!'
           },
@@ -767,23 +720,23 @@
             id: 'a5_lateral',
             order: '5-2번 필살기 · 정면 어깨 가로 폭 넓히기 (옆뽕 직격타 🔥)',
             name: '시티드 덤벨 사이드 레터럴 레이즈 (의자에 등 기대고 사레레)',
-            zone: '검은 바닥 덤벨존 (등받이 의자 세워 앉기 · 1~3kg 초경량 아령!)',
+            zone: '검은 바닥 덤벨존 (등받이 의자 세워 앉기 · 목 안 아프게 2kg 초경량!)',
             img: '',
-            weight: 3,
+            weight: 2,
             weightStep: 1,
             unit: 'kg(양손)',
             defaultReps: 20,
             repUnit: '회',
             sets: [
-              { weight: 3, reps: 20, done: true },
-              { weight: 3, reps: 20, done: true },
-              { weight: 3, reps: 20, done: true }
+              { weight: 2, reps: 20, done: false },
+              { weight: 2, reps: 20, done: false },
+              { weight: 2, reps: 20, done: false }
             ],
-            tip: '🔥 [어깨 넓어지는 1등 운동 · 허리부담 0%] 반드시 등받이 벤치에 뒤통수·등·엉덩이를 딱 붙이고 앉으세요! 2~3kg 작은 아령을 들고 팔꿈치를 양옆 벽으로 멀리 밀어내듯이 가슴~쇄골 아래까지만 올렸다 천천히 내리세요!'
+            tip: '🔥 [목 통증 방지 공식 · 허리부담 0%] 반드시 등받이 벤치에 뒤통수·등·엉덩이를 딱 붙이고 앉으세요! 2kg 작은 아령을 들고 귀와 어깨를 멀리 내린 채 가슴 높이(45~60도)까지만 올렸다 천천히 내리세요!'
           },
           {
             id: 'a5',
-            order: '6번 기구 · 팔 앞쪽 탄력 (4세트 드롭세트 완주 🔥)',
+            order: '6번 기구 · 팔 앞쪽 탄력',
             name: '암 컬 머신 (팔뚝 패드 접기)',
             zone: '나무 바닥 (비스듬한 네모 패드 의자)',
             img: 'images/machine_arm_curl.jpg',
@@ -793,29 +746,45 @@
             defaultReps: 15,
             repUnit: '회',
             sets: [
-              { weight: 10, reps: 20, done: true },
-              { weight: 10, reps: 18, done: true },
-              { weight: 10, reps: 15, done: true },
-              { weight: 5, reps: 14, done: true }
+              { weight: 10, reps: 18, done: false },
+              { weight: 10, reps: 15, done: false },
+              { weight: 10, reps: 15, done: false }
             ],
             tip: '⚖️ [전완근 피로 방지 & 좌우 대칭] 주먹을 꽉 쥐지 말고 손바닥 아랫부분에 바를 걸친 채 손목을 꺾지 말고, 왼팔 이두근 힘까지 끝까지 집중해서 접어 올리세요!'
           },
           {
             id: 'a6',
             isCardio: true,
-            order: '마무리 유산소 & 전신 코어 · 29분 완주! (👟 호카 마하 6 실전!)',
+            order: '마무리 유산소 & 전신 코어 · 25~30분 (👟 호카 마하 6!)',
             name: '창가 러닝머신 오르막 빠르게 걷기',
-            zone: '2.23km 완주 · 평균 145 BPM · 케이던스 109 SPM',
+            zone: '하늘색(경사도) 5 / 노란색(속도) 4.6~5.0 · 목표 140~145 BPM',
             img: 'images/machine_treadmill.jpg',
             incline: 5,
-            speed: 4.6,
-            defaultReps: 29,
+            speed: 4.8,
+            defaultReps: 25,
             repUnit: '분',
-            sets: [{ incline: 5, speed: 4.6, reps: 29, done: true }],
+            sets: [{ incline: 5, speed: 4.8, reps: 25, done: false }],
             tip: '👟 [호카 마하 6 & 척추 속근육 코어 공식] 절대 손잡이를 잡지 마세요! 아랫배에 살짝 힘을 주고 시선 정면, 양팔을 앞뒤로 시원하게 흔들며 심박수 138~145 BPM으로 걸으면 허리 부담 0%로 전신 코어 밸런스가 완성됩니다!'
           }
         ],
         courseB: [
+          {
+            id: 'a0_plank',
+            order: '0번 워밍업 · 꼬리뼈 위(L5-S1) 천연 복대 켜기 (2세트)',
+            name: '플랭크 버티기 (하체 기구 전 스트레칭 매트)',
+            zone: '하체 시작 전 매트 40초×2세트 (허리 흔들림 100% 잠금!)',
+            img: '',
+            weight: 0,
+            weightStep: 5,
+            unit: '맨몸',
+            defaultReps: 40,
+            repUnit: '초',
+            sets: [
+              { weight: 0, reps: 40, done: false },
+              { weight: 0, reps: 40, done: false }
+            ],
+            tip: '🛡️ [하체 전 허리 보호 필수] 하체 기구 타기 전에 배꼽을 등 쪽으로 당기고 엉덩이를 꽉 조여 플랭크 40초 2세트로 속근육 복대를 먼저 켜두면 꼬리뼈 위 허리가 완벽히 보호됩니다!'
+          },
           {
             id: 'b1',
             order: '1번 기구 · 하체 전체 (칼로리 1등)',
@@ -966,7 +935,7 @@
           },
           {
             id: 'h4',
-            order: '2단계 유산소 · 식후 혈당컷 완주 (15분 10초 · 1,020바퀴!)',
+            order: '2단계 유산소 · 1회 15~20분 이내',
             name: '집 이고진 미니 바이크 타기',
             zone: '기어 적당히 조이고 15분에 1,000바퀴 이상',
             img: '',
@@ -976,13 +945,19 @@
             defaultReps: 15,
             repUnit: '분',
             sets: [
-              { weight: 120, reps: 15, done: true }
+              { weight: 120, reps: 15, done: false }
             ],
             tip: '소파에 눕듯이 타지 말고 허리 뒤에 쿠션을 받쳐 상체를 세운 뒤, 1회 20분 이내로 1,000바퀴 이상 빠르게 굴리기!'
           }
         ]
       },
       watchRecords: [
+        {
+          date: '11/12 (목) · 10일차 진행 중',
+          weight: '93.9 kg (-2.1kg · 93kg대 첫 입성! 🏆)',
+          activeKcal: '대기 중 (⚡ B하체 + 오르막 걷기 예정)',
+          memo: '🌅 아침 공복 93.9kg 돌파!! 어제 발아현미밥 1공기+척아이롤 300g 든든히 먹고도 93kg대 진입 성공!'
+        },
         {
           date: '11/11 (수) · 9일차 올클리어',
           weight: '94.0 kg (-2.0kg 최저점 돌파 🔥)',
@@ -1042,12 +1017,14 @@
 
     function normalizeState(raw) {
       const todayKey = new Date().toLocaleDateString('sv-SE');
-      // 9일차(2026-11-11 수) 식후 이고진 15분 10초(1,020바퀴) 혈당컷 완주 마이그레이션
-      if (todayKey === '2026-11-11' && (!raw || !raw.day9WednesdayEgojinDoneV1)) {
+      // 10일차(2026-11-12 목) 아침 93.9kg 돌파 및 B하체 데이 초기화 마이그레이션
+      if (todayKey === '2026-11-12' && (!raw || !raw.day10ThursdayInit939V1)) {
         const fresh = JSON.parse(JSON.stringify(defaultData));
-        if (raw && raw.lastDateKey === '2026-11-11') {
+        if (raw && raw.lastDateKey === '2026-11-12') {
+          if (raw.todayMeals && raw.todayMeals.length > 0) fresh.todayMeals = raw.todayMeals;
           if (raw.waterCups && raw.waterCups > fresh.waterCups) fresh.waterCups = raw.waterCups;
           if (raw.psylliumLunch) fresh.psylliumLunch = raw.psylliumLunch;
+          if (raw.psylliumDinner) fresh.psylliumDinner = raw.psylliumDinner;
         }
         return fresh;
       }
@@ -1105,7 +1082,7 @@
           });
         });
       });
-      if (!merged.currentWeight) merged.currentWeight = 94.0;
+      if (!merged.currentWeight) merged.currentWeight = 93.9;
 
       // 날짜가 바뀌면(매일 자정 이후 첫 접속 시) 오늘의 세트 체크·식단·물·워치 누적 자동 초기화!
       if (rawDateKey && rawDateKey !== todayKey) {
@@ -2443,12 +2420,18 @@
     }
 
     function renderRecords() {
+      const curW = state.currentWeight || 93.9;
+      const diffLabelEl = document.getElementById('recordsWeightDiffLabel');
+      if (diffLabelEl) {
+        const diff = (96.0 - curW).toFixed(1);
+        diffLabelEl.textContent = `현재 -${diff}kg 달성 (${curW.toFixed(1)}kg 돌파! 🔥)`;
+      }
       const chartEl = document.getElementById('weightTrendChart');
       if (chartEl) {
         const points = [
-          { label: '시작(2일차)', w: 96.0, highlight: false },
-          { label: '현재(8일차)', w: state.currentWeight || 94.8, highlight: true },
-          { label: '1차목표', w: 88.0, highlight: false },
+          { label: '시작(11/04)', w: 96.0, highlight: false },
+          { label: '현재(10일차)', w: curW, highlight: true },
+          { label: '80대진입', w: 89.9, highlight: false },
           { label: '최종목표', w: 76.0, highlight: false }
         ];
         chartEl.innerHTML = points.map(p => {
