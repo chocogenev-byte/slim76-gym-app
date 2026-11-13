@@ -652,7 +652,7 @@
 
     const defaultData = {
       updatedAt: Date.now(),
-      lastDateKey: '2026-11-12',
+      lastDateKey: '2026-11-13',
       day6SundaySyncedV1: true,
       day6SundayWorkoutDoneV1: true,
       day6SundayLunchSyncedV1: true,
@@ -698,61 +698,16 @@
       day10ThursdayDinnerMokgumeong400V1: true,
       day10ThursdayDinnerFullRiceSsamV1: true,
       day10ThursdayTheDanbaekAddedV1: true,
-      lastAction: '10일차 (목) 식단 올클리어! 🥗포케+사과 + 🥤더단백 + 🥩목구멍특목살400g+발아현미밥1공기 (총 1,530kcal · 단백질 144g 🏆)',
+      day11FridayInitV1: true,
+      lastAction: '11일차 (금) 아침 스타트! 🔥 상체 A코스 & 불금 방어전 준비 완료',
       currentWeight: 93.9,
-      todayWatchKcal: 435,
-      todayWatchHr: '하체 112 / 걷기 143 BPM (총 536kcal 🔥)',
-      waterCups: 6,
+      todayWatchKcal: 0,
+      todayWatchHr: '기록 대기',
+      waterCups: 1,
       psylliumLunch: false,
-      psylliumDinner: true,
-      todayMeals: [
-        {
-          id: 1794477500004,
-          time: '오후 6:58',
-          name: '🍚 발아현미밥 1공기 (210g · 하체 323회 글리코겐 회복)',
-          kcal: 300,
-          carb: 65,
-          protein: 6,
-          fat: 2
-        },
-        {
-          id: 1794473400003,
-          time: '오후 6:58',
-          name: '🥩 목구멍 특목살 400g + 🥬 쌈·마늘 듬뿍·쌈장 조금',
-          kcal: 715,
-          carb: 18,
-          protein: 82,
-          fat: 35
-        },
-        {
-          id: 1794468000005,
-          time: '오후 4:30',
-          name: '🥤 더:단백 드링크 카라멜맛 (당류 0.5g)',
-          kcal: 105,
-          carb: 4,
-          protein: 20,
-          fat: 1
-        },
-        {
-          id: 1794461400001,
-          time: '오후 2:25',
-          name: '🥗 수비드 닭가슴살 포케 (초저지방·고단백)',
-          kcal: 375,
-          carb: 38,
-          protein: 36,
-          fat: 8
-        },
-        {
-          id: 1794461450002,
-          time: '오후 2:30',
-          name: '🍎 감홍 사과 2쪽 (운동 후 글리코겐 보충)',
-          kcal: 35,
-          carb: 9,
-          protein: 0,
-          fat: 0
-        }
-      ],
-      activeTab: 'diet',
+      psylliumDinner: false,
+      todayMeals: [],
+      activeTab: 'courseA',
       courses: {
         courseA: [
           {
@@ -933,7 +888,7 @@
           },
           {
             id: 'b1',
-            order: '1번 기구 · 하체 전체 (55kg · 66회 완료! 🔥)',
+            order: '1번 기구 · 하체 전체 (기본 55kg · 20회)',
             name: '시티드 레그 프레스 (네모난 검은 발판)',
             zone: '나무 바닥 (핀 꽂는 하체 기구)',
             img: 'images/machine_leg_press.jpg',
@@ -943,15 +898,15 @@
             defaultReps: 20,
             repUnit: '회',
             sets: [
-              { weight: 55, reps: 21, done: true },
-              { weight: 55, reps: 21, done: true },
-              { weight: 55, reps: 24, done: true }
+              { weight: 55, reps: 21, done: false },
+              { weight: 55, reps: 21, done: false },
+              { weight: 55, reps: 24, done: false }
             ],
-            tip: '55kg 21·21·24회 완주! 무릎은 다 펴지 말고 90%만 펴서 관절 보호하기!'
+            tip: '무릎은 다 펴지 말고 90%만 펴서 관절 보호하기!'
           },
           {
             id: 'b2',
-            order: '2번 기구 · 허벅지 앞쪽 (25kg · 64회 완료! 🔥)',
+            order: '2번 기구 · 허벅지 앞쪽 (기본 25kg · 20회)',
             name: '레그 익스텐션 (발목 스펀지 들어 올리기)',
             zone: '나무 바닥 (의자 아래 둥근 롤러)',
             img: 'images/machine_leg_extension.jpg',
@@ -961,15 +916,15 @@
             defaultReps: 20,
             repUnit: '회',
             sets: [
-              { weight: 25, reps: 20, done: true },
-              { weight: 25, reps: 20, done: true },
-              { weight: 25, reps: 24, done: true }
+              { weight: 25, reps: 20, done: false },
+              { weight: 25, reps: 20, done: false },
+              { weight: 25, reps: 24, done: false }
             ],
-            tip: '25kg 20·20·24회 완주! 다리를 끝까지 들어 올려 맨 위에서 1초 멈췄다 내리기!'
+            tip: '다리를 끝까지 들어 올려 맨 위에서 1초 멈췄다 내리기!'
           },
           {
             id: 'b3',
-            order: '3번 기구 · 허벅지 뒤쪽 (15kg 안전무게 · 68회 완료! 🛡️)',
+            order: '3번 기구 · 허벅지 뒤쪽 (15kg 안전무게 · 90도 스톱 🛡️)',
             name: '라잉 레그 컬 (엎드려서 다리 접기)',
             zone: '나무 바닥 (길게 엎드리는 벤치 기구)',
             img: 'images/machine_leg_curl.jpg',
@@ -979,15 +934,15 @@
             defaultReps: 15,
             repUnit: '회',
             sets: [
-              { weight: 15, reps: 21, done: true },
-              { weight: 15, reps: 20, done: true },
-              { weight: 15, reps: 27, done: true }
+              { weight: 15, reps: 21, done: false },
+              { weight: 15, reps: 20, done: false },
+              { weight: 15, reps: 27, done: false }
             ],
             tip: '🚨 [꼬리뼈 위 허리 보호 필수 공식] 1) 15kg 고정! 2) 발뒤꿈치를 엉덩이까지 끝까지 당기면 엉덩이가 들리며 허리가 꺾입니다! 종아리가 바닥과 수직(90도 ㄱ자) 될 때까지만 접고, 치골(아랫배)을 벤치에 꾹 눌러 붙이세요!'
           },
           {
             id: 'b4',
-            order: '4번 기구 · 허벅지 안쪽 라인 (25kg · 55회 완료! 🔥)',
+            order: '4번 기구 · 허벅지 안쪽 라인 (25kg · 20회)',
             name: '이너타이 (무릎 패드 안으로 모으기)',
             zone: '나무 바닥 (무릎 양옆 동그란 패드 기구)',
             img: 'images/machine_inner_thigh.jpg',
@@ -997,15 +952,15 @@
             defaultReps: 20,
             repUnit: '회',
             sets: [
-              { weight: 25, reps: 20, done: true },
-              { weight: 25, reps: 15, done: true },
-              { weight: 25, reps: 20, done: true }
+              { weight: 25, reps: 20, done: false },
+              { weight: 25, reps: 15, done: false },
+              { weight: 25, reps: 20, done: false }
             ],
             tip: '⚠️ [골반 보호 팁] 고관절에 무리가 안 가게 반동 없이 허벅지 안쪽 힘으로 모으기!'
           },
           {
             id: 'b4_outer',
-            order: '5번 기구 · 중둔근 & 골반 안정화 (25kg · 70회 폭발! 🔥)',
+            order: '5번 기구 · 중둔근 & 골반 안정화 (25kg · 20회)',
             name: '아웃타이 (앉은 자리에서 패드 돌려 밖으로 벌리기)',
             zone: '이너타이 기구 그대로 (패드만 180도 회전)',
             img: 'images/machine_inner_thigh.jpg',
@@ -1015,24 +970,24 @@
             defaultReps: 20,
             repUnit: '회',
             sets: [
-              { weight: 25, reps: 20, done: true },
-              { weight: 25, reps: 20, done: true },
-              { weight: 25, reps: 30, done: true }
+              { weight: 25, reps: 20, done: false },
+              { weight: 25, reps: 20, done: false },
+              { weight: 25, reps: 30, done: false }
             ],
             tip: '무릎 패드를 바깥쪽으로 돌린 뒤, 다리를 오므린 상태에서 엉덩이 옆쪽(중둔근) 힘으로 쫙 밀어 벌리기!'
           },
           {
             id: 'b5',
             isCardio: true,
-            order: '마무리 유산소 · 27분 09초 완주! (2.25km · 143 BPM 🔥)',
+            order: '마무리 유산소 · 25분 (경사도 5 · 속도 5.0)',
             name: '창가 러닝머신 오르막 빠르게 걷기',
-            zone: '2.25km (평균 페이스 12\'03"/km · 케이던스 113 SPM)',
+            zone: '창가 뷰 러닝머신',
             img: 'images/machine_treadmill.jpg',
             incline: 5,
             speed: 5.0,
-            defaultReps: 27,
+            defaultReps: 25,
             repUnit: '분',
-            sets: [{ incline: 5, speed: 5.0, reps: 27, done: true }],
+            sets: [{ incline: 5, speed: 5.0, reps: 25, done: false }],
             tip: '심박수 135~150 BPM 유지하며 성큼성큼 빠르게 걷기! (중간에 속도/경사를 바꾸면 아래 [구간 추가]를 눌러 기록하세요)'
           }
         ],
@@ -1163,12 +1118,13 @@
 
     function normalizeState(raw) {
       const todayKey = new Date().toLocaleDateString('sv-SE');
-      // 10일차(2026-11-12 목) 더단백 카라멜맛 추가 + 목구멍 특목살 400g + 발아현미밥 1공기(총 1,530kcal) 반영 마이그레이션
-      if (todayKey === '2026-11-12' && (!raw || !raw.day10ThursdayTheDanbaekAddedV1)) {
+      // 11일차(2026-11-13 금) 아침 초기화 & 10일차(1,530kcal·단백질 144g) 기록장 영구 보존 마이그레이션
+      if (todayKey === '2026-11-13' && (!raw || !raw.day11FridayInitV1)) {
         const fresh = JSON.parse(JSON.stringify(defaultData));
-        if (raw && raw.lastDateKey === '2026-11-12') {
+        if (raw && raw.lastDateKey === '2026-11-13') {
           if (raw.waterCups && raw.waterCups > fresh.waterCups) fresh.waterCups = raw.waterCups;
-          if (raw.psylliumLunch) fresh.psylliumLunch = raw.psylliumLunch;
+          if (raw.todayMeals && raw.todayMeals.length > 0) fresh.todayMeals = raw.todayMeals;
+          if (raw.currentWeight && raw.currentWeight !== 93.9) fresh.currentWeight = raw.currentWeight;
         }
         return fresh;
       }
