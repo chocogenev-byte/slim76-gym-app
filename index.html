@@ -652,7 +652,7 @@
 
     const defaultData = {
       updatedAt: Date.now(),
-      lastDateKey: '2026-11-13',
+      lastDateKey: '2026-11-15',
       day6SundaySyncedV1: true,
       day6SundayWorkoutDoneV1: true,
       day6SundayLunchSyncedV1: true,
@@ -699,15 +699,26 @@
       day10ThursdayDinnerFullRiceSsamV1: true,
       day10ThursdayTheDanbaekAddedV1: true,
       day11FridayInitV1: true,
-      lastAction: '11일차 (금) 아침 스타트! 🔥 상체 A코스 & 불금 방어전 준비 완료',
+      day13SundayLowerInitV1: true,
+      lastAction: '13일차 (일) ⚡ B하체 코스 세팅 완료! (금요일 상체 18세트 완주 → 오늘 하체 차례 🔥)',
       currentWeight: 93.9,
       todayWatchKcal: 0,
       todayWatchHr: '기록 대기',
-      waterCups: 1,
-      psylliumLunch: false,
+      waterCups: 2,
+      psylliumLunch: true,
       psylliumDinner: false,
-      todayMeals: [],
-      activeTab: 'courseA',
+      todayMeals: [
+        {
+          id: 1794715800001,
+          time: '오후 12:15',
+          name: '☕ 아이스 아메리카노 + 🍎 감홍 사과 2쪽 (운동 전 부스터)',
+          kcal: 40,
+          carb: 10,
+          protein: 0,
+          fat: 0
+        }
+      ],
+      activeTab: 'courseB',
       courses: {
         courseA: [
           {
@@ -1066,6 +1077,12 @@
       },
       watchRecords: [
         {
+          date: '11/13 (금) · 11일차 오전 속공 완주',
+          weight: '93.9 kg (-2.1kg 유지 🔥)',
+          activeKcal: '360 kcal (상체 18세트 258회 완주!)',
+          memo: '🔥 A상체 18세트(플랭크2+랫풀60회+시티드로우56회+체스트44회+펙덱38회+사레레60회) 완료 후 광주 이동!'
+        },
+        {
           date: '11/12 (목) · 10일차 헬스 & 식단 완주',
           weight: '93.9 kg (-2.1kg · 93kg대 첫 입성! 🏆)',
           activeKcal: '435 kcal (총 536 kcal · 하체15세트 148 + 걷기27분 287)',
@@ -1130,13 +1147,22 @@
 
     function normalizeState(raw) {
       const todayKey = new Date().toLocaleDateString('sv-SE');
-      // 11일차(2026-11-13 금) 아침 초기화 & 10일차(1,530kcal·단백질 144g) 기록장 영구 보존 마이그레이션
-      if (todayKey === '2026-11-13' && (!raw || !raw.day11FridayInitV1)) {
+      // 13일차(2026-11-15 일) ⚡ B하체 코스 자동 전환 & 금요일 상체 18세트 기록장 보존 마이그레이션
+      if (todayKey === '2026-11-15' && (!raw || !raw.day13SundayLowerInitV1)) {
         const fresh = JSON.parse(JSON.stringify(defaultData));
-        if (raw && raw.lastDateKey === '2026-11-13') {
+        if (raw && raw.lastDateKey === '2026-11-15') {
           if (raw.waterCups && raw.waterCups > fresh.waterCups) fresh.waterCups = raw.waterCups;
+          if (raw.todayWatchKcal && raw.todayWatchKcal > 0) fresh.todayWatchKcal = raw.todayWatchKcal;
+          if (raw.todayWatchHr && raw.todayWatchHr !== '기록 대기') fresh.todayWatchHr = raw.todayWatchHr;
           if (raw.todayMeals && raw.todayMeals.length > 0) fresh.todayMeals = raw.todayMeals;
           if (raw.currentWeight && raw.currentWeight !== 93.9) fresh.currentWeight = raw.currentWeight;
+          if (raw.courses && Array.isArray(raw.courses.courseB) && raw.courses.courseB.length === fresh.courses.courseB.length) {
+            raw.courses.courseB.forEach((oldItem, i) => {
+              if (oldItem && Array.isArray(oldItem.sets) && oldItem.sets.some(s => s && s.done)) {
+                fresh.courses.courseB[i].sets = oldItem.sets;
+              }
+            });
+          }
         }
         return fresh;
       }
@@ -1210,11 +1236,10 @@
             (item.sets || []).forEach(s => { s.done = false; });
           });
         });
-        // 요일별 자동 코스 탭 선택 (화·토=홈트, 월·목=B하체, 일·수·금=A상체)
+        // 이전 코스 기준 A상체 / B하체 자동 교차 전환 (화·토=홈트, 그 외 직전 A상체였으면 B하체)
         const dayOfWeek = new Date().getDay();
         if (dayOfWeek === 2 || dayOfWeek === 6) merged.activeTab = 'courseHome';
-        else if (dayOfWeek === 1 || dayOfWeek === 4) merged.activeTab = 'courseB';
-        else merged.activeTab = 'courseA';
+        else merged.activeTab = (raw && raw.activeTab === 'courseA') ? 'courseB' : 'courseA';
       }
       return merged;
     }
