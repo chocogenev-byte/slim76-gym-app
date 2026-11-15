@@ -259,7 +259,7 @@
               ↩️ 방금 1개 취소
             </button>
             <button onclick="restoreTodayDefaultMeals()" class="py-2 px-2 rounded-xl text-[11px] font-extrabold bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 active:scale-95 transition">
-              🔄 오늘식단(1,530) 복구
+              🔄 오늘식단(595) 복구
             </button>
             <button onclick="clearTodayMealsOnly()" class="py-2 px-2 rounded-xl text-[11px] font-extrabold bg-rose-500/20 text-rose-300 border border-rose-500/50 active:scale-95 transition">
               🗑️ 음식 전체 0kcal
@@ -701,14 +701,33 @@
       day11FridayInitV1: true,
       day13SundayLowerInitV1: true,
       day13SundayWorkoutAllClearV1: true,
-      lastAction: '13일차 (일) ⚡ B하체 18세트(407회 신기록!) + 👟 오르막걷기 28분(2.53km·300kcal) 올클리어! 🔥',
+      day13SundayLunchBeefPokeAltiveV1: true,
+      lastAction: '13일차 (일) 점심 🥩부채살 메밀 포케 + 🌰얼티브 밤맛 완료! (누적 595kcal · 단백질 57g 🔥)',
       currentWeight: 93.9,
       todayWatchKcal: 433,
       todayWatchHr: '하체 104 / 걷기 141 BPM (총 542kcal 🔥)',
-      waterCups: 4,
+      waterCups: 5,
       psylliumLunch: true,
       psylliumDinner: false,
       todayMeals: [
+        {
+          id: 1794721900003,
+          time: '오후 2:50',
+          name: '🌰 얼티브 프로틴 밤맛 (당류 0g · 추가 단백질 보충)',
+          kcal: 115,
+          carb: 1,
+          protein: 21,
+          fat: 3
+        },
+        {
+          id: 1794721800002,
+          time: '오후 2:35',
+          name: '🥩 부채살 포케 (메밀면 베이스 · 고단백 철분 충전)',
+          kcal: 440,
+          carb: 38,
+          protein: 36,
+          fat: 14
+        },
         {
           id: 1794715800001,
           time: '오후 12:15',
@@ -719,7 +738,7 @@
           fat: 0
         }
       ],
-      activeTab: 'courseB',
+      activeTab: 'diet',
       courses: {
         courseA: [
           {
@@ -1082,7 +1101,7 @@
           date: '11/15 (일) · 13일차 하체 & 걷기 신기록 완주',
           weight: '93.9 kg (-2.1kg 유지 🔥)',
           activeKcal: '433 kcal (총 542 kcal · 하체18세트 133 + 걷기28분 300)',
-          memo: '⚡ B하체 18세트(총 407회 역대 신기록! 아웃타이 35kg 증량!) + 👟 오르막걷기 28분(2.53km · 11\'05"/km · 141BPM · 300kcal 신기록!) 완료!'
+          memo: '⚡ B하체 18세트(총 407회 역대 신기록! 아웃타이 35kg 증량!) + 👟 오르막걷기 28분(2.53km · 11\'05"/km · 141BPM · 300kcal 신기록!) 완료! / 🥗 점심: 부채살 메밀포케+얼티브 밤맛 (누적 595kcal·단백질 57g!)'
         },
         {
           date: '11/13 (금) · 11일차 오전 속공 완주',
@@ -1155,8 +1174,8 @@
 
     function normalizeState(raw) {
       const todayKey = new Date().toLocaleDateString('sv-SE');
-      // 13일차(2026-11-15 일) ⚡ B하체 18세트(407회) + 걷기 28분(2.53km·300kcal) 올클리어 동기화
-      if (todayKey === '2026-11-15' && (!raw || !raw.day13SundayWorkoutAllClearV1)) {
+      // 13일차(2026-11-15 일) 점심 부채살 메밀포케 + 얼티브 프로틴 밤맛(누적 595kcal · 단백질 57g) 동기화
+      if (todayKey === '2026-11-15' && (!raw || !raw.day13SundayLunchBeefPokeAltiveV1)) {
         const fresh = JSON.parse(JSON.stringify(defaultData));
         if (raw && raw.lastDateKey === '2026-11-15') {
           if (raw.waterCups && raw.waterCups > fresh.waterCups) fresh.waterCups = raw.waterCups;
@@ -1417,12 +1436,12 @@
       showToast(`↩️ [${removed.name}] (-${removed.kcal}kcal) 삭제 완료!`);
     }
 
-    // 🔄 오늘 기본 식단(점심 포케+사과2쪽 + 더단백 + 저녁 목구멍 특목살 400g+발아현미밥1공기 = 1,530kcal)으로 즉시 복구
+    // 🔄 오늘 기본 식단(아메리카노+사과2쪽 + 부채살 메밀포케 + 얼티브 밤맛 = 595kcal)으로 즉시 복구
     function restoreTodayDefaultMeals() {
       state.todayMeals = JSON.parse(JSON.stringify(defaultData.todayMeals));
       renderDietTab();
-      saveState('식단 복구: 오늘 기본 식단(1,530kcal)으로 복원', true);
-      showToast('🔄 오늘 기본 식단(1,530kcal · 단백질 144g) 상태로 복구되었습니다!');
+      saveState('식단 복구: 오늘 기본 식단(595kcal)으로 복원', true);
+      showToast('🔄 오늘 기본 식단(595kcal · 단백질 57g) 상태로 복구되었습니다!');
     }
 
     // 🗑️ 수분 기록은 유지하고 오늘 음식 목록만 0kcal로 비우기
