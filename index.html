@@ -259,7 +259,7 @@
               ↩️ 방금 1개 취소
             </button>
             <button onclick="restoreTodayDefaultMeals()" class="py-2 px-2 rounded-xl text-[11px] font-extrabold bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 active:scale-95 transition">
-              🔄 오늘식단(870) 복구
+              🔄 오늘식단(950) 복구
             </button>
             <button onclick="clearTodayMealsOnly()" class="py-2 px-2 rounded-xl text-[11px] font-extrabold bg-rose-500/20 text-rose-300 border border-rose-500/50 active:scale-95 transition">
               🗑️ 음식 전체 0kcal
@@ -722,7 +722,8 @@
       day14MondayInitV1: true,
       day14MondayWorkoutAndSubwayLunchV1: true,
       day14MondayDinnerTacoPlateV1: true,
-      lastAction: '14일차 (월) 저녁 🌮너드버거클럽 타코 2피스 + 🥤닥터페퍼 제로 완료! (누적 870kcal · 단백질 56g 🔥)',
+      day14MondayDinnerTacoReceiptV2: true,
+      lastAction: '14일차 (월) 저녁 🌮스매쉬버거타코 & 풀드포크타코(+소고기패티 추가!) 완료! (누적 950kcal · 단백질 72g 🔥)',
       currentWeight: 93.9,
       todayWatchKcal: 425,
       todayWatchHr: '워치미착용 정밀환산 (총 525kcal 🔥)',
@@ -733,11 +734,11 @@
         {
           id: 1794820000002,
           time: '오후 6:05',
-          name: '🌮 너드버거클럽 풀드포크 & 치즈칠리 타코 2피스 + 🥤닥터페퍼 제로',
-          kcal: 490,
-          carb: 37,
-          protein: 36,
-          fat: 21
+          name: '🌮 너드버거클럽 스매쉬버거타코 & 풀드포크타코(+소고기패티 추가) + 🥤제로음료',
+          kcal: 570,
+          carb: 35,
+          protein: 52,
+          fat: 25
         },
         {
           id: 1794802800001,
@@ -1112,7 +1113,7 @@
           date: '11/16 (월) · 14일차 상체 21세트 & 걷기 완주 🔥',
           weight: '95.0 kg (하체수분 포집중 · 최저 93.9kg)',
           activeKcal: '425 kcal (총 525 kcal · 상체21세트 160 + 걷기25분 265 [정밀환산])',
-          memo: '🔥 A상체 21세트(총 362회! 랫풀 35kg 증량·사레레 3kg 60회·암컬 55회 올클리어!) + 👟 오르막걷기 25분(경사5·속도5.0km/h·2.08km) 완료! / 🍽️ 식단: 누적 870kcal · 단백질 56g (점심 써브웨이 안창비프 15cm 380 + 저녁 너드버거 타코 2피스·닥터페퍼제로 490kcal!)'
+          memo: '🔥 A상체 21세트(총 362회! 랫풀 35kg 증량·사레레 3kg 60회·암컬 55회 올클리어!) + 👟 오르막걷기 25분(경사5·속도5.0km/h·2.08km) 완료! / 🍽️ 식단: 누적 950kcal · 단백질 72g (점심 써브웨이 안창비프 15cm 380 + 저녁 스매쉬버거타코·풀드포크타코[+소고기패티 추가] 570kcal!)'
         },
         {
           date: '11/15 (일) · 13일차 하체·걷기·밤모임 방어 올클리어 🏆',
@@ -1191,8 +1192,8 @@
 
     function normalizeState(raw) {
       const todayKey = new Date().toLocaleDateString('sv-SE');
-      // 14일차(2026-11-16 월) 저녁 너드버거클럽 타코 2피스 + 닥터페퍼 제로(누적 870kcal · 단백질 56g) 동기화
-      if (todayKey === '2026-11-16' && (!raw || !raw.day14MondayDinnerTacoPlateV1)) {
+      // 14일차(2026-11-16 월) 저녁 너드버거클럽 스매쉬버거타코+풀드포크(+소고기패티 추가) 영수증(누적 950kcal · 단백질 72g) 동기화
+      if (todayKey === '2026-11-16' && (!raw || !raw.day14MondayDinnerTacoReceiptV2)) {
         const fresh = JSON.parse(JSON.stringify(defaultData));
         if (raw && raw.lastDateKey === '2026-11-16') {
           if (raw.waterCups && raw.waterCups > fresh.waterCups) fresh.waterCups = raw.waterCups;
@@ -1453,12 +1454,12 @@
       showToast(`↩️ [${removed.name}] (-${removed.kcal}kcal) 삭제 완료!`);
     }
 
-    // 🔄 오늘 기본 식단(써브웨이 안창비프 15cm + 너드버거클럽 타코 2피스 = 870kcal)으로 즉시 복구
+    // 🔄 오늘 기본 식단(써브웨이 안창비프 15cm + 너드버거클럽 스매쉬버거타코&풀드포크+소고기패티 = 950kcal)으로 즉시 복구
     function restoreTodayDefaultMeals() {
       state.todayMeals = JSON.parse(JSON.stringify(defaultData.todayMeals));
       renderDietTab();
-      saveState('식단 복구: 오늘 기본 식단(870kcal)으로 복원', true);
-      showToast('🔄 오늘 기본 식단(870kcal · 단백질 56g) 상태로 복구되었습니다!');
+      saveState('식단 복구: 오늘 기본 식단(950kcal)으로 복원', true);
+      showToast('🔄 오늘 기본 식단(950kcal · 단백질 72g) 상태로 복구되었습니다!');
     }
 
     // 🗑️ 수분 기록은 유지하고 오늘 음식 목록만 0kcal로 비우기
