@@ -259,7 +259,7 @@
               ↩️ 방금 1개 취소
             </button>
             <button onclick="restoreTodayDefaultMeals()" class="py-2 px-2 rounded-xl text-[11px] font-extrabold bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 active:scale-95 transition">
-              🔄 오늘식단(1,060) 복구
+              🔄 오늘식단(1,410) 복구
             </button>
             <button onclick="clearTodayMealsOnly()" class="py-2 px-2 rounded-xl text-[11px] font-extrabold bg-rose-500/20 text-rose-300 border border-rose-500/50 active:scale-95 transition">
               🗑️ 음식 전체 0kcal
@@ -724,14 +724,24 @@
       day14MondayDinnerTacoPlateV1: true,
       day14MondayDinnerTacoReceiptV2: true,
       day14MondayNightChicken110V1: true,
-      lastAction: '14일차 (월) 🍗저당 닭가슴살 1팩(110kcal) 보충 완료! (총 1,060kcal · 단백질 95g 올클리어 🏆)',
+      day14MondayFinalRoastChickenMovingV1: true,
+      lastAction: '14일차 (월) 🍗써브웨이 로스트치킨 15cm + 📦냉장고·짐 운반 반영 완료! (총 1,410kcal · 단백질 124g 🏆)',
       currentWeight: 93.9,
-      todayWatchKcal: 425,
-      todayWatchHr: '워치미착용 정밀환산 (총 525kcal 🔥)',
+      todayWatchKcal: 705,
+      todayWatchHr: '헬스장425+냉장고운반280 (총 705kcal 🔥)',
       waterCups: 7,
       psylliumLunch: true,
       psylliumDinner: false,
       todayMeals: [
+        {
+          id: 1794834300004,
+          time: '오후 10:05',
+          name: '🍗 써브웨이 로스트 치킨 15cm (위트·슈레드·식초·후추 · 중노동 후 회복)',
+          kcal: 350,
+          carb: 41,
+          protein: 29,
+          fat: 7
+        },
         {
           id: 1794827000003,
           time: '오후 8:00',
@@ -1120,10 +1130,10 @@
       },
       watchRecords: [
         {
-          date: '11/16 (월) · 14일차 상체 362회·걷기·식단 올클리어 🏆',
+          date: '11/16 (월) · 14일차 상체 362회·걷기·냉장고운반 올클리어 🏆',
           weight: '95.0 kg (하체수분 포집중 · 최저 93.9kg)',
-          activeKcal: '425 kcal (총 525 kcal · 상체21세트 160 + 걷기25분 265 [정밀환산])',
-          memo: '🔥 A상체 21세트(총 362회! 랫풀 35kg 증량·사레레 3kg 60회·암컬 55회 올클리어!) + 👟 오르막걷기 25분(경사5·속도5.0km/h·2.08km) 완료! / 🍽️ 식단: 총 1,060kcal · 단백질 95g (점심 써브웨이 안창비프 380 + 저녁 스매쉬버거타코·풀드포크타코[+소고기패티] 570 + 밤 저당 닭가슴살 110kcal 완벽 마감!)'
+          activeKcal: '705 kcal (총 850+ kcal · 헬스장 425 + 냉장고·짐운반 280)',
+          memo: '🔥 A상체 21세트(362회) + 👟 오르막걷기 25분(425kcal) + 📦 오후 짐·냉장고 운반(280kcal) 완주! / 🍽️ 식단: 총 1,410kcal · 단백질 124g (안창비프15cm 380 + 타코2피스·패티추가 570 + 저당닭가슴살 110 + 로스트치킨15cm 350kcal 완벽 마감!)'
         },
         {
           date: '11/15 (일) · 13일차 하체·걷기·밤모임 방어 올클리어 🏆',
@@ -1202,8 +1212,8 @@
 
     function normalizeState(raw) {
       const todayKey = new Date().toLocaleDateString('sv-SE');
-      // 14일차(2026-11-16 월) 밤 저당 닭가슴살 1팩(110kcal) 추가 보충 (총 1,060kcal · 단백질 95g 올클리어!) 동기화
-      if (todayKey === '2026-11-16' && (!raw || !raw.day14MondayNightChicken110V1)) {
+      // 14일차(2026-11-16 월) 밤 써브웨이 로스트치킨 15cm + 냉장고·짐 운반 280kcal 반영 (총 1,410kcal · 단백질 124g) 동기화
+      if (todayKey === '2026-11-16' && (!raw || !raw.day14MondayFinalRoastChickenMovingV1)) {
         const fresh = JSON.parse(JSON.stringify(defaultData));
         if (raw && raw.lastDateKey === '2026-11-16') {
           if (raw.waterCups && raw.waterCups > fresh.waterCups) fresh.waterCups = raw.waterCups;
@@ -1464,12 +1474,12 @@
       showToast(`↩️ [${removed.name}] (-${removed.kcal}kcal) 삭제 완료!`);
     }
 
-    // 🔄 오늘 기본 식단(써브웨이 안창비프 15cm + 너드버거클럽 타코 + 저당 닭가슴살 = 1,060kcal)으로 즉시 복구
+    // 🔄 오늘 기본 식단(안창비프 15cm + 타코 + 저당닭가슴살 + 로스트치킨 15cm = 1,410kcal)으로 즉시 복구
     function restoreTodayDefaultMeals() {
       state.todayMeals = JSON.parse(JSON.stringify(defaultData.todayMeals));
       renderDietTab();
-      saveState('식단 복구: 오늘 기본 식단(1,060kcal)으로 복원', true);
-      showToast('🔄 오늘 기본 식단(1,060kcal · 단백질 95g) 상태로 복구되었습니다!');
+      saveState('식단 복구: 오늘 기본 식단(1,410kcal)으로 복원', true);
+      showToast('🔄 오늘 기본 식단(1,410kcal · 단백질 124g) 상태로 복구되었습니다!');
     }
 
     // 🗑️ 수분 기록은 유지하고 오늘 음식 목록만 0kcal로 비우기
