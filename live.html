@@ -259,7 +259,7 @@
               ↩️ 방금 1개 취소
             </button>
             <button onclick="restoreTodayDefaultMeals()" class="py-2 px-2 rounded-xl text-[11px] font-extrabold bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 active:scale-95 transition">
-              🔄 오늘식단(1,095) 복구
+              🔄 오늘식단 초기화
             </button>
             <button onclick="clearTodayMealsOnly()" class="py-2 px-2 rounded-xl text-[11px] font-extrabold bg-rose-500/20 text-rose-300 border border-rose-500/50 active:scale-95 transition">
               🗑️ 음식 전체 0kcal
@@ -660,7 +660,7 @@
 
     const defaultData = {
       updatedAt: Date.now(),
-      lastDateKey: '2026-11-15',
+      lastDateKey: '2026-11-16',
       day6SundaySyncedV1: true,
       day6SundayWorkoutDoneV1: true,
       day6SundayLunchSyncedV1: true,
@@ -711,61 +711,16 @@
       day13SundayWorkoutAllClearV1: true,
       day13SundayLunchBeefPokeAltiveV1: true,
       day13SundayDinnerButterCurryHarimV1: true,
-      lastAction: '13일차 (일) 저녁 🍱CJ 저당 버터커리 도시락 + 🍗하림 닭가슴살 1덩어리 완료! (총 1,095kcal · 단백질 100g 올클리어 🔥)',
+      day14MondayInitV1: true,
+      lastAction: '14일차 (월) 아침 시작! (어제 13일차 총 1,515kcal · 단백질 122g 방어 성공 🔥)',
       currentWeight: 93.9,
-      todayWatchKcal: 433,
-      todayWatchHr: '하체 104 / 걷기 141 BPM (총 542kcal 🔥)',
-      waterCups: 7,
-      psylliumLunch: true,
+      todayWatchKcal: 0,
+      todayWatchHr: '기록 대기',
+      waterCups: 0,
+      psylliumLunch: false,
       psylliumDinner: false,
-      todayMeals: [
-        {
-          id: 1794745200005,
-          time: '저녁 식사',
-          name: '🍗 하림 편의점 닭가슴살 1덩어리 (단백질 부스터)',
-          kcal: 115,
-          carb: 1,
-          protein: 23,
-          fat: 2
-        },
-        {
-          id: 1794745100004,
-          time: '저녁 식사',
-          name: '🍱 CJ 밸런스밀 저당 도시락 (통곡물밥 닭가슴살 버터커리맛)',
-          kcal: 385,
-          carb: 53,
-          protein: 20,
-          fat: 8
-        },
-        {
-          id: 1794721900003,
-          time: '오후 2:50',
-          name: '🌰 얼티브 프로틴 밤맛 (당류 0g · 추가 단백질 보충)',
-          kcal: 115,
-          carb: 1,
-          protein: 21,
-          fat: 3
-        },
-        {
-          id: 1794721800002,
-          time: '오후 2:35',
-          name: '🥩 부채살 포케 (메밀면 베이스 · 고단백 철분 충전)',
-          kcal: 440,
-          carb: 38,
-          protein: 36,
-          fat: 14
-        },
-        {
-          id: 1794715800001,
-          time: '오후 12:15',
-          name: '☕ 아이스 아메리카노 + 🍎 감홍 사과 2쪽 (운동 전 부스터)',
-          kcal: 40,
-          carb: 10,
-          protein: 0,
-          fat: 0
-        }
-      ],
-      activeTab: 'diet',
+      todayMeals: [],
+      activeTab: 'courseA',
       courses: {
         courseA: [
           {
@@ -936,7 +891,7 @@
         courseB: [
           {
             id: 'a0_plank',
-            order: '0번 워밍업 · 꼬리뼈 위(L5-S1) 천연 복대 켜기 (2세트 완료! 🔥)',
+            order: '0번 워밍업 · 꼬리뼈 위(L5-S1) 천연 복대 켜기 (2세트)',
             name: '플랭크 버티기 (하체 기구 전 스트레칭 매트)',
             zone: '하체 시작 전 매트 40초×2세트 (허리 흔들림 100% 잠금!)',
             img: '',
@@ -946,14 +901,14 @@
             defaultReps: 40,
             repUnit: '초',
             sets: [
-              { weight: 0, reps: 40, done: true },
-              { weight: 0, reps: 40, done: true }
+              { weight: 0, reps: 40, done: false },
+              { weight: 0, reps: 40, done: false }
             ],
             tip: '🛡️ [하체 전 허리 보호 필수] 하체 기구 타기 전에 배꼽을 등 쪽으로 당기고 엉덩이를 꽉 조여 플랭크 40초 2세트로 속근육 복대를 먼저 켜두면 꼬리뼈 위 허리가 완벽히 보호됩니다!'
           },
           {
             id: 'b1',
-            order: '1번 기구 · 하체 전체 (55kg · 70회 완료! 🔥)',
+            order: '1번 기구 · 하체 전체 (지난 55kg 70회 달성 🔥)',
             name: '시티드 레그 프레스 (네모난 검은 발판)',
             zone: '나무 바닥 (핀 꽂는 하체 기구)',
             gripGuide: '✋ 손잡이: 엉덩이 양옆 『보조 손잡이』를 꽉 잡아 엉덩이와 허리가 등받이에서 뜨지 않게 몸통 고정!',
@@ -964,15 +919,15 @@
             defaultReps: 20,
             repUnit: '회',
             sets: [
-              { weight: 55, reps: 22, done: true },
-              { weight: 55, reps: 23, done: true },
-              { weight: 55, reps: 25, done: true }
+              { weight: 55, reps: 22, done: false },
+              { weight: 55, reps: 23, done: false },
+              { weight: 55, reps: 25, done: false }
             ],
-            tip: '55kg 22·23·25회(70회) 완주! 무릎은 다 펴지 말고 90%만 펴서 관절 보호하기!'
+            tip: '무릎은 다 펴지 말고 90%만 펴서 관절 보호하기! (지난 기록: 55kg 22·23·25회)'
           },
           {
             id: 'b2',
-            order: '2번 기구 · 허벅지 앞쪽 (25kg · 69회 완료! 🔥)',
+            order: '2번 기구 · 허벅지 앞쪽 (지난 25kg 69회 달성 🔥)',
             name: '레그 익스텐션 (발목 스펀지 들어 올리기)',
             zone: '나무 바닥 (의자 아래 둥근 롤러)',
             gripGuide: '✋ 손잡이: 의자 양옆 『아래쪽 손잡이』를 잡고 엉덩이를 아래로 꾹 누르며 다리만 들어 올리기!',
@@ -983,15 +938,15 @@
             defaultReps: 20,
             repUnit: '회',
             sets: [
-              { weight: 25, reps: 24, done: true },
-              { weight: 25, reps: 20, done: true },
-              { weight: 25, reps: 25, done: true }
+              { weight: 25, reps: 24, done: false },
+              { weight: 25, reps: 20, done: false },
+              { weight: 25, reps: 25, done: false }
             ],
-            tip: '25kg 24·20·25회(69회) 완주! 다리를 끝까지 들어 올려 맨 위에서 1초 멈췄다 내리기!'
+            tip: '다리를 끝까지 들어 올려 맨 위에서 1초 멈췄다 내리기! (지난 기록: 25kg 24·20·25회)'
           },
           {
             id: 'b3',
-            order: '3번 기구 · 허벅지 뒤쪽 (15kg 안전무게 · 92회 완료! 🛡️)',
+            order: '3번 기구 · 허벅지 뒤쪽 (15kg 안전무게 고정 🛡️)',
             name: '라잉 레그 컬 (엎드려서 다리 접기)',
             zone: '나무 바닥 (길게 엎드리는 벤치 기구)',
             gripGuide: '✋ 손잡이: 벤치 앞쪽 『양옆 손잡이』를 잡고 상체를 들지 않은 채 치골(골반 앞)을 벤치에 밀착!',
@@ -1002,15 +957,15 @@
             defaultReps: 15,
             repUnit: '회',
             sets: [
-              { weight: 15, reps: 30, done: true },
-              { weight: 15, reps: 30, done: true },
-              { weight: 15, reps: 32, done: true }
+              { weight: 15, reps: 30, done: false },
+              { weight: 15, reps: 30, done: false },
+              { weight: 15, reps: 32, done: false }
             ],
             tip: '🚨 [꼬리뼈 위 허리 보호 필수 공식] 1) 15kg 고정! 2) 발뒤꿈치를 엉덩이까지 끝까지 당기면 엉덩이가 들리며 허리가 꺾입니다! 종아리가 바닥과 수직(90도 ㄱ자) 될 때까지만 접고, 치골(아랫배)을 벤치에 꾹 눌러 붙이세요!'
           },
           {
             id: 'b4',
-            order: '4번 기구 · 허벅지 안쪽 라인 (25kg · 65회 완료! 🔥)',
+            order: '4번 기구 · 허벅지 안쪽 라인 (지난 25kg 65회 달성 🔥)',
             name: '이너타이 (무릎 패드 안으로 모으기)',
             zone: '나무 바닥 (무릎 양옆 동그란 패드 기구)',
             gripGuide: '✋ 손잡이: 의자 양옆 『손잡이』를 가볍게 잡고 등을 등받이에 기대 상체 고정!',
@@ -1021,15 +976,15 @@
             defaultReps: 20,
             repUnit: '회',
             sets: [
-              { weight: 25, reps: 23, done: true },
-              { weight: 25, reps: 20, done: true },
-              { weight: 25, reps: 22, done: true }
+              { weight: 25, reps: 23, done: false },
+              { weight: 25, reps: 20, done: false },
+              { weight: 25, reps: 22, done: false }
             ],
             tip: '⚠️ [골반 보호 팁] 고관절에 무리가 안 가게 반동 없이 허벅지 안쪽 힘으로 모으기!'
           },
           {
             id: 'b4_outer',
-            order: '5번 기구 · 중둔근 & 골반 안정화 (30→35kg 증량 4세트 111회! 🏆)',
+            order: '5번 기구 · 중둔근 & 골반 안정화 (30→35kg 증량 세팅! 🏆)',
             name: '아웃타이 (앉은 자리에서 패드 돌려 밖으로 벌리기)',
             zone: '이너타이 기구 그대로 (패드만 180도 회전)',
             gripGuide: '✋ 손잡이: 의자 양옆 『손잡이』를 잡고 엉덩이를 등받이 깊숙이 붙인 채 다리 벌리기!',
@@ -1040,25 +995,25 @@
             defaultReps: 20,
             repUnit: '회',
             sets: [
-              { weight: 30, reps: 25, done: true },
-              { weight: 30, reps: 26, done: true },
-              { weight: 35, reps: 30, done: true },
-              { weight: 35, reps: 30, done: true }
+              { weight: 30, reps: 25, done: false },
+              { weight: 30, reps: 26, done: false },
+              { weight: 35, reps: 30, done: false },
+              { weight: 35, reps: 30, done: false }
             ],
             tip: '무릎 패드를 바깥쪽으로 돌린 뒤, 다리를 오므린 상태에서 엉덩이 옆쪽(중둔근) 힘으로 쫙 밀어 벌리기!'
           },
           {
             id: 'b5',
             isCardio: true,
-            order: '마무리 유산소 · 28분 06초 신기록 완주! (2.53km · 300kcal 🔥)',
+            order: '마무리 유산소 · 25~28분 (👟 호카 마하 6! 최고기록 2.53km · 300kcal)',
             name: '창가 러닝머신 오르막 빠르게 걷기',
-            zone: '2.53km (평균 페이스 11\'05"/km · 케이던스 117 SPM · 141 BPM)',
+            zone: '하늘색(경사도) 5 / 노란색(속도) 5.0~5.4 · 목표 140~145 BPM',
             img: 'images/machine_treadmill.jpg',
             incline: 5,
             speed: 5.4,
             defaultReps: 28,
             repUnit: '분',
-            sets: [{ incline: 5, speed: 5.4, reps: 28, done: true }],
+            sets: [{ incline: 5, speed: 5.4, reps: 28, done: false }],
             tip: '심박수 135~150 BPM 유지하며 성큼성큼 빠르게 걷기! (중간에 속도/경사를 바꾸면 아래 [구간 추가]를 눌러 기록하세요)'
           }
         ],
@@ -1125,10 +1080,10 @@
       },
       watchRecords: [
         {
-          date: '11/15 (일) · 13일차 하체·걷기·식단 올클리어 🏆',
+          date: '11/15 (일) · 13일차 하체·걷기·밤모임 방어 올클리어 🏆',
           weight: '93.9 kg (-2.1kg 유지 🔥)',
           activeKcal: '433 kcal (총 542 kcal · 하체18세트 133 + 걷기28분 300)',
-          memo: '⚡ B하체 18세트(총 407회 역대 신기록! 아웃타이 35kg 증량!) + 👟 오르막걷기 28분(2.53km · 11\'05"/km · 141BPM · 300kcal 신기록!) 완료! / 🍽️ 식단: 총 1,095kcal · 단백질 100g (점심 부채살 메밀포케+얼티브 밤맛 / 저녁 CJ 저당 버터커리 도시락+하림 닭가슴살 1덩어리 올클리어!)'
+          memo: '⚡ B하체 18세트(총 407회 역대 신기록! 아웃타이 35kg 증량!) + 👟 오르막걷기 28분(2.53km · 11\'05"/km · 141BPM · 300kcal 신기록!) 완료! / 🍽️ 식단: 총 1,515kcal · 단백질 122g (점심 부채살포케+얼티브 595 / 저녁 저당버터커리+하림닭가슴살 500 / 밤 꼬막13알·제육4점·주먹밥반개·맥주1잔·면한젓가락 420kcal 소량 방어 성공!)'
         },
         {
           date: '11/13 (금) · 11일차 오전 속공 완주',
@@ -1201,10 +1156,10 @@
 
     function normalizeState(raw) {
       const todayKey = new Date().toLocaleDateString('sv-SE');
-      // 13일차(2026-11-15 일) 저녁 CJ 밸런스밀 저당 버터커리 도시락 + 하림 닭가슴살 1덩어리(총 1,095kcal · 단백질 100g) 동기화
-      if (todayKey === '2026-11-15' && (!raw || !raw.day13SundayDinnerButterCurryHarimV1)) {
+      // 14일차(2026-11-16 월) 아침 초기화 (어제 13일차 총 1,515kcal 마감 반영 + 오늘 A상체 코스로 시작)
+      if (todayKey === '2026-11-16' && (!raw || !raw.day14MondayInitV1)) {
         const fresh = JSON.parse(JSON.stringify(defaultData));
-        if (raw && raw.lastDateKey === '2026-11-15') {
+        if (raw && raw.lastDateKey === '2026-11-16') {
           if (raw.waterCups && raw.waterCups > fresh.waterCups) fresh.waterCups = raw.waterCups;
           if (raw.todayMeals && raw.todayMeals.length > 0) {
             const existingIds = new Set(fresh.todayMeals.map(m => m.id));
@@ -1463,12 +1418,12 @@
       showToast(`↩️ [${removed.name}] (-${removed.kcal}kcal) 삭제 완료!`);
     }
 
-    // 🔄 오늘 기본 식단(아메리카노+사과2쪽 + 부채살 메밀포케 + 얼티브 밤맛 + CJ 저당 버터커리 + 하림 닭가슴살 = 1,095kcal)으로 즉시 복구
+    // 🔄 오늘 기본 식단(0kcal 초기화)으로 즉시 복구
     function restoreTodayDefaultMeals() {
       state.todayMeals = JSON.parse(JSON.stringify(defaultData.todayMeals));
       renderDietTab();
-      saveState('식단 복구: 오늘 기본 식단(1,095kcal)으로 복원', true);
-      showToast('🔄 오늘 기본 식단(1,095kcal · 단백질 100g) 상태로 복구되었습니다!');
+      saveState('식단 복구: 오늘 초기 식단(0kcal)으로 복원', true);
+      showToast('🔄 오늘 식단이 초기 상태(0kcal)로 복구되었습니다!');
     }
 
     // 🗑️ 수분 기록은 유지하고 오늘 음식 목록만 0kcal로 비우기
