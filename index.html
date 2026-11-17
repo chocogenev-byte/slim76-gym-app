@@ -727,11 +727,12 @@
       day14MondayFinalRoastChickenMovingV1: true,
       day15TuesdayInitV1: true,
       day15TuesdayLunchCurryHalfChickenV1: true,
-      lastAction: '15일차 (화) 점심 🍱CJ 저당 버터커리 도시락 + 🍗닭가슴살 반 개 완료! (440kcal · 단백질 32g 🔥)',
+      day15TuesdayBike219DoneV1: true,
+      lastAction: '15일차 (화) 외식 전 🚴실내자전거 25분30초(219kcal · 131BPM) 완주! 🔥',
       currentWeight: 93.9,
-      todayWatchKcal: 0,
-      todayWatchHr: '기록 대기',
-      waterCups: 3,
+      todayWatchKcal: 219,
+      todayWatchHr: '평균 131 BPM (총 264kcal 🔥)',
+      waterCups: 5,
       psylliumLunch: false,
       psylliumDinner: false,
       todayMeals: [
@@ -1096,17 +1097,17 @@
           },
           {
             id: 'h4',
-            order: '2단계 유산소 · 1회 15~20분 이내',
-            name: '집 이고진 미니 바이크 타기',
-            zone: '기어 적당히 조이고 15분에 1,000바퀴 이상',
+            order: '2단계 유산소 · 25분 30초 완주! (219kcal · 131BPM 🔥)',
+            name: '실내 사이클링 (집 자전거 · 회복 수분 배출)',
+            zone: '16:18~16:44 · 활동 219kcal (총 264kcal) · 평균 131 BPM 완료!',
             img: '',
-            weight: 120,
+            weight: 131,
             weightStep: 5,
             unit: 'BPM',
-            defaultReps: 15,
+            defaultReps: 25,
             repUnit: '분',
             sets: [
-              { weight: 120, reps: 15, done: false }
+              { weight: 131, reps: 25, done: true }
             ],
             tip: '소파에 눕듯이 타지 말고 허리 뒤에 쿠션을 받쳐 상체를 세운 뒤, 1회 20분 이내로 1,000바퀴 이상 빠르게 굴리기!'
           }
@@ -1114,10 +1115,10 @@
       },
       watchRecords: [
         {
-          date: '11/17 (화) · 15일차 수분배출 회복데이 진행중 🚴',
-          weight: '95.0 kg (물풍선 배출 대기 · 최저 93.9kg)',
-          activeKcal: '회복 데이 (저녁 가벼운 페달 예정)',
-          memo: '🛡️ 헬스장 웨이트 휴식(전신 근육 초과회복 & 수분 배출 스위치 ON!) / 🍽️ 점심: CJ 저당 버터커리 도시락 + 닭가슴살 반 개 (440kcal · 단백질 32g · 초저염 750mg!)'
+          date: '11/17 (화) · 15일차 외식 전 자전거 25분 완주 🚴',
+          weight: '95.0 kg (물풍선 배출 중 · 최저 93.9kg)',
+          activeKcal: '219 kcal (총 264 kcal · 실내자전거 25분30초 · 131 BPM)',
+          memo: '🚴 외식 전 실내 사이클링 25분30초(16:18~16:44 · 활동 219kcal / 총 264kcal · 131BPM 교과서 회복페달링!) 완료! / 🍽️ 점심: CJ 저당 버터커리 + 닭가슴살 반 개 (440kcal · 단백질 32g)'
         },
         {
           date: '11/16 (월) · 14일차 상체 362회·걷기·냉장고운반 올클리어 🏆',
@@ -1202,8 +1203,8 @@
 
     function normalizeState(raw) {
       const todayKey = new Date().toLocaleDateString('sv-SE');
-      // 15일차(2026-11-17 화) 점심 CJ 저당 버터커리 도시락 + 닭가슴살 반 개(440kcal · 단백질 32g) 동기화
-      if (todayKey === '2026-11-17' && (!raw || !raw.day15TuesdayLunchCurryHalfChickenV1)) {
+      // 15일차(2026-11-17 화) 외식 전 실내자전거 25분30초(219kcal · 131BPM) 애플워치 동기화
+      if (todayKey === '2026-11-17' && (!raw || !raw.day15TuesdayBike219DoneV1)) {
         const fresh = JSON.parse(JSON.stringify(defaultData));
         if (raw && raw.lastDateKey === '2026-11-17') {
           if (raw.waterCups && raw.waterCups > fresh.waterCups) fresh.waterCups = raw.waterCups;
