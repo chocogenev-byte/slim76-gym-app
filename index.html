@@ -259,7 +259,7 @@
               ↩️ 방금 1개 취소
             </button>
             <button onclick="restoreTodayDefaultMeals()" class="py-2 px-2 rounded-xl text-[11px] font-extrabold bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 active:scale-95 transition">
-              🔄 오늘식단(1,380) 복구
+              🔄 오늘식단(1,230) 복구
             </button>
             <button onclick="clearTodayMealsOnly()" class="py-2 px-2 rounded-xl text-[11px] font-extrabold bg-rose-500/20 text-rose-300 border border-rose-500/50 active:scale-95 transition">
               🗑️ 음식 전체 0kcal
@@ -734,7 +734,8 @@
       day16WednesdayWeight945V1: true,
       day16WednesdayLunchBeefSalmonPokeV1: true,
       day16WednesdayDinnerGalbisalScallopRiceV1: true,
-      lastAction: '16일차 (수) 저녁 🥩갈비살200g+🐚관자10알+🌱숙주+🍚발아현미밥 완료! (총 1,380kcal · 단백질 113g 올클리어 🏆)',
+      day16WednesdayFixPoke400V1: true,
+      lastAction: '16일차 (수) 점심 부채살포케(400kcal·단32g) 정정 완료! (현재 총 1,230kcal · 단백질 95g 🔥)',
       currentWeight: 93.9,
       todayWatchKcal: 367,
       todayWatchHr: '하체 108 / 걷기 142 BPM (총 459kcal 🔥)',
@@ -754,11 +755,11 @@
         {
           id: 1794987600001,
           time: '오후 3:30',
-          name: '🥗 부채살 & 연어 더블 포케 (고단백 50g · 오메가3 충전)',
-          kcal: 550,
+          name: '🥗 부채살 포케 (정량 1보울 · 고단백 32g)',
+          kcal: 400,
           carb: 38,
-          protein: 50,
-          fat: 20
+          protein: 32,
+          fat: 12
         }
       ],
       activeTab: 'diet',
@@ -1124,7 +1125,7 @@
           date: '11/18 (수) · 16일차 하체 3종목 증량·걷기·식단 올클리어 🏆',
           weight: '95.3 → 94.5 kg (-0.8kg 수분 즉시 배출! 🔥)',
           activeKcal: '367 kcal (총 459 kcal · 하체16세트 145 + 걷기21분 222)',
-          memo: '⚡ B하체 16세트(총 394회! 익스텐션 30kg·이너타이 30kg·아웃타이 전세트 35kg 3종목 동시 증량!) + 👟 오르막걷기 20분35초(1.84km · 케이던스 121SPM 신기록 · 142BPM) 완료! / 🍽️ 식단: 총 1,380kcal · 단백질 113g (점심 부채살·연어 더블포케 550 + 저녁 갈비살200g·관자10알·숙주·발아현미밥 830kcal 6시20분 마감!)'
+          memo: '⚡ B하체 16세트(총 394회! 익스텐션 30kg·이너타이 30kg·아웃타이 전세트 35kg 3종목 동시 증량!) + 👟 오르막걷기 20분35초(1.84km · 케이던스 121SPM 신기록 · 142BPM) 완료! / 🍽️ 식단: 현재 1,230kcal · 단백질 95g (점심 부채살포케 400 + 저녁 갈비살200g·관자10알·숙주·발아현미밥 830kcal)'
         },
         {
           date: '11/17 (화) · 15일차 회복 자전거 & 1·2차 외식 선방 🚴',
@@ -1215,8 +1216,8 @@
 
     function normalizeState(raw) {
       const todayKey = new Date().toLocaleDateString('sv-SE');
-      // 16일차(2026-11-18 수) 저녁 갈비살200g·관자10알·숙주·발아현미밥(830kcal) → 총 1,380kcal 동기화
-      if (todayKey === '2026-11-18' && (!raw || !raw.day16WednesdayDinnerGalbisalScallopRiceV1)) {
+      // 16일차(2026-11-18 수) 점심 부채살 포케 400kcal 정정 → 현재 총 1,230kcal · 단백질 95g 동기화
+      if (todayKey === '2026-11-18' && (!raw || !raw.day16WednesdayFixPoke400V1)) {
         const fresh = JSON.parse(JSON.stringify(defaultData));
         if (raw && raw.lastDateKey === '2026-11-18') {
           if (raw.waterCups && raw.waterCups > fresh.waterCups) fresh.waterCups = raw.waterCups;
@@ -1477,12 +1478,12 @@
       showToast(`↩️ [${removed.name}] (-${removed.kcal}kcal) 삭제 완료!`);
     }
 
-    // 🔄 오늘 기본 식단(점심 포케 550 + 저녁 갈비살·관자·숙주·발아현미밥 830 = 1,380kcal)으로 즉시 복구
+    // 🔄 오늘 기본 식단(점심 부채살포케 400 + 저녁 갈비살·관자·숙주·발아현미밥 830 = 1,230kcal)으로 즉시 복구
     function restoreTodayDefaultMeals() {
       state.todayMeals = JSON.parse(JSON.stringify(defaultData.todayMeals));
       renderDietTab();
-      saveState('식단 복구: 오늘 기본 식단(1,380kcal · 단백질 113g)으로 복원', true);
-      showToast('🔄 오늘 기본 식단(1,380kcal · 단백질 113g) 상태로 복구되었습니다!');
+      saveState('식단 복구: 오늘 기본 식단(1,230kcal · 단백질 95g)으로 복원', true);
+      showToast('🔄 오늘 기본 식단(1,230kcal · 단백질 95g) 상태로 복구되었습니다!');
     }
 
     // 🗑️ 수분 기록은 유지하고 오늘 음식 목록만 0kcal로 비우기
