@@ -259,7 +259,7 @@
               ↩️ 방금 1개 취소
             </button>
             <button onclick="restoreTodayDefaultMeals()" class="py-2 px-2 rounded-xl text-[11px] font-extrabold bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 active:scale-95 transition">
-              🔄 오늘식단(440) 복구
+              🔄 오늘식단 초기화
             </button>
             <button onclick="clearTodayMealsOnly()" class="py-2 px-2 rounded-xl text-[11px] font-extrabold bg-rose-500/20 text-rose-300 border border-rose-500/50 active:scale-95 transition">
               🗑️ 음식 전체 0kcal
@@ -668,7 +668,7 @@
 
     const defaultData = {
       updatedAt: Date.now(),
-      lastDateKey: '2026-11-17',
+      lastDateKey: '2026-11-18',
       day6SundaySyncedV1: true,
       day6SundayWorkoutDoneV1: true,
       day6SundayLunchSyncedV1: true,
@@ -728,34 +728,16 @@
       day15TuesdayInitV1: true,
       day15TuesdayLunchCurryHalfChickenV1: true,
       day15TuesdayBike219DoneV1: true,
-      lastAction: '15일차 (화) 외식 전 🚴실내자전거 25분30초(219kcal · 131BPM) 완주! 🔥',
+      day16WednesdayInitV1: true,
+      lastAction: '16일차 (수) ⚡B하체 코스 & 외식 수분 쫙 빼기 스타트! 🔥',
       currentWeight: 93.9,
-      todayWatchKcal: 219,
-      todayWatchHr: '평균 131 BPM (총 264kcal 🔥)',
-      waterCups: 5,
+      todayWatchKcal: 0,
+      todayWatchHr: '기록 대기',
+      waterCups: 1,
       psylliumLunch: false,
       psylliumDinner: false,
-      todayMeals: [
-        {
-          id: 1794892200002,
-          time: '오후 2:05',
-          name: '🍗 닭가슴살 반 개 (1/2덩어리 · 단백질 보충)',
-          kcal: 55,
-          carb: 1,
-          protein: 12,
-          fat: 1
-        },
-        {
-          id: 1794892100001,
-          time: '오후 2:05',
-          name: '🍱 CJ 밸런스밀 저당 도시락 (통곡물밥 닭가슴살 버터커리맛)',
-          kcal: 385,
-          carb: 53,
-          protein: 20,
-          fat: 8
-        }
-      ],
-      activeTab: 'diet',
+      todayMeals: [],
+      activeTab: 'courseB',
       courses: {
         courseA: [
           {
@@ -1097,9 +1079,9 @@
           },
           {
             id: 'h4',
-            order: '2단계 유산소 · 25분 30초 완주! (219kcal · 131BPM 🔥)',
-            name: '실내 사이클링 (집 자전거 · 회복 수분 배출)',
-            zone: '16:18~16:44 · 활동 219kcal (총 264kcal) · 평균 131 BPM 완료!',
+            order: '2단계 유산소 · 1회 20~25분 이내',
+            name: '실내 사이클링 / 집 이고진 미니 바이크 타기',
+            zone: '기어 적당히 조이고 평균 125~135 BPM 유지 (지난 219kcal 달성)',
             img: '',
             weight: 131,
             weightStep: 5,
@@ -1107,7 +1089,7 @@
             defaultReps: 25,
             repUnit: '분',
             sets: [
-              { weight: 131, reps: 25, done: true }
+              { weight: 131, reps: 25, done: false }
             ],
             tip: '소파에 눕듯이 타지 말고 허리 뒤에 쿠션을 받쳐 상체를 세운 뒤, 1회 20분 이내로 1,000바퀴 이상 빠르게 굴리기!'
           }
@@ -1115,10 +1097,10 @@
       },
       watchRecords: [
         {
-          date: '11/17 (화) · 15일차 외식 전 자전거 25분 완주 🚴',
-          weight: '95.0 kg (물풍선 배출 중 · 최저 93.9kg)',
+          date: '11/17 (화) · 15일차 회복 자전거 & 고기명작 외식 🚴',
+          weight: '95.0 kg (최저 93.9kg)',
           activeKcal: '219 kcal (총 264 kcal · 실내자전거 25분30초 · 131 BPM)',
-          memo: '🚴 외식 전 실내 사이클링 25분30초(16:18~16:44 · 활동 219kcal / 총 264kcal · 131BPM 교과서 회복페달링!) 완료! / 🍽️ 점심: CJ 저당 버터커리 + 닭가슴살 반 개 (440kcal · 단백질 32g)'
+          memo: '🚴 외식 전 실내 사이클링 25분30초(활동 219kcal · 131BPM) 완료! / 🍽️ 점심: CJ 저당버터커리+닭가슴살 반 개(440kcal) + 저녁: 도담동 고기명작 외식'
         },
         {
           date: '11/16 (월) · 14일차 상체 362회·걷기·냉장고운반 올클리어 🏆',
@@ -1203,10 +1185,10 @@
 
     function normalizeState(raw) {
       const todayKey = new Date().toLocaleDateString('sv-SE');
-      // 15일차(2026-11-17 화) 외식 전 실내자전거 25분30초(219kcal · 131BPM) 애플워치 동기화
-      if (todayKey === '2026-11-17' && (!raw || !raw.day15TuesdayBike219DoneV1)) {
+      // 16일차(2026-11-18 수) 아침 초기화 (전일 15일차 기록장 보존 + 오늘 B하체 코스 시작)
+      if (todayKey === '2026-11-18' && (!raw || !raw.day16WednesdayInitV1)) {
         const fresh = JSON.parse(JSON.stringify(defaultData));
-        if (raw && raw.lastDateKey === '2026-11-17') {
+        if (raw && raw.lastDateKey === '2026-11-18') {
           if (raw.waterCups && raw.waterCups > fresh.waterCups) fresh.waterCups = raw.waterCups;
           if (raw.todayMeals && raw.todayMeals.length > 0) {
             const existingIds = new Set(fresh.todayMeals.map(m => m.id));
@@ -1465,12 +1447,12 @@
       showToast(`↩️ [${removed.name}] (-${removed.kcal}kcal) 삭제 완료!`);
     }
 
-    // 🔄 오늘 기본 식단(CJ 저당 버터커리 도시락 + 닭가슴살 반 개 = 440kcal)으로 즉시 복구
+    // 🔄 오늘 초기 식단(0kcal 초기화)으로 즉시 복구
     function restoreTodayDefaultMeals() {
       state.todayMeals = JSON.parse(JSON.stringify(defaultData.todayMeals));
       renderDietTab();
-      saveState('식단 복구: 오늘 기본 식단(440kcal)으로 복원', true);
-      showToast('🔄 오늘 기본 식단(440kcal · 단백질 32g) 상태로 복구되었습니다!');
+      saveState('식단 복구: 오늘 초기 식단(0kcal)으로 복원', true);
+      showToast('🔄 오늘 식단이 초기 상태(0kcal)로 복구되었습니다!');
     }
 
     // 🗑️ 수분 기록은 유지하고 오늘 음식 목록만 0kcal로 비우기
