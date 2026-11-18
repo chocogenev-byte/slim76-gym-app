@@ -729,6 +729,7 @@
       day15TuesdayLunchCurryHalfChickenV1: true,
       day15TuesdayBike219DoneV1: true,
       day16WednesdayInitV1: true,
+      day16WednesdayUpdateTueLogV1: true,
       lastAction: '16일차 (수) ⚡B하체 코스 & 외식 수분 쫙 빼기 스타트! 🔥',
       currentWeight: 93.9,
       todayWatchKcal: 0,
@@ -1097,10 +1098,10 @@
       },
       watchRecords: [
         {
-          date: '11/17 (화) · 15일차 회복 자전거 & 고기명작 외식 🚴',
-          weight: '95.0 kg (최저 93.9kg)',
+          date: '11/17 (화) · 15일차 회복 자전거 & 1·2차 외식 선방 🚴',
+          weight: '95.0 → 95.3 kg (고기·수분 정체)',
           activeKcal: '219 kcal (총 264 kcal · 실내자전거 25분30초 · 131 BPM)',
-          memo: '🚴 외식 전 실내 사이클링 25분30초(활동 219kcal · 131BPM) 완료! / 🍽️ 점심: CJ 저당버터커리+닭가슴살 반 개(440kcal) + 저녁: 도담동 고기명작 외식'
+          memo: '🚴 외식 전 실내 사이클링 25분30초(활동 219kcal · 131BPM) 완료! / 🍽️ 총 2,390kcal · 단백질 147g (점심 저당버터커리+닭가슴살 440 + 1차 고기명작 550g·오가피주·제로콜라 + 2차 역전할맥 라볶이·튀김 — 자전거 방어로 소모량 2,369kcal과 본전 선방!)'
         },
         {
           date: '11/16 (월) · 14일차 상체 362회·걷기·냉장고운반 올클리어 🏆',
@@ -1185,8 +1186,8 @@
 
     function normalizeState(raw) {
       const todayKey = new Date().toLocaleDateString('sv-SE');
-      // 16일차(2026-11-18 수) 아침 초기화 (전일 15일차 기록장 보존 + 오늘 B하체 코스 시작)
-      if (todayKey === '2026-11-18' && (!raw || !raw.day16WednesdayInitV1)) {
+      // 16일차(2026-11-18 수) 아침 초기화 (전일 15일차 고기명작·역전할맥 전체 기록장 업데이트 + 오늘 B하체 코스 시작)
+      if (todayKey === '2026-11-18' && (!raw || !raw.day16WednesdayUpdateTueLogV1)) {
         const fresh = JSON.parse(JSON.stringify(defaultData));
         if (raw && raw.lastDateKey === '2026-11-18') {
           if (raw.waterCups && raw.waterCups > fresh.waterCups) fresh.waterCups = raw.waterCups;
