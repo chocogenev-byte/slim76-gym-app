@@ -731,7 +731,8 @@
       day16WednesdayInitV1: true,
       day16WednesdayUpdateTueLogV1: true,
       day16WednesdayWorkoutAllClearV1: true,
-      lastAction: '16일차 (수) ⚡B하체 16세트(394회·3종목 증량!) + 👟오르막걷기 20분35초(367kcal) 올클리어! 🔥',
+      day16WednesdayWeight945V1: true,
+      lastAction: '16일차 (수) 운동 직후 95.3 → 94.5kg (-0.8kg 외식 수분 즉시 배출!) 달성! 🔥',
       currentWeight: 93.9,
       todayWatchKcal: 367,
       todayWatchHr: '하체 108 / 걷기 142 BPM (총 459kcal 🔥)',
@@ -1100,7 +1101,7 @@
       watchRecords: [
         {
           date: '11/18 (수) · 16일차 하체 3종목 증량 & 걷기 완주 🔥',
-          weight: '95.3 kg (어제 외식 수분 배출 스타트 · 최저 93.9kg)',
+          weight: '95.3 → 94.5 kg (-0.8kg 수분 즉시 배출! 🔥)',
           activeKcal: '367 kcal (총 459 kcal · 하체16세트 145 + 걷기21분 222)',
           memo: '⚡ B하체 16세트(총 394회! 익스텐션 30kg·이너타이 30kg·아웃타이 전세트 35kg 3종목 동시 증량!) + 👟 오르막걷기 20분35초(1.84km · 케이던스 121SPM 신기록 · 142BPM) 완료!'
         },
@@ -1193,8 +1194,8 @@
 
     function normalizeState(raw) {
       const todayKey = new Date().toLocaleDateString('sv-SE');
-      // 16일차(2026-11-18 수) B하체 16세트(394회 · 3종목 동시 증량!) + 걷기 20분35초(367kcal) 애플워치 동기화
-      if (todayKey === '2026-11-18' && (!raw || !raw.day16WednesdayWorkoutAllClearV1)) {
+      // 16일차(2026-11-18 수) 운동 직후 실측 95.3 → 94.5kg(-0.8kg 즉시 배출!) 동기화
+      if (todayKey === '2026-11-18' && (!raw || !raw.day16WednesdayWeight945V1)) {
         const fresh = JSON.parse(JSON.stringify(defaultData));
         if (raw && raw.lastDateKey === '2026-11-18') {
           if (raw.waterCups && raw.waterCups > fresh.waterCups) fresh.waterCups = raw.waterCups;
