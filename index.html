@@ -739,8 +739,9 @@
       day17ThursdayInit941V1: true,
       day17ThursdayWeight939V1: true,
       day17ThursdayWeight937RecordV1: true,
-      lastAction: '🏆 역대 최저 신기록 93.7kg (-2.3kg) 돌파!! 어제 아침 대비 -1.6kg 수직 낙하 🔥',
-      currentWeight: 93.7,
+      day17ThursdayWeight935RecordV1: true,
+      lastAction: '🏆 역대 최저 대박 신기록 93.5kg (-2.5kg) 돌파!! 28시간 만에 -1.8kg 수직 낙하 💥',
+      currentWeight: 93.5,
       todayWatchKcal: 0,
       todayWatchHr: '측정 전 (오늘 A코스 상체 + 걷기 🔥)',
       waterCups: 0,
@@ -1107,10 +1108,10 @@
       },
       watchRecords: [
         {
-          date: '11/19 (목) · 17일차 🏆 역대 최저 신기록 93.7kg (-2.3kg) 돌파!!',
-          weight: '95.3 → 94.1 → 93.9 → 93.7 kg (28시간 만에 -1.6kg! · 신기록 🔥)',
+          date: '11/19 (목) · 17일차 🏆 역대 최저 대박 신기록 93.5kg (-2.5kg) 돌파!!',
+          weight: '95.3 → 94.1 → 93.9 → 93.5 kg (28시간 만에 -1.8kg! · -2.5kg 달성 💥)',
           activeKcal: '진행 예정 (🔥 오후 2시 A코스 상체 + 👟 오르막 걷기)',
-          memo: '🏆 기존 최저점(93.9kg) 깨고 역대 최저 93.7kg(-2.3kg) 달성! 어제 클린 식단 1일차만으로 감춰져 있던 실질 감량분 폭발! 오늘 오후 2시 A상체 + 오르막 걷기 & 클린 2일차로 내일 93.3~93.5kg 정조준!'
+          memo: '🏆 어젯밤 예측했던 실질 알맹이 체중(93.4~93.6kg) 정중앙 93.5kg(-2.5kg) 실측 돌파!! 클린 식단 1일차만으로 감춰졌던 진짜 감량분 폭발! 오늘 오후 2시 A상체 + 오르막 걷기 & 클린 2일차로 92kg대 진입 가시권!'
         },
         {
           date: '11/18 (수) · 16일차 하체 3종목 증량·걷기·식단 올클리어 🏆',
@@ -1207,8 +1208,8 @@
 
     function normalizeState(raw) {
       const todayKey = new Date().toLocaleDateString('sv-SE');
-      // 17일차(2026-11-19 목) 역대 최저 신기록 93.7kg (-2.3kg!) 동기화
-      if (todayKey === '2026-11-19' && (!raw || !raw.day17ThursdayWeight937RecordV1)) {
+      // 17일차(2026-11-19 목) 역대 최저 대박 신기록 93.5kg (-2.5kg!) 동기화
+      if (todayKey === '2026-11-19' && (!raw || !raw.day17ThursdayWeight935RecordV1)) {
         const fresh = JSON.parse(JSON.stringify(defaultData));
         if (raw && raw.lastDateKey === '2026-11-19') {
           if (raw.waterCups && raw.waterCups > fresh.waterCups) fresh.waterCups = raw.waterCups;
