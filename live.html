@@ -259,7 +259,7 @@
               ↩️ 방금 1개 취소
             </button>
             <button onclick="restoreTodayDefaultMeals()" class="py-2 px-2 rounded-xl text-[11px] font-extrabold bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 active:scale-95 transition">
-              🔄 오늘식단(400) 복구
+              🔄 오늘식단(1,250) 복구
             </button>
             <button onclick="clearTodayMealsOnly()" class="py-2 px-2 rounded-xl text-[11px] font-extrabold bg-rose-500/20 text-rose-300 border border-rose-500/50 active:scale-95 transition">
               🗑️ 음식 전체 0kcal
@@ -741,14 +741,24 @@
       day17ThursdayWeight937RecordV1: true,
       day17ThursdayWeight935RecordV1: true,
       day17ThursdayFitbitWorkoutLunchV1: true,
-      lastAction: '17일차 (목) 핏빗 에어 올클리어(A상체 375회·걷기 29분 2.33km · 총 660/활동 525kcal!) + 점심 🥗부채살 포케(400kcal) 반영 🏆',
+      day17ThursdayDinnerOvenChickenHalfV1: true,
+      lastAction: '17일차 (목) 저녁 🍗오븐구이치킨 반마리+🍚발아현미밥(850kcal) 완료! (총 1,250kcal · 단백질 100g · -1,425kcal 적자 🏆)',
       currentWeight: 93.5,
       todayWatchKcal: 525,
       todayWatchHr: '근력 108 / 걷기 141 BPM (Fitbit 총 660kcal 🔥)',
-      waterCups: 4,
+      waterCups: 6,
       psylliumLunch: false,
       psylliumDinner: false,
       todayMeals: [
+        {
+          id: 1795087600002,
+          time: '오후 8:25',
+          name: '🍗 오븐구이 양념치킨 반마리(떡 제외) + 🍚 발아현미밥 1공기',
+          kcal: 850,
+          carb: 79,
+          protein: 68,
+          fat: 28
+        },
         {
           id: 1795071200001,
           time: '오후 3:55',
@@ -1119,10 +1129,10 @@
       },
       watchRecords: [
         {
-          date: '11/19 (목) · 17일차 🏆 93.5kg 신기록 & 핏빗 에어 67분 올클리어!',
+          date: '11/19 (목) · 17일차 🏆 93.5kg 신기록 & 핏빗 에어·식단 올클리어!',
           weight: '95.3 → 94.1 → 93.9 → 93.5 kg (-2.5kg 신기록 💥)',
           activeKcal: '활동 525 kcal (Fitbit 총 660 kcal · 상체 268 + 걷기 392)',
-          memo: '🔥 핏빗 에어 첫 자동 연동 성공! A상체 21세트 375회 신기록(숄더 전세트 15kg · 암컬 전세트 15kg 2종목 동시 증량! · 37분41초 · 108BPM) + 👟 오르막걷기 29분07초(2.33km · 3,240보 · 141BPM · 고강도 24분!) 완주! / 🥗 점심: 부채살 포케(400kcal · 단32g)'
+          memo: '🔥 핏빗 에어 자동 연동! A상체 21세트 375회 신기록(숄더·암컬 전세트 15kg 2종목 동시 증량! · 108BPM) + 👟 오르막걷기 29분07초(2.33km · 141BPM · 고강도 24분!) 완주! / 🍽️ 식단: 총 1,250kcal · 단백질 100g (점심 부채살포케 400 + 저녁 오븐치킨 반마리·발아현미밥 850kcal · -1,425kcal 초대형 적자!)'
         },
         {
           date: '11/18 (수) · 16일차 하체 3종목 증량·걷기·식단 올클리어 🏆',
@@ -1219,8 +1229,8 @@
 
     function normalizeState(raw) {
       const todayKey = new Date().toLocaleDateString('sv-SE');
-      // 17일차(2026-11-19 목) 핏빗 에어 상체 375회·걷기 29분 + 점심 부채살 포케(400kcal) 동기화
-      if (todayKey === '2026-11-19' && (!raw || !raw.day17ThursdayFitbitWorkoutLunchV1)) {
+      // 17일차(2026-11-19 목) 저녁 오븐치킨 반마리+발아현미밥(850kcal) → 총 1,250kcal 동기화
+      if (todayKey === '2026-11-19' && (!raw || !raw.day17ThursdayDinnerOvenChickenHalfV1)) {
         const fresh = JSON.parse(JSON.stringify(defaultData));
         if (raw && raw.lastDateKey === '2026-11-19') {
           if (raw.waterCups && raw.waterCups > fresh.waterCups) fresh.waterCups = raw.waterCups;
@@ -1480,12 +1490,12 @@
       showToast(`↩️ [${removed.name}] (-${removed.kcal}kcal) 삭제 완료!`);
     }
 
-    // 🔄 오늘 기본 식단(17일차 점심 부채살 포케 = 400kcal)으로 즉시 복구
+    // 🔄 오늘 기본 식단(점심 포케 400 + 저녁 오븐치킨 반마리·발아현미밥 850 = 1,250kcal)으로 즉시 복구
     function restoreTodayDefaultMeals() {
       state.todayMeals = JSON.parse(JSON.stringify(defaultData.todayMeals));
       renderDietTab();
-      saveState('식단 복구: 17일차 오늘 기본 식단(400kcal · 단백질 32g)으로 복원', true);
-      showToast('🔄 17일차 오늘 식단(400kcal · 단백질 32g) 상태로 복구되었습니다!');
+      saveState('식단 복구: 17일차 오늘 기본 식단(1,250kcal · 단백질 100g)으로 복원', true);
+      showToast('🔄 17일차 오늘 식단(1,250kcal · 단백질 100g) 상태로 복구되었습니다!');
     }
 
     // 🗑️ 수분 기록은 유지하고 오늘 음식 목록만 0kcal로 비우기
