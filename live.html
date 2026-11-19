@@ -737,8 +737,9 @@
       day16WednesdayFixPoke400V1: true,
       day16WednesdayProteinEgg180V1: true,
       day17ThursdayInit941V1: true,
-      lastAction: '17일차 (목) 아침 공복 94.1kg (-1.2kg 수직 하락! 🔥) · 오늘 A코스 상체 + 오르막 걷기 준비 완료!',
-      currentWeight: 94.1,
+      day17ThursdayWeight939V1: true,
+      lastAction: '17일차 (목) 배변 후 93.9kg (-2.1kg · 93kg대 완전 탈환 🏆 어제 대비 -1.4kg 수직 낙하!)',
+      currentWeight: 93.9,
       todayWatchKcal: 0,
       todayWatchHr: '측정 전 (오늘 A코스 상체 + 걷기 🔥)',
       waterCups: 0,
@@ -1105,10 +1106,10 @@
       },
       watchRecords: [
         {
-          date: '11/19 (목) · 17일차 아침 94.1kg (-1.2kg 수직 하락! 🔥)',
-          weight: '95.3 → 94.1 kg (어제 대비 -1.2kg! · 최저 93.9kg 코앞)',
+          date: '11/19 (목) · 17일차 93.9kg 93kg대 완전 탈환! 🏆',
+          weight: '95.3 → 94.1 → 93.9 kg (하루 만에 -1.4kg! · 역대 최저 타이 🔥)',
           activeKcal: '진행 예정 (🔥 A코스 상체 + 👟 오르막 걷기)',
-          memo: '🔥 클린 3일 연속 2일차! 어제 오후 6시35분 마감(1,410kcal · 단백질 121g) + 숙주·관자 효과로 하룻밤 만에 -1.2kg 수직 하락! 오늘 A상체 + 오르막 걷기 & 저녁 클린 식단으로 93kg대 재진입 정조준!'
+          memo: '🏆 어젯밤 예측(대변 시 93.9kg) 100% 적중! 클린 3일 연속 2일차 돌입 — 오늘 A상체 + 오르막 걷기 & 저녁 7시 전 클린 식단으로 내일 93kg 초반 역대 신기록 갱신 정조준!'
         },
         {
           date: '11/18 (수) · 16일차 하체 3종목 증량·걷기·식단 올클리어 🏆',
@@ -1205,8 +1206,8 @@
 
     function normalizeState(raw) {
       const todayKey = new Date().toLocaleDateString('sv-SE');
-      // 17일차(2026-11-19 목) 아침 공복 94.1kg (-1.2kg 수직 하락!) & A코스 상체 초기화 동기화
-      if (todayKey === '2026-11-19' && (!raw || !raw.day17ThursdayInit941V1)) {
+      // 17일차(2026-11-19 목) 배변 후 공복 93.9kg (-2.1kg · 93kg대 완전 탈환!) 동기화
+      if (todayKey === '2026-11-19' && (!raw || !raw.day17ThursdayWeight939V1)) {
         const fresh = JSON.parse(JSON.stringify(defaultData));
         if (raw && raw.lastDateKey === '2026-11-19') {
           if (raw.waterCups && raw.waterCups > fresh.waterCups) fresh.waterCups = raw.waterCups;
@@ -1216,7 +1217,6 @@
               if (!existingIds.has(m.id)) fresh.todayMeals.unshift(m);
             });
           }
-          if (raw.currentWeight && raw.currentWeight !== 94.1) fresh.currentWeight = raw.currentWeight;
         }
         return fresh;
       }
