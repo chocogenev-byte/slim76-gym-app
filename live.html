@@ -534,6 +534,103 @@
       </div>
     </div>
 
+    <!-- 🎓 1개월 월·화·수·목 PT 마스터 노트 & 평생 혼자 운동 백과사전 탭 -->
+    <div id="ptNotesContainer" class="hidden space-y-4">
+
+      <!-- 1. PT 16회 진행도 & 4분할 마스터 카드 -->
+      <div class="bg-slate-800 border border-violet-500/50 rounded-3xl p-4 space-y-3 shadow-md">
+        <div class="flex items-center justify-between">
+          <div>
+            <span class="inline-block px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-violet-500/20 text-violet-300 border border-violet-500/40">
+              1개월 집중 과외 · 평생 독립 코스
+            </span>
+            <h2 class="text-base font-extrabold text-white mt-1">🎓 월·화·수·목 PT 마스터 노트</h2>
+          </div>
+          <div class="flex items-center space-x-1.5 bg-slate-900 border border-slate-700 rounded-2xl px-2 py-1">
+            <button onclick="changePtSessions(-1)" class="w-6 h-6 rounded-xl bg-slate-800 text-slate-300 text-xs font-black active:scale-90">−</button>
+            <span class="text-xs font-black text-violet-300 px-1"><span id="ptSessionsCount">0</span> / 16회</span>
+            <button onclick="changePtSessions(1)" class="w-6 h-6 rounded-xl bg-violet-600 text-white text-xs font-black active:scale-90">+</button>
+          </div>
+        </div>
+
+        <div class="w-full bg-slate-900 rounded-full h-2.5 overflow-hidden border border-slate-700">
+          <div id="ptProgressBar" class="bg-gradient-to-r from-violet-500 to-emerald-400 h-2.5 rounded-full transition-all duration-500" style="width: 4%"></div>
+        </div>
+
+        <div class="grid grid-cols-4 gap-1.5 text-center">
+          <div class="bg-slate-900/90 border border-slate-700 rounded-2xl p-2">
+            <div class="text-[11px] font-extrabold text-indigo-300">월요일</div>
+            <div class="text-[10px] text-slate-300 mt-0.5 font-semibold">등 · 이두</div>
+          </div>
+          <div class="bg-slate-900/90 border border-slate-700 rounded-2xl p-2">
+            <div class="text-[11px] font-extrabold text-rose-300">화요일</div>
+            <div class="text-[10px] text-slate-300 mt-0.5 font-semibold">가슴 · 삼두</div>
+          </div>
+          <div class="bg-slate-900/90 border border-slate-700 rounded-2xl p-2">
+            <div class="text-[11px] font-extrabold text-emerald-300">수요일</div>
+            <div class="text-[10px] text-slate-300 mt-0.5 font-semibold">하체 · 코어</div>
+          </div>
+          <div class="bg-slate-900/90 border border-slate-700 rounded-2xl p-2">
+            <div class="text-[11px] font-extrabold text-amber-300">목요일</div>
+            <div class="text-[10px] text-slate-300 mt-0.5 font-semibold">어깨 · 팔</div>
+          </div>
+        </div>
+
+        <div class="bg-slate-900/80 border border-amber-500/30 rounded-2xl p-3 space-y-1 text-[11px] text-slate-200 leading-relaxed">
+          <div class="font-extrabold text-amber-300">📌 트레이너 첫날 필수 요청 3가지 (본전 200% 공식)</div>
+          <div>1️⃣ <strong>혼자 할 기본 머신·덤벨</strong>의 의자 번호·손잡이·자극점(큐잉) 마스터</div>
+          <div>2️⃣ <strong>꼬리뼈 위(L5-S1) 보호:</strong> 척추 압박 없는 복압(브레이싱) 세팅</div>
+          <div>3️⃣ <strong>어깨 보호:</strong> 시티드 로우 세로 그립 뚜둑 방지 & 날개뼈 고정법</div>
+        </div>
+      </div>
+
+      <!-- 2. 수업 직후 30초 초간단 PT 노트 입력 카드 -->
+      <div class="bg-slate-800 border border-emerald-500/40 rounded-3xl p-4 space-y-3 shadow-md">
+        <div class="flex items-center justify-between">
+          <h3 class="text-sm font-extrabold text-white">✍️ 오늘 배운 PT 팁 30초 기록</h3>
+          <span class="text-[10px] font-bold text-emerald-300">저장 시 AI 코치에 자동 전송!</span>
+        </div>
+
+        <div class="grid grid-cols-5 gap-1">
+          <button onclick="selectPtPart('등')" id="ptPartBtn-등" class="py-1.5 rounded-xl text-[11px] font-extrabold bg-violet-600 text-white border border-violet-400">등</button>
+          <button onclick="selectPtPart('가슴')" id="ptPartBtn-가슴" class="py-1.5 rounded-xl text-[11px] font-bold bg-slate-900 text-slate-300 border border-slate-700">가슴</button>
+          <button onclick="selectPtPart('하체')" id="ptPartBtn-하체" class="py-1.5 rounded-xl text-[11px] font-bold bg-slate-900 text-slate-300 border border-slate-700">하체</button>
+          <button onclick="selectPtPart('어깨·팔')" id="ptPartBtn-어깨·팔" class="py-1.5 rounded-xl text-[11px] font-bold bg-slate-900 text-slate-300 border border-slate-700">어깨·팔</button>
+          <button onclick="selectPtPart('코어·자세')" id="ptPartBtn-코어·자세" class="py-1.5 rounded-xl text-[11px] font-bold bg-slate-900 text-slate-300 border border-slate-700">코어</button>
+        </div>
+
+        <div class="space-y-2">
+          <input type="text" id="ptExerciseName" placeholder="종목명 / 회차 (예: 1회차 · 랫풀다운)" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-xs text-white font-bold">
+          <input type="text" id="ptMachineSetting" placeholder="의자·패드 번호 / 그립 / 무게 (예: 의자 3번 · 날개 손잡이 · 35kg 15회×4)" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-xs text-white">
+          <textarea id="ptTrainerCue" rows="2" placeholder="트레이너 핵심 꿀팁·자극점 (예: 가슴 들고 팔꿈치를 수직 아래로 찍기, 어깨 으쓱 금지!)" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-xs text-white leading-relaxed"></textarea>
+        </div>
+
+        <button onclick="addPtNote()" class="w-full py-3 rounded-2xl text-xs font-black bg-emerald-500 text-slate-950 shadow active:scale-98 transition">
+          💾 PT 노트 영구 저장 & AI 코치 전송
+        </button>
+      </div>
+
+      <!-- 3. 부위별 필터 & 나만의 평생 운동 백과사전 -->
+      <div class="bg-slate-800 border border-slate-700 rounded-3xl p-4 space-y-3">
+        <div class="flex items-center justify-between">
+          <h3 class="text-sm font-extrabold text-white">📚 나만의 평생 운동 백과사전</h3>
+          <span id="ptNotesCountBadge" class="text-[11px] font-bold text-violet-300">총 0개</span>
+        </div>
+
+        <div class="flex flex-wrap gap-1.5">
+          <button onclick="filterPtPart('전체')" id="ptFilter-전체" class="px-2.5 py-1 rounded-full text-[11px] font-extrabold bg-violet-600 text-white">전체</button>
+          <button onclick="filterPtPart('등')" id="ptFilter-등" class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-slate-900 text-slate-300 border border-slate-700">등</button>
+          <button onclick="filterPtPart('가슴')" id="ptFilter-가슴" class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-slate-900 text-slate-300 border border-slate-700">가슴</button>
+          <button onclick="filterPtPart('하체')" id="ptFilter-하체" class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-slate-900 text-slate-300 border border-slate-700">하체</button>
+          <button onclick="filterPtPart('어깨·팔')" id="ptFilter-어깨·팔" class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-slate-900 text-slate-300 border border-slate-700">어깨·팔</button>
+          <button onclick="filterPtPart('코어·자세')" id="ptFilter-코어·자세" class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-slate-900 text-slate-300 border border-slate-700">코어·자세</button>
+        </div>
+
+        <div id="ptNotesList" class="space-y-2.5"></div>
+      </div>
+
+    </div>
+
   </div>
 
   <!-- 사진 확대 모달 -->
@@ -545,23 +642,26 @@
     </div>
   </div>
 
-  <!-- 하단 고정 5개 네비게이션 탭 바 (필라이즈 식단·물 탭 포함) -->
-  <div class="fixed bottom-0 inset-x-0 z-40 bg-slate-900/95 backdrop-blur-md border-t border-slate-800 px-2 py-2" style="padding-bottom: calc(env(safe-area-inset-bottom) + 8px);">
-    <div class="max-w-md mx-auto grid grid-cols-5 gap-1">
-      <button onclick="switchTab('courseA', true)" id="tab-courseA" class="py-2 px-0.5 rounded-2xl text-[11px] font-extrabold bg-indigo-600 text-white transition">
-        🔥 A상체<br><span class="font-normal opacity-90 text-[10px]">일·수·금</span>
+  <!-- 하단 고정 6개 네비게이션 탭 바 (PT 노트 탭 포함) -->
+  <div class="fixed bottom-0 inset-x-0 z-40 bg-slate-900/95 backdrop-blur-md border-t border-slate-800 px-1.5 py-2" style="padding-bottom: calc(env(safe-area-inset-bottom) + 8px);">
+    <div class="max-w-md mx-auto grid grid-cols-6 gap-1">
+      <button onclick="switchTab('courseA', true)" id="tab-courseA" class="py-2 px-0.5 rounded-2xl text-[10px] font-extrabold bg-indigo-600 text-white transition">
+        🔥 A상체<br><span class="font-normal opacity-90 text-[9px]">등·가슴</span>
       </button>
-      <button onclick="switchTab('courseB', true)" id="tab-courseB" class="py-2 px-0.5 rounded-2xl text-[11px] font-bold text-slate-400 transition">
-        ⚡ B하체<br><span class="font-normal opacity-80 text-[10px]">월·목</span>
+      <button onclick="switchTab('courseB', true)" id="tab-courseB" class="py-2 px-0.5 rounded-2xl text-[10px] font-bold text-slate-400 transition">
+        ⚡ B하체<br><span class="font-normal opacity-80 text-[9px]">하체5종</span>
       </button>
-      <button onclick="switchTab('diet', true)" id="tab-diet" class="py-2 px-0.5 rounded-2xl text-[11px] font-bold text-slate-400 transition">
-        🥗 식단·물<br><span class="font-normal opacity-80 text-[10px]">필라이즈</span>
+      <button onclick="switchTab('diet', true)" id="tab-diet" class="py-2 px-0.5 rounded-2xl text-[10px] font-bold text-slate-400 transition">
+        🥗 식단<br><span class="font-normal opacity-80 text-[9px]">필라이즈</span>
       </button>
-      <button onclick="switchTab('courseHome', true)" id="tab-courseHome" class="py-2 px-0.5 rounded-2xl text-[11px] font-bold text-slate-400 transition">
-        🚴 홈트<br><span class="font-normal opacity-80 text-[10px]">화·토</span>
+      <button onclick="switchTab('ptNotes', true)" id="tab-ptNotes" class="py-2 px-0.5 rounded-2xl text-[10px] font-bold text-slate-400 transition">
+        🎓 PT노트<br><span class="font-normal opacity-80 text-[9px]">월~목</span>
       </button>
-      <button onclick="switchTab('records', true)" id="tab-records" class="py-2 px-0.5 rounded-2xl text-[11px] font-bold text-slate-400 transition">
-        📈 기록장<br><span class="font-normal opacity-80 text-[10px]">체중·워치</span>
+      <button onclick="switchTab('courseHome', true)" id="tab-courseHome" class="py-2 px-0.5 rounded-2xl text-[10px] font-bold text-slate-400 transition">
+        🚴 홈트<br><span class="font-normal opacity-80 text-[9px]">자전거</span>
+      </button>
+      <button onclick="switchTab('records', true)" id="tab-records" class="py-2 px-0.5 rounded-2xl text-[10px] font-bold text-slate-400 transition">
+        📈 기록<br><span class="font-normal opacity-80 text-[9px]">체중·워치</span>
       </button>
     </div>
   </div>
@@ -748,7 +848,27 @@
       day18FridayLunchDQPC779V1: true,
       day19SaturdayInitV1: true,
       day19SaturdayRestStarbucks388V1: true,
-      lastAction: '19일차 (토) 공식 완전 휴식일(6일 연속 운동 + HRV 25.4ms 회복!) · 아점 스벅 치킨머쉬룸+아메리카노(388kcal · 단24g) 🥪',
+      day19SaturdayPtNotesTabV1: true,
+      lastAction: '🎓 월·화·수·목 1개월 PT 마스터 노트 탭 신설 완료! (수업 팁 영구 저장 + AI 코치 자동 동기화)',
+      ptSessionsDone: 0,
+      ptNotes: [
+        {
+          id: 1795236000001,
+          date: '11/21 (사전 세팅)',
+          part: '코어·자세',
+          exercise: '🛡️ L5-S1 꼬리뼈 위 허리 보호 (트레이너 첫날 전달)',
+          setting: '바벨 스쿼트·데드리프트·45도 레그프레스·힙쓰러스트 제외',
+          cue: '척추 압박 없는 복압(브레이싱) 잡는 법 + 허리 안 꺾이는 머신/덤벨 폼 위주로 배우기! 라잉 레그 컬은 15kg·90도 수직 정지 고정.'
+        },
+        {
+          id: 1795236000002,
+          date: '11/21 (사전 세팅)',
+          part: '등',
+          exercise: '🛡️ 시티드 로우 & 상체 어깨 탄발음(뚜둑) 방지',
+          setting: '바깥쪽 가로 오버그립 고정 (세로 그립 X) · 10kg',
+          cue: '날개뼈를 먼저 아래로 내린 뒤 당기기! PT에서 등·가슴·어깨 기구별 내 키(176cm)에 맞는 의자 번호와 그립 위치 꼭 체크해 두기.'
+        }
+      ],
       currentWeight: 93.5,
       todayWatchKcal: 0,
       todayWatchHr: '공식 완전 휴식일 🛌 (HRV 25.4ms · 6일 무휴 초과회복)',
@@ -1238,8 +1358,8 @@
 
     function normalizeState(raw) {
       const todayKey = new Date().toLocaleDateString('sv-SE');
-      // 19일차(2026-11-21 토) 공식 완전 휴식일 + 스벅 치킨머쉬룸&아메리카노(388kcal) 동기화
-      if (todayKey === '2026-11-21' && (!raw || !raw.day19SaturdayRestStarbucks388V1)) {
+      // 19일차(2026-11-21 토) PT 마스터 노트 탭 신설 동기화
+      if (todayKey === '2026-11-21' && (!raw || !raw.day19SaturdayPtNotesTabV1)) {
         const fresh = JSON.parse(JSON.stringify(defaultData));
         if (raw && raw.lastDateKey === '2026-11-21') {
           if (raw.waterCups && raw.waterCups > fresh.waterCups) fresh.waterCups = raw.waterCups;
@@ -1250,10 +1370,14 @@
             });
           }
         }
+        if (raw && Array.isArray(raw.ptNotes) && raw.ptNotes.length > 0) fresh.ptNotes = raw.ptNotes;
+        if (raw && typeof raw.ptSessionsDone === 'number') fresh.ptSessionsDone = raw.ptSessionsDone;
         return fresh;
       }
       const rawDateKey = raw && raw.lastDateKey;
       const merged = Object.assign({}, defaultData, raw || {});
+      if (!Array.isArray(merged.ptNotes)) merged.ptNotes = JSON.parse(JSON.stringify(defaultData.ptNotes));
+      if (typeof merged.ptSessionsDone !== 'number') merged.ptSessionsDone = 0;
       if (!merged.courses) merged.courses = defaultData.courses;
       ['courseA', 'courseB', 'courseHome'].forEach(cKey => {
         if (!merged.courses[cKey] || merged.courses[cKey].length !== defaultData.courses[cKey].length) {
@@ -1372,7 +1496,7 @@
     }
 
     function buildSummary(actionLabel) {
-      const courseKey = (state.activeTab === 'records' || state.activeTab === 'diet') ? 'courseA' : state.activeTab;
+      const courseKey = (state.activeTab === 'records' || state.activeTab === 'diet' || state.activeTab === 'ptNotes') ? 'courseA' : state.activeTab;
       const doneItems = state.courses[courseKey].map(item => ({
         name: item.name.split(' ')[0] + ' ' + (item.name.split(' ')[1] || ''),
         doneSets: item.sets.filter(s => s.done).length + '/' + item.sets.length,
@@ -1399,6 +1523,11 @@
         },
         activeCourse: courseKey,
         progress: doneItems,
+        ptSummary: {
+          sessionsDone: state.ptSessionsDone || 0,
+          totalNotes: (state.ptNotes || []).length,
+          latestNote: (state.ptNotes && state.ptNotes[0]) || null
+        },
         latestRecord: state.watchRecords[0] || null
       };
     }
@@ -1704,7 +1833,7 @@
     }
 
     function autoCalcFromCompletedSets() {
-      const courseKey = (state.activeTab === 'records' || state.activeTab === 'diet') ? 'courseB' : state.activeTab;
+      const courseKey = (state.activeTab === 'records' || state.activeTab === 'diet' || state.activeTab === 'ptNotes') ? 'courseB' : state.activeTab;
       const list = state.courses[courseKey] || [];
       let doneWeightSets = 0;
       let totalReps = 0;
@@ -1792,7 +1921,7 @@
       const pct = Math.min(100, Math.max(8, (lostSoFar / totalToLose) * 100));
       document.getElementById('weightProgressBar').style.width = pct + '%';
 
-      const currentKey = (state.activeTab === 'records' || state.activeTab === 'diet') ? 'courseA' : state.activeTab;
+      const currentKey = (state.activeTab === 'records' || state.activeTab === 'diet' || state.activeTab === 'ptNotes') ? 'courseA' : state.activeTab;
       const currentList = state.courses[currentKey];
       let totalSets = 0;
       let doneSets = 0;
@@ -2168,21 +2297,151 @@
       modal.classList.remove('flex');
     }
 
+    let selectedPtPart = '등';
+    let activePtFilter = '전체';
+
+    function selectPtPart(part) {
+      selectedPtPart = part;
+      ['등', '가슴', '하체', '어깨·팔', '코어·자세'].forEach(p => {
+        const el = document.getElementById('ptPartBtn-' + p);
+        if (!el) return;
+        if (p === part) {
+          el.className = 'py-1.5 rounded-xl text-[11px] font-extrabold bg-violet-600 text-white border border-violet-400';
+        } else {
+          el.className = 'py-1.5 rounded-xl text-[11px] font-bold bg-slate-900 text-slate-300 border border-slate-700';
+        }
+      });
+    }
+
+    function filterPtPart(part) {
+      activePtFilter = part;
+      ['전체', '등', '가슴', '하체', '어깨·팔', '코어·자세'].forEach(p => {
+        const el = document.getElementById('ptFilter-' + p);
+        if (!el) return;
+        if (p === part) {
+          el.className = 'px-2.5 py-1 rounded-full text-[11px] font-extrabold bg-violet-600 text-white';
+        } else {
+          el.className = 'px-2.5 py-1 rounded-full text-[11px] font-bold bg-slate-900 text-slate-300 border border-slate-700';
+        }
+      });
+      renderPtNotes();
+    }
+
+    function changePtSessions(delta) {
+      state.ptSessionsDone = Math.max(0, Math.min(16, (state.ptSessionsDone || 0) + delta));
+      renderPtNotes();
+      saveState(`🎓 PT 진행 회차 업데이트: ${state.ptSessionsDone}/16회`, true);
+    }
+
+    function addPtNote() {
+      const exEl = document.getElementById('ptExerciseName');
+      const setEl = document.getElementById('ptMachineSetting');
+      const cueEl = document.getElementById('ptTrainerCue');
+      const exercise = (exEl.value || '').trim();
+      const setting = (setEl.value || '').trim();
+      const cue = (cueEl.value || '').trim();
+
+      if (!exercise && !cue) {
+        showToast('⚠️ 종목명이나 트레이너 꿀팁을 1줄 이상 입력해 주세요!');
+        exEl.focus();
+        return;
+      }
+
+      if (!Array.isArray(state.ptNotes)) state.ptNotes = [];
+      const now = new Date();
+      const dateStr = `${now.getMonth() + 1}/${now.getDate()}`;
+      const note = {
+        id: Date.now(),
+        date: `${dateStr} (${state.ptSessionsDone || 1}회차)`,
+        part: selectedPtPart,
+        exercise: exercise || `${selectedPtPart} PT 수업 메모`,
+        setting: setting || '세팅 메모 없음',
+        cue: cue || '트레이너 폼 교정 완료'
+      };
+      state.ptNotes.unshift(note);
+      exEl.value = '';
+      setEl.value = '';
+      cueEl.value = '';
+      activePtFilter = '전체';
+      filterPtPart('전체');
+      saveState(`🎓 PT노트 추가 [${note.part}] ${note.exercise} | ${note.setting} | ${note.cue}`, true);
+      showToast(`🎓 [${note.exercise}] PT 노트가 저장 & AI 코치에 전송되었습니다!`);
+    }
+
+    function deletePtNote(noteId) {
+      if (!Array.isArray(state.ptNotes)) return;
+      const target = state.ptNotes.find(n => n.id === noteId);
+      state.ptNotes = state.ptNotes.filter(n => n.id !== noteId);
+      renderPtNotes();
+      saveState(`🎓 PT노트 삭제: ${target ? target.exercise : noteId}`, true);
+      showToast('🗑️ PT 노트가 삭제되었습니다.');
+    }
+
+    function renderPtNotes() {
+      const done = state.ptSessionsDone || 0;
+      const countEl = document.getElementById('ptSessionsCount');
+      const barEl = document.getElementById('ptProgressBar');
+      if (countEl) countEl.textContent = done;
+      if (barEl) barEl.style.width = Math.max(4, Math.min(100, (done / 16) * 100)) + '%';
+
+      const notes = Array.isArray(state.ptNotes) ? state.ptNotes : [];
+      const filtered = activePtFilter === '전체' ? notes : notes.filter(n => n.part === activePtFilter);
+      const badgeEl = document.getElementById('ptNotesCountBadge');
+      if (badgeEl) badgeEl.textContent = `총 ${filtered.length}개`;
+
+      const listEl = document.getElementById('ptNotesList');
+      if (!listEl) return;
+      if (filtered.length === 0) {
+        listEl.innerHTML = `<div class="text-xs text-slate-400 text-center py-4 bg-slate-900/60 rounded-2xl border border-slate-800">해당 부위의 PT 노트가 아직 없습니다. 수업 직후 위에서 30초만 적어두세요!</div>`;
+        return;
+      }
+
+      const partColorMap = {
+        '등': 'bg-indigo-500/20 text-indigo-300 border-indigo-500/40',
+        '가슴': 'bg-rose-500/20 text-rose-300 border-rose-500/40',
+        '하체': 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40',
+        '어깨·팔': 'bg-amber-500/20 text-amber-300 border-amber-500/40',
+        '코어·자세': 'bg-sky-500/20 text-sky-300 border-sky-500/40'
+      };
+
+      listEl.innerHTML = filtered.map(n => `
+        <div class="bg-slate-900/90 border border-slate-700 rounded-2xl p-3 space-y-2">
+          <div class="flex items-start justify-between gap-2">
+            <div class="space-y-1">
+              <div class="flex items-center gap-1.5 flex-wrap">
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold border ${partColorMap[n.part] || 'bg-violet-500/20 text-violet-300 border-violet-500/40'}">${n.part}</span>
+                <span class="text-[10px] text-slate-400 font-semibold">${n.date}</span>
+              </div>
+              <div class="text-xs font-extrabold text-white">${n.exercise}</div>
+            </div>
+            <button onclick="deletePtNote(${n.id})" class="shrink-0 text-[10px] font-bold text-rose-300 bg-rose-500/15 border border-rose-500/30 px-2 py-1 rounded-lg active:scale-95">삭제</button>
+          </div>
+          <div class="bg-slate-950/80 border border-slate-800 rounded-xl px-2.5 py-1.5 text-[11px] text-emerald-300 font-bold">
+            ⚙️ 세팅: ${n.setting}
+          </div>
+          <div class="text-xs text-slate-200 leading-relaxed bg-violet-950/30 border border-violet-500/20 rounded-xl px-2.5 py-2">
+            💡 ${n.cue}
+          </div>
+        </div>
+      `).join('');
+    }
+
     function switchTab(tabName, shouldSync = false) {
       state.activeTab = tabName;
-      ['courseA', 'courseB', 'diet', 'courseHome', 'records'].forEach(t => {
+      ['courseA', 'courseB', 'diet', 'ptNotes', 'courseHome', 'records'].forEach(t => {
         const btn = document.getElementById('tab-' + t);
         if (!btn) return;
         if (t === tabName) {
-          btn.className = 'py-2 px-0.5 rounded-2xl text-[11px] font-extrabold bg-indigo-600 text-white transition shadow';
+          btn.className = 'py-2 px-0.5 rounded-2xl text-[10px] font-extrabold bg-indigo-600 text-white transition shadow';
         } else {
-          btn.className = 'py-2 px-0.5 rounded-2xl text-[11px] font-bold text-slate-400 transition';
+          btn.className = 'py-2 px-0.5 rounded-2xl text-[10px] font-bold text-slate-400 transition';
         }
       });
 
       document.getElementById('workoutListContainer').classList.add('hidden');
       document.getElementById('dietContainer').classList.add('hidden');
       document.getElementById('recordsContainer').classList.add('hidden');
+      document.getElementById('ptNotesContainer').classList.add('hidden');
 
       if (tabName === 'records') {
         document.getElementById('recordsContainer').classList.remove('hidden');
@@ -2190,6 +2449,9 @@
       } else if (tabName === 'diet') {
         document.getElementById('dietContainer').classList.remove('hidden');
         renderDietTab();
+      } else if (tabName === 'ptNotes') {
+        document.getElementById('ptNotesContainer').classList.remove('hidden');
+        renderPtNotes();
       } else {
         document.getElementById('workoutListContainer').classList.remove('hidden');
         renderWorkoutList();
@@ -2365,7 +2627,7 @@
     }
 
     function resetTodaySets() {
-      const courseKey = (state.activeTab === 'records' || state.activeTab === 'diet') ? 'courseA' : state.activeTab;
+      const courseKey = (state.activeTab === 'records' || state.activeTab === 'diet' || state.activeTab === 'ptNotes') ? 'courseA' : state.activeTab;
       state.courses[courseKey].forEach(item => {
         item.sets.forEach(s => { s.done = false; });
       });
