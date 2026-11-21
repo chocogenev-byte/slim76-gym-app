@@ -259,7 +259,7 @@
               ↩️ 방금 1개 취소
             </button>
             <button onclick="restoreTodayDefaultMeals()" class="py-2 px-2 rounded-xl text-[11px] font-extrabold bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 active:scale-95 transition">
-              🔄 오늘식단(0) 초기화
+              🔄 오늘식단(388) 복구
             </button>
             <button onclick="clearTodayMealsOnly()" class="py-2 px-2 rounded-xl text-[11px] font-extrabold bg-rose-500/20 text-rose-300 border border-rose-500/50 active:scale-95 transition">
               🗑️ 음식 전체 0kcal
@@ -747,15 +747,26 @@
       day18FridayFitbitBikeDoneV1: true,
       day18FridayLunchDQPC779V1: true,
       day19SaturdayInitV1: true,
-      lastAction: '19일차 (토) 시작! 어제 고추바사삭 1마리 포함 -436kcal 적자 방어 성공 · 오늘 B코스 하체 + 걷기 준비 🔥',
+      day19SaturdayRestStarbucks388V1: true,
+      lastAction: '19일차 (토) 공식 완전 휴식일(6일 연속 운동 + HRV 25.4ms 회복!) · 아점 스벅 치킨머쉬룸+아메리카노(388kcal · 단24g) 🥪',
       currentWeight: 93.5,
       todayWatchKcal: 0,
-      todayWatchHr: '측정 전 (오늘 B코스 하체 + 오르막 걷기 ⚡)',
-      waterCups: 0,
+      todayWatchHr: '공식 완전 휴식일 🛌 (HRV 25.4ms · 6일 무휴 초과회복)',
+      waterCups: 3,
       psylliumLunch: false,
       psylliumDinner: false,
-      todayMeals: [],
-      activeTab: 'courseB',
+      todayMeals: [
+        {
+          id: 1795226400001,
+          time: '오전 11:00',
+          name: '🥪 스벅 치킨&머쉬룸 멜팅치즈 샌드위치 + ☕ 아메리카노',
+          kcal: 388,
+          carb: 36,
+          protein: 24,
+          fat: 15
+        }
+      ],
+      activeTab: 'diet',
       courses: {
         courseA: [
           {
@@ -1115,10 +1126,10 @@
       },
       watchRecords: [
         {
-          date: '11/21 (토) · 19일차 B코스 하체 + 걷기 출격! ⚡',
-          weight: '최저 93.5 kg (-2.5kg · 수면 깊은수면 104분 회복!)',
-          activeKcal: '진행 예정 (⚡ B코스 하체 + 👟 오르막 걷기)',
-          memo: '😴 핏빗 에어 수면 6시간36분(깊은수면 104분 최상급! · HRV 25.4ms · 안정시 63BPM — 어젯밤 치킨 소화로 심박 +3BPM). 오늘 하체 땀 한 번 쫙 빼고 클린 식단으로 93kg 초반 돌파!'
+          date: '11/21 (토) · 19일차 공식 완전 휴식일 🛌 (6일 연속 운동 초과회복!)',
+          weight: '최저 93.5 kg (-2.5kg · 코르티솔 리셋 데이)',
+          activeKcal: '완전 휴식 🛌 (HRV 34.0→25.4ms · RHR 63BPM 회복 처방)',
+          memo: '🛌 6일 연속 무휴 운동(일~금 7종목 증량!) + 수면 6h36m · HRV 25.4ms(-25%) 급락으로 과학적 완전 휴식일 처방! / 🥪 아점: 스벅 치킨&머쉬룸 샌드위치 + 아메리카노(388kcal · 단24g) — 오늘 식단 1,350~1,450kcal 마감으로 체지방 적자 유지!'
         },
         {
           date: '11/20 (금) · 18일차 공복 자전거 & 고추바사삭 1마리 적자 방어! 🍗',
@@ -1227,8 +1238,8 @@
 
     function normalizeState(raw) {
       const todayKey = new Date().toLocaleDateString('sv-SE');
-      // 19일차(2026-11-21 토) B코스 하체 + 어제 고추바사삭 1마리(-436kcal 방어) 마감 기록 동기화
-      if (todayKey === '2026-11-21' && (!raw || !raw.day19SaturdayInitV1)) {
+      // 19일차(2026-11-21 토) 공식 완전 휴식일 + 스벅 치킨머쉬룸&아메리카노(388kcal) 동기화
+      if (todayKey === '2026-11-21' && (!raw || !raw.day19SaturdayRestStarbucks388V1)) {
         const fresh = JSON.parse(JSON.stringify(defaultData));
         if (raw && raw.lastDateKey === '2026-11-21') {
           if (raw.waterCups && raw.waterCups > fresh.waterCups) fresh.waterCups = raw.waterCups;
@@ -1488,12 +1499,12 @@
       showToast(`↩️ [${removed.name}] (-${removed.kcal}kcal) 삭제 완료!`);
     }
 
-    // 🔄 오늘 기본 식단(19일차 초기화 = 0kcal)으로 즉시 복구
+    // 🔄 오늘 기본 식단(19일차 스벅 치킨머쉬룸 + 아메리카노 = 388kcal)으로 즉시 복구
     function restoreTodayDefaultMeals() {
       state.todayMeals = JSON.parse(JSON.stringify(defaultData.todayMeals));
       renderDietTab();
-      saveState('식단 복구: 19일차 오늘 기본 식단(0kcal)으로 초기화', true);
-      showToast('🔄 19일차 오늘 식단(0kcal) 상태로 초기화되었습니다!');
+      saveState('식단 복구: 19일차 오늘 기본 식단(388kcal · 단백질 24g)으로 복원', true);
+      showToast('🔄 19일차 오늘 식단(388kcal · 단백질 24g) 상태로 복구되었습니다!');
     }
 
     // 🗑️ 수분 기록은 유지하고 오늘 음식 목록만 0kcal로 비우기
