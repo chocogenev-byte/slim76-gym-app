@@ -259,7 +259,7 @@
               ↩️ 방금 1개 취소
             </button>
             <button onclick="restoreTodayDefaultMeals()" class="py-2 px-2 rounded-xl text-[11px] font-extrabold bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 active:scale-95 transition">
-              🔄 오늘식단(779) 복구
+              🔄 오늘식단(0) 초기화
             </button>
             <button onclick="clearTodayMealsOnly()" class="py-2 px-2 rounded-xl text-[11px] font-extrabold bg-rose-500/20 text-rose-300 border border-rose-500/50 active:scale-95 transition">
               🗑️ 음식 전체 0kcal
@@ -668,7 +668,7 @@
 
     const defaultData = {
       updatedAt: Date.now(),
-      lastDateKey: '2026-11-20',
+      lastDateKey: '2026-11-21',
       day6SundaySyncedV1: true,
       day6SundayWorkoutDoneV1: true,
       day6SundayLunchSyncedV1: true,
@@ -746,34 +746,16 @@
       day18FridayInitCoffee937V1: true,
       day18FridayFitbitBikeDoneV1: true,
       day18FridayLunchDQPC779V1: true,
-      lastAction: '18일차 (금) 점심 🍔더블 쿼터파운더 치즈 단품(769kcal·단50g) 완료! (현재 779kcal · 저녁 550~650kcal 초저지방 고단백 대기 🔥)',
+      day19SaturdayInitV1: true,
+      lastAction: '19일차 (토) 시작! 어제 고추바사삭 1마리 포함 -436kcal 적자 방어 성공 · 오늘 B코스 하체 + 걷기 준비 🔥',
       currentWeight: 93.5,
-      todayWatchKcal: 215,
-      todayWatchHr: '스피닝 평균 134 BPM (고강도 12분 · Fitbit 총 256kcal 🔥)',
-      waterCups: 6,
+      todayWatchKcal: 0,
+      todayWatchHr: '측정 전 (오늘 B코스 하체 + 오르막 걷기 ⚡)',
+      waterCups: 0,
       psylliumLunch: false,
       psylliumDinner: false,
-      todayMeals: [
-        {
-          id: 1795154400002,
-          time: '오후 2:40',
-          name: '🍔 맥도날드 더블 쿼터파운더 치즈 단품 (고단백 50g · 감튀 컷!)',
-          kcal: 769,
-          carb: 40,
-          protein: 50,
-          fat: 45
-        },
-        {
-          id: 1795140800001,
-          time: '오전 11:00',
-          name: '☕ 블랙 아메리카노 1잔 (공복 지방연소 부스터)',
-          kcal: 10,
-          carb: 1,
-          protein: 0,
-          fat: 0
-        }
-      ],
-      activeTab: 'diet',
+      todayMeals: [],
+      activeTab: 'courseB',
       courses: {
         courseA: [
           {
@@ -1115,17 +1097,17 @@
           },
           {
             id: 'h4',
-            order: '2단계 유산소 · 공복 실내자전거 22분 45초 완주! 🔥',
+            order: '2단계 유산소 · 1회 20~25분 이내',
             name: '실내 사이클링 / 집 이고진 미니 바이크 타기',
-            zone: '핏빗 에어 자동수신: 평균 134 BPM · 고강도 12분 · 활동 215kcal (Fitbit 총 256kcal)',
+            zone: '기어 적당히 조이고 평균 130~138 BPM 유지 (지난 22분45초 · 134BPM 달성)',
             img: '',
             weight: 134,
             weightStep: 5,
             unit: 'BPM',
-            defaultReps: 23,
+            defaultReps: 25,
             repUnit: '분',
             sets: [
-              { weight: 134, reps: 23, done: true }
+              { weight: 134, reps: 25, done: false }
             ],
             tip: '소파에 눕듯이 타지 말고 허리 뒤에 쿠션을 받쳐 상체를 세운 뒤, 1회 20분 이내로 1,000바퀴 이상 빠르게 굴리기!'
           }
@@ -1133,10 +1115,16 @@
       },
       watchRecords: [
         {
-          date: '11/20 (금) · 18일차 공복 자전거 완주 & 더블쿼터파운더 단품 방어 🍔',
+          date: '11/21 (토) · 19일차 B코스 하체 + 걷기 출격! ⚡',
+          weight: '최저 93.5 kg (-2.5kg · 수면 깊은수면 104분 회복!)',
+          activeKcal: '진행 예정 (⚡ B코스 하체 + 👟 오르막 걷기)',
+          memo: '😴 핏빗 에어 수면 6시간36분(깊은수면 104분 최상급! · HRV 25.4ms · 안정시 63BPM — 어젯밤 치킨 소화로 심박 +3BPM). 오늘 하체 땀 한 번 쫙 빼고 클린 식단으로 93kg 초반 돌파!'
+        },
+        {
+          date: '11/20 (금) · 18일차 공복 자전거 & 고추바사삭 1마리 적자 방어! 🍗',
           weight: '커피 후 93.7 → 운동 후 93.5 kg (신기록 타이 고정 💥)',
           activeKcal: '활동 215 kcal (Fitbit 총 256 kcal · 22분45초 · 134 BPM)',
-          memo: '🚴 공복 실내자전거 22분45초(134BPM · 고강도 12분 · 활동 215/Fitbit 총 256kcal) 완주! / 🍔 점심: 더블 쿼터파운더 치즈 단품(769kcal · 단50g · 감튀 컷!) — 현재 779kcal, 저녁 초저지방 고단백 대기'
+          memo: '🚴 공복 실내자전거 22분45초(134BPM · 고강도 12분) 완주! / 🍽️ 총 1,929kcal · 단백질 175g!! (아메리카노 10 + 더블 쿼터파운더 단품 769 + 저녁 굽네 고추바사삭 1마리 1,150kcal — 오븐치킨이라 1마리 다 먹고도 -436kcal 적자 방어 성공!)'
         },
         {
           date: '11/19 (목) · 17일차 🏆 93.5kg 신기록 & 핏빗 에어·식단 올클리어!',
@@ -1239,10 +1227,10 @@
 
     function normalizeState(raw) {
       const todayKey = new Date().toLocaleDateString('sv-SE');
-      // 18일차(2026-11-20 금) 점심 더블 쿼터파운더 치즈 단품(769kcal) → 현재 779kcal 동기화
-      if (todayKey === '2026-11-20' && (!raw || !raw.day18FridayLunchDQPC779V1)) {
+      // 19일차(2026-11-21 토) B코스 하체 + 어제 고추바사삭 1마리(-436kcal 방어) 마감 기록 동기화
+      if (todayKey === '2026-11-21' && (!raw || !raw.day19SaturdayInitV1)) {
         const fresh = JSON.parse(JSON.stringify(defaultData));
-        if (raw && raw.lastDateKey === '2026-11-20') {
+        if (raw && raw.lastDateKey === '2026-11-21') {
           if (raw.waterCups && raw.waterCups > fresh.waterCups) fresh.waterCups = raw.waterCups;
           if (raw.todayMeals && raw.todayMeals.length > 0) {
             const existingIds = new Set(fresh.todayMeals.map(m => m.id));
@@ -1500,12 +1488,12 @@
       showToast(`↩️ [${removed.name}] (-${removed.kcal}kcal) 삭제 완료!`);
     }
 
-    // 🔄 오늘 기본 식단(아메리카노 10 + 더블 쿼터파운더 치즈 769 = 779kcal)으로 즉시 복구
+    // 🔄 오늘 기본 식단(19일차 초기화 = 0kcal)으로 즉시 복구
     function restoreTodayDefaultMeals() {
       state.todayMeals = JSON.parse(JSON.stringify(defaultData.todayMeals));
       renderDietTab();
-      saveState('식단 복구: 18일차 오늘 기본 식단(779kcal · 단백질 50g)으로 복원', true);
-      showToast('🔄 18일차 오늘 식단(779kcal · 단백질 50g) 상태로 복구되었습니다!');
+      saveState('식단 복구: 19일차 오늘 기본 식단(0kcal)으로 초기화', true);
+      showToast('🔄 19일차 오늘 식단(0kcal) 상태로 초기화되었습니다!');
     }
 
     // 🗑️ 수분 기록은 유지하고 오늘 음식 목록만 0kcal로 비우기
