@@ -259,7 +259,7 @@
               ↩️ 방금 1개 취소
             </button>
             <button onclick="restoreTodayDefaultMeals()" class="py-2 px-2 rounded-xl text-[11px] font-extrabold bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 active:scale-95 transition">
-              🔄 오늘식단(388) 복구
+              🔄 오늘식단(500) 복구
             </button>
             <button onclick="clearTodayMealsOnly()" class="py-2 px-2 rounded-xl text-[11px] font-extrabold bg-rose-500/20 text-rose-300 border border-rose-500/50 active:scale-95 transition">
               🗑️ 음식 전체 0kcal
@@ -768,7 +768,7 @@
 
     const defaultData = {
       updatedAt: Date.now(),
-      lastDateKey: '2026-11-21',
+      lastDateKey: '2026-11-22',
       day6SundaySyncedV1: true,
       day6SundayWorkoutDoneV1: true,
       day6SundayLunchSyncedV1: true,
@@ -849,7 +849,8 @@
       day19SaturdayInitV1: true,
       day19SaturdayRestStarbucks388V1: true,
       day19SaturdayPtNotesTabV1: true,
-      lastAction: '🎓 월·화·수·목 1개월 PT 마스터 노트 탭 신설 완료! (수업 팁 영구 저장 + AI 코치 자동 동기화)',
+      day20SundayHanwooStriploin500V1: true,
+      lastAction: '20일차 (일) 점심 🥩한우 1등급 채끝 250g(500kcal · 단백질 52g 🏆) 반영! HRV 31.0ms 회복 완료!',
       ptSessionsDone: 0,
       ptNotes: [
         {
@@ -871,19 +872,19 @@
       ],
       currentWeight: 93.5,
       todayWatchKcal: 0,
-      todayWatchHr: '공식 완전 휴식일 🛌 (HRV 25.4ms · 6일 무휴 초과회복)',
-      waterCups: 3,
+      todayWatchHr: 'HRV 31.0ms 완벽 회복! (내일 월요일 첫 PT 풀충전 🔥)',
+      waterCups: 2,
       psylliumLunch: false,
       psylliumDinner: false,
       todayMeals: [
         {
-          id: 1795226400001,
-          time: '오전 11:00',
-          name: '🥪 스벅 치킨&머쉬룸 멜팅치즈 샌드위치 + ☕ 아메리카노',
-          kcal: 388,
-          carb: 36,
-          protein: 24,
-          fat: 15
+          id: 1795321400001,
+          time: '오후 1:25',
+          name: '🥩 명품 한우 1등급 채끝살 250g (다이어트 1티어 · 단백질 52g!)',
+          kcal: 500,
+          carb: 0,
+          protein: 52,
+          fat: 31
         }
       ],
       activeTab: 'diet',
@@ -1246,6 +1247,12 @@
       },
       watchRecords: [
         {
+          date: '11/22 (일) · 20일차 🥩 한우 1등급 채끝 250g & 내일 첫 PT 풀충전!',
+          weight: '최저 93.5 kg (-2.5kg · HRV 25.4→31.0ms +22% 회복! 🔥)',
+          activeKcal: '회복 & 월~목 첫 PT 대비 컨디션 완성 (수면 7h52m · 심박 57BPM)',
+          memo: '😴 핏빗 에어 수면 7시간52분(깊은수면 96분 · 렘 113분 · 깨어있음 절반 감소 · HRV 31.0ms 반등)! / 🥩 점심: 명품 한우 1등급 채끝살 250g(500kcal · 단백질 52g · 탄수 0g) — 내일 월요일 첫 PT 풀파워 준비 완료!'
+        },
+        {
           date: '11/21 (토) · 19일차 공식 완전 휴식일 🛌 (6일 연속 운동 초과회복!)',
           weight: '최저 93.5 kg (-2.5kg · 코르티솔 리셋 데이)',
           activeKcal: '완전 휴식 🛌 (HRV 34.0→25.4ms · RHR 63BPM 회복 처방)',
@@ -1358,10 +1365,10 @@
 
     function normalizeState(raw) {
       const todayKey = new Date().toLocaleDateString('sv-SE');
-      // 19일차(2026-11-21 토) PT 마스터 노트 탭 신설 동기화
-      if (todayKey === '2026-11-21' && (!raw || !raw.day19SaturdayPtNotesTabV1)) {
+      // 20일차(2026-11-22 일) 점심 한우 1등급 채끝 250g(500kcal · 단52g) + HRV 31.0ms 회복 동기화
+      if (todayKey === '2026-11-22' && (!raw || !raw.day20SundayHanwooStriploin500V1)) {
         const fresh = JSON.parse(JSON.stringify(defaultData));
-        if (raw && raw.lastDateKey === '2026-11-21') {
+        if (raw && raw.lastDateKey === '2026-11-22') {
           if (raw.waterCups && raw.waterCups > fresh.waterCups) fresh.waterCups = raw.waterCups;
           if (raw.todayMeals && raw.todayMeals.length > 0) {
             const existingIds = new Set(fresh.todayMeals.map(m => m.id));
@@ -1628,12 +1635,12 @@
       showToast(`↩️ [${removed.name}] (-${removed.kcal}kcal) 삭제 완료!`);
     }
 
-    // 🔄 오늘 기본 식단(19일차 스벅 치킨머쉬룸 + 아메리카노 = 388kcal)으로 즉시 복구
+    // 🔄 오늘 기본 식단(20일차 한우 1등급 채끝 250g = 500kcal)으로 즉시 복구
     function restoreTodayDefaultMeals() {
       state.todayMeals = JSON.parse(JSON.stringify(defaultData.todayMeals));
       renderDietTab();
-      saveState('식단 복구: 19일차 오늘 기본 식단(388kcal · 단백질 24g)으로 복원', true);
-      showToast('🔄 19일차 오늘 식단(388kcal · 단백질 24g) 상태로 복구되었습니다!');
+      saveState('식단 복구: 20일차 오늘 기본 식단(한우 채끝 500kcal · 단백질 52g)으로 복원', true);
+      showToast('🔄 20일차 오늘 식단(500kcal · 단백질 52g) 상태로 복구되었습니다!');
     }
 
     // 🗑️ 수분 기록은 유지하고 오늘 음식 목록만 0kcal로 비우기
