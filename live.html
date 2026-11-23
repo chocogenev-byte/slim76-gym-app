@@ -852,16 +852,17 @@
       day20SundayHanwooStriploin500V1: true,
       day21MondayPt1LunchCurry385V1: true,
       day21MondayPt1AnkleNoteV1: true,
-      lastAction: '🎓 PT 1회차 핵심 진단 추가: 발목 가동성(키높이 깔창·쿠션화 주의) & 평평한 웨이트화 세팅 저장!',
+      day21MondayPt1AnkleYipsV2: true,
+      lastAction: '🎓 PT 1회차 핵심 진단 업데이트: 키높이 깔창 → 발목 입스(Yips · 신경/균형 감각 꼬임) & 맨발 감각 재교육 저장!',
       ptSessionsDone: 1,
       ptNotes: [
         {
           id: 1795426800001,
           date: '11/23 (1회차 PT)',
           part: '코어·자세',
-          exercise: '🦶 발목 가동성 교정 & 키높이 깔창/웨이트 신발 세팅',
-          setting: '근력·PT: 바닥 평평한 신발(반스·컨버스·메트콘) 또는 양말 / 걷기: 호카 마하 6',
-          cue: '키높이 깔창 습관으로 아킬레스건·발목이 굳으면 하체 시 허리(L5-S1)가 대신 말림! 매일 2분 [벽 대고 뒤꿈치 고정 무릎 터치 10회 + 종아리 폼롤러 1분]으로 발목 가동성 풀기!'
+          exercise: '🦶 발목 입스(Yips · 균형감각 꼬임) & 키높이 깔창 교정',
+          setting: '근력·PT: 평평한 단화(반스·컨버스) 또는 맨발/양말 / 걷기: 호카 마하 6',
+          cue: '키높이 깔창 습관으로 발목·발바닥 신경(고유수용감각)이 꼬여 평지에서 중심 잡는 감각 저하(발목 입스)! 매일 1분 [맨발 발바닥 3점(엄지·새끼·뒤꿈치) 꾹 누르고 한 발 서기 30초]로 뇌-발목 신경 재교육!'
         },
         {
           id: 1795236000001,
@@ -1381,8 +1382,8 @@
 
     function normalizeState(raw) {
       const todayKey = new Date().toLocaleDateString('sv-SE');
-      // 21일차(2026-11-23 월) PT 1회차 발목 가동성 진단 노트 추가 동기화
-      if (todayKey === '2026-11-23' && (!raw || !raw.day21MondayPt1AnkleNoteV1)) {
+      // 21일차(2026-11-23 월) PT 1회차 발목 입스(Yips) 진단 노트 정정 동기화
+      if (todayKey === '2026-11-23' && (!raw || !raw.day21MondayPt1AnkleYipsV2)) {
         const fresh = JSON.parse(JSON.stringify(defaultData));
         if (raw && raw.lastDateKey === '2026-11-23') {
           if (raw.waterCups && raw.waterCups > fresh.waterCups) fresh.waterCups = raw.waterCups;
