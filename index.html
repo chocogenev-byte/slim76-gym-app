@@ -851,9 +851,18 @@
       day19SaturdayPtNotesTabV1: true,
       day20SundayHanwooStriploin500V1: true,
       day21MondayPt1LunchCurry385V1: true,
-      lastAction: '21일차 (월) 🎓 PT 1회차(78분 · 118BPM · Fitbit 활동 1,010kcal!) + 점심 🍱저당 버터커리 닭가슴살 도시락(385kcal) 반영 🏆',
+      day21MondayPt1AnkleNoteV1: true,
+      lastAction: '🎓 PT 1회차 핵심 진단 추가: 발목 가동성(키높이 깔창·쿠션화 주의) & 평평한 웨이트화 세팅 저장!',
       ptSessionsDone: 1,
       ptNotes: [
+        {
+          id: 1795426800001,
+          date: '11/23 (1회차 PT)',
+          part: '코어·자세',
+          exercise: '🦶 발목 가동성 교정 & 키높이 깔창/웨이트 신발 세팅',
+          setting: '근력·PT: 바닥 평평한 신발(반스·컨버스·메트콘) 또는 양말 / 걷기: 호카 마하 6',
+          cue: '키높이 깔창 습관으로 아킬레스건·발목이 굳으면 하체 시 허리(L5-S1)가 대신 말림! 매일 2분 [벽 대고 뒤꿈치 고정 무릎 터치 10회 + 종아리 폼롤러 1분]으로 발목 가동성 풀기!'
+        },
         {
           id: 1795236000001,
           date: '11/21 (사전 세팅)',
@@ -1372,8 +1381,8 @@
 
     function normalizeState(raw) {
       const todayKey = new Date().toLocaleDateString('sv-SE');
-      // 21일차(2026-11-23 월) PT 1회차(78분·118BPM) + 점심 저당 커리 도시락(385kcal) 동기화
-      if (todayKey === '2026-11-23' && (!raw || !raw.day21MondayPt1LunchCurry385V1)) {
+      // 21일차(2026-11-23 월) PT 1회차 발목 가동성 진단 노트 추가 동기화
+      if (todayKey === '2026-11-23' && (!raw || !raw.day21MondayPt1AnkleNoteV1)) {
         const fresh = JSON.parse(JSON.stringify(defaultData));
         if (raw && raw.lastDateKey === '2026-11-23') {
           if (raw.waterCups && raw.waterCups > fresh.waterCups) fresh.waterCups = raw.waterCups;
@@ -1384,7 +1393,12 @@
             });
           }
         }
-        if (raw && Array.isArray(raw.ptNotes) && raw.ptNotes.length > 0) fresh.ptNotes = raw.ptNotes;
+        if (raw && Array.isArray(raw.ptNotes) && raw.ptNotes.length > 0) {
+          const existingNoteIds = new Set(fresh.ptNotes.map(n => n.id));
+          raw.ptNotes.forEach(n => {
+            if (!existingNoteIds.has(n.id)) fresh.ptNotes.push(n);
+          });
+        }
         if (raw && typeof raw.ptSessionsDone === 'number') fresh.ptSessionsDone = Math.max(raw.ptSessionsDone, fresh.ptSessionsDone);
         return fresh;
       }
