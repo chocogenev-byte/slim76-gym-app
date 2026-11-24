@@ -855,9 +855,18 @@
       day21MondayPt1AnkleYipsV2: true,
       day22TuesdayPt2Meals1620V1: true,
       day22TuesdayFinalTheDanbaek1725V1: true,
-      lastAction: '22일차 (화) 최종 마감 🏆 PT 2회차(103분) + 총 1,725kcal · 단백질 100g (-1,075kcal 적자 · 8시15분 칼마감!)',
+      day22TuesdayPt2HunchedBackNoteV1: true,
+      lastAction: '🎓 PT 2회차 핵심 진단 저장: 굽은 등(흉추 후만·라운드숄더) 교정 & 매일 3분 흉추 펴기·벽 천사 루틴 추가!',
       ptSessionsDone: 2,
       ptNotes: [
+        {
+          id: 1795519100001,
+          date: '11/24 (2회차 PT)',
+          part: '등',
+          exercise: '🦴 굽은 등(흉추 후만·라운드숄더) 교정 & 등 신경 깨우기',
+          setting: '무게 욕심 X · 저중량 고집중 + 매일 밤 3분 흉추 펴기 숙제',
+          cue: '등이 굽어 근육이 잠들어 있어서 당길 때 팔로만 힘이 샘(어깨 뚜둑·허리 부담의 근본 원인!). [1] 폼롤러(수건말이) 날개뼈 아래 대고 흉추 젖히기 10회 [2] 벽에 뒤통수·등·팔꿈치 붙이고 W자 내리기(벽천사) 10회로 날개뼈 모이는 느낌부터 깨우기!'
+        },
         {
           id: 1795426800001,
           date: '11/23 (1회차 PT)',
@@ -1417,8 +1426,8 @@
 
     function normalizeState(raw) {
       const todayKey = new Date().toLocaleDateString('sv-SE');
-      // 22일차(2026-11-24 화) 저녁 더단백 1팩 추가 → 최종 1,725kcal · 단백질 100g 마감 동기화
-      if (todayKey === '2026-11-24' && (!raw || !raw.day22TuesdayFinalTheDanbaek1725V1)) {
+      // 22일차(2026-11-24 화) PT 2회차 굽은 등 교정 노트 추가 동기화
+      if (todayKey === '2026-11-24' && (!raw || !raw.day22TuesdayPt2HunchedBackNoteV1)) {
         const fresh = JSON.parse(JSON.stringify(defaultData));
         if (raw && raw.lastDateKey === '2026-11-24') {
           if (raw.waterCups && raw.waterCups > fresh.waterCups) fresh.waterCups = raw.waterCups;
