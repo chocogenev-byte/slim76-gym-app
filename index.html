@@ -259,7 +259,7 @@
               ↩️ 방금 1개 취소
             </button>
             <button onclick="restoreTodayDefaultMeals()" class="py-2 px-2 rounded-xl text-[11px] font-extrabold bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 active:scale-95 transition">
-              🔄 오늘식단(385) 복구
+              🔄 오늘식단(1,620) 복구
             </button>
             <button onclick="clearTodayMealsOnly()" class="py-2 px-2 rounded-xl text-[11px] font-extrabold bg-rose-500/20 text-rose-300 border border-rose-500/50 active:scale-95 transition">
               🗑️ 음식 전체 0kcal
@@ -768,7 +768,7 @@
 
     const defaultData = {
       updatedAt: Date.now(),
-      lastDateKey: '2026-11-23',
+      lastDateKey: '2026-11-24',
       day6SundaySyncedV1: true,
       day6SundayWorkoutDoneV1: true,
       day6SundayLunchSyncedV1: true,
@@ -853,8 +853,9 @@
       day21MondayPt1LunchCurry385V1: true,
       day21MondayPt1AnkleNoteV1: true,
       day21MondayPt1AnkleYipsV2: true,
-      lastAction: '🎓 PT 1회차 핵심 진단 업데이트: 키높이 깔창 → 발목 입스(Yips · 신경/균형 감각 꼬임) & 맨발 감각 재교육 저장!',
-      ptSessionsDone: 1,
+      day22TuesdayPt2Meals1620V1: true,
+      lastAction: '22일차 (화) 🎓 PT 2회차(103분 · Fitbit 활동 601/총 2,568kcal) + 현재 섭취 1,620kcal(단백질 80g · 저녁 무지방 고단백 보충 추천 🔥)',
+      ptSessionsDone: 2,
       ptNotes: [
         {
           id: 1795426800001,
@@ -882,23 +883,41 @@
         }
       ],
       currentWeight: 93.5,
-      todayWatchKcal: 750,
-      todayWatchHr: 'PT 1회차 78분 118BPM (Fitbit 활동 1,010 / 총 2,704kcal 🔥)',
+      todayWatchKcal: 490,
+      todayWatchHr: 'PT 2회차 103분 95BPM (Fitbit 활동 601 / 총 2,568kcal · 6,477보 🔥)',
       waterCups: 5,
       psylliumLunch: false,
       psylliumDinner: false,
       todayMeals: [
         {
-          id: 1795410000001,
-          time: '오후 2:00',
-          name: '🍱 CJ 밸런스밀 저당 버터커리 닭가슴살 도시락',
-          kcal: 385,
-          carb: 44,
-          protein: 21,
-          fat: 13
+          id: 1795515000003,
+          time: '낮/오후',
+          name: '🥩 수육 약간 (약 80~100g)',
+          kcal: 220,
+          carb: 0,
+          protein: 18,
+          fat: 16
+        },
+        {
+          id: 1795514000002,
+          time: '낮/오후',
+          name: '🍲 순대국밥 1그릇 (밥 포함)',
+          kcal: 700,
+          carb: 78,
+          protein: 32,
+          fat: 26
+        },
+        {
+          id: 1795513000001,
+          time: '낮/오후',
+          name: '🍔 롯데리아 더블 리아버거 단품 1개',
+          kcal: 700,
+          carb: 46,
+          protein: 30,
+          fat: 42
         }
       ],
-      activeTab: 'ptNotes',
+      activeTab: 'diet',
       courses: {
         courseA: [
           {
@@ -1258,6 +1277,12 @@
       },
       watchRecords: [
         {
+          date: '11/24 (화) · 22일차 🎓 2회차 PT 103분 완주! (Fitbit 활동 601kcal · 6,477보)',
+          weight: '최저 93.5 kg (-2.5kg · 수면효율 98.4% 깨어있음 6분! · HRV 29.9ms)',
+          activeKcal: '활동 490 kcal (Fitbit 활동 601 / 20시 총 2,568kcal · 자정 ~2,800kcal)',
+          memo: '🎓 2/16회 PT(18:22~20:05 · 103분 · 평균 95BPM · 367kcal) + 걷기(42kcal) 핏빗 에어 자동수신! / 🍽️ 현재 1,620kcal(더블 리아버거 700 + 순대국밥 700 + 수육 약간 220 · 탄124/단80/지84g) — 저녁은 닭가슴살·더단백 무지방 단백질만 보충!'
+        },
+        {
           date: '11/23 (월) · 21일차 🎓 1회차 PT 78분 완주! (Fitbit 활동 1,010kcal 폭발 🔥)',
           weight: '최저 93.5 kg (-2.5kg · 수면효율 98% 깨어있음 9분!)',
           activeKcal: '활동 750 kcal (Fitbit 활동 1,010 / 현재 총 2,704kcal · PT 78분 118BPM)',
@@ -1382,10 +1407,10 @@
 
     function normalizeState(raw) {
       const todayKey = new Date().toLocaleDateString('sv-SE');
-      // 21일차(2026-11-23 월) PT 1회차 발목 입스(Yips) 진단 노트 정정 동기화
-      if (todayKey === '2026-11-23' && (!raw || !raw.day21MondayPt1AnkleYipsV2)) {
+      // 22일차(2026-11-24 화) PT 2회차(103분) + 현재 식단 1,620kcal 동기화
+      if (todayKey === '2026-11-24' && (!raw || !raw.day22TuesdayPt2Meals1620V1)) {
         const fresh = JSON.parse(JSON.stringify(defaultData));
-        if (raw && raw.lastDateKey === '2026-11-23') {
+        if (raw && raw.lastDateKey === '2026-11-24') {
           if (raw.waterCups && raw.waterCups > fresh.waterCups) fresh.waterCups = raw.waterCups;
           if (raw.todayMeals && raw.todayMeals.length > 0) {
             const existingIds = new Set(fresh.todayMeals.map(m => m.id));
@@ -1657,12 +1682,12 @@
       showToast(`↩️ [${removed.name}] (-${removed.kcal}kcal) 삭제 완료!`);
     }
 
-    // 🔄 오늘 기본 식단(21일차 저당 버터커리 도시락 = 385kcal)으로 즉시 복구
+    // 🔄 오늘 기본 식단(22일차 더블리아버거+순대국밥+수육 = 1,620kcal)으로 즉시 복구
     function restoreTodayDefaultMeals() {
       state.todayMeals = JSON.parse(JSON.stringify(defaultData.todayMeals));
       renderDietTab();
-      saveState('식단 복구: 21일차 오늘 기본 식단(저당 커리 도시락 385kcal · 단백질 21g)으로 복원', true);
-      showToast('🔄 21일차 오늘 식단(385kcal · 단백질 21g) 상태로 복구되었습니다!');
+      saveState('식단 복구: 22일차 오늘 기본 식단(1,620kcal · 단백질 80g)으로 복원', true);
+      showToast('🔄 22일차 오늘 식단(1,620kcal · 단백질 80g) 상태로 복구되었습니다!');
     }
 
     // 🗑️ 수분 기록은 유지하고 오늘 음식 목록만 0kcal로 비우기
