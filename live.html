@@ -259,7 +259,7 @@
               ↩️ 방금 1개 취소
             </button>
             <button onclick="restoreTodayDefaultMeals()" class="py-2 px-2 rounded-xl text-[11px] font-extrabold bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 active:scale-95 transition">
-              🔄 오늘식단(1,620) 복구
+              🔄 오늘식단(1,725) 복구
             </button>
             <button onclick="clearTodayMealsOnly()" class="py-2 px-2 rounded-xl text-[11px] font-extrabold bg-rose-500/20 text-rose-300 border border-rose-500/50 active:scale-95 transition">
               🗑️ 음식 전체 0kcal
@@ -854,7 +854,8 @@
       day21MondayPt1AnkleNoteV1: true,
       day21MondayPt1AnkleYipsV2: true,
       day22TuesdayPt2Meals1620V1: true,
-      lastAction: '22일차 (화) 🎓 PT 2회차(103분 · Fitbit 활동 601/총 2,568kcal) + 현재 섭취 1,620kcal(단백질 80g · 저녁 무지방 고단백 보충 추천 🔥)',
+      day22TuesdayFinalTheDanbaek1725V1: true,
+      lastAction: '22일차 (화) 최종 마감 🏆 PT 2회차(103분) + 총 1,725kcal · 단백질 100g (-1,075kcal 적자 · 8시15분 칼마감!)',
       ptSessionsDone: 2,
       ptNotes: [
         {
@@ -889,6 +890,15 @@
       psylliumLunch: false,
       psylliumDinner: false,
       todayMeals: [
+        {
+          id: 1795518700004,
+          time: '오후 8:15',
+          name: '🥤 더단백 드링크 1팩 (저녁 8시15분 깔끔 마감 · 단백질 20g)',
+          kcal: 105,
+          carb: 2,
+          protein: 20,
+          fat: 2
+        },
         {
           id: 1795515000003,
           time: '낮/오후',
@@ -1277,10 +1287,10 @@
       },
       watchRecords: [
         {
-          date: '11/24 (화) · 22일차 🎓 2회차 PT 103분 완주! (Fitbit 활동 601kcal · 6,477보)',
-          weight: '최저 93.5 kg (-2.5kg · 수면효율 98.4% 깨어있음 6분! · HRV 29.9ms)',
+          date: '11/24 (화) · 22일차 🎓 PT 2회차 & 더단백 깔끔 마감 🏆',
+          weight: '최저 93.5 kg (-2.5kg · 수면효율 98.4% · HRV 29.9ms)',
           activeKcal: '활동 490 kcal (Fitbit 활동 601 / 20시 총 2,568kcal · 자정 ~2,800kcal)',
-          memo: '🎓 2/16회 PT(18:22~20:05 · 103분 · 평균 95BPM · 367kcal) + 걷기(42kcal) 핏빗 에어 자동수신! / 🍽️ 현재 1,620kcal(더블 리아버거 700 + 순대국밥 700 + 수육 약간 220 · 탄124/단80/지84g) — 저녁은 닭가슴살·더단백 무지방 단백질만 보충!'
+          memo: '🎓 2/16회 PT(18:22~20:05 · 103분 · 95BPM · 367kcal) + 걷기(42kcal) 완주! / 🍽️ 최종 1,725kcal · 단백질 100g (더블리아버거 700 + 순대국밥 700 + 수육 약간 220 + 저녁 더단백 105kcal 8시15분 칼마감 · -1,075kcal 적자!)'
         },
         {
           date: '11/23 (월) · 21일차 🎓 1회차 PT 78분 완주! (Fitbit 활동 1,010kcal 폭발 🔥)',
@@ -1407,8 +1417,8 @@
 
     function normalizeState(raw) {
       const todayKey = new Date().toLocaleDateString('sv-SE');
-      // 22일차(2026-11-24 화) PT 2회차(103분) + 현재 식단 1,620kcal 동기화
-      if (todayKey === '2026-11-24' && (!raw || !raw.day22TuesdayPt2Meals1620V1)) {
+      // 22일차(2026-11-24 화) 저녁 더단백 1팩 추가 → 최종 1,725kcal · 단백질 100g 마감 동기화
+      if (todayKey === '2026-11-24' && (!raw || !raw.day22TuesdayFinalTheDanbaek1725V1)) {
         const fresh = JSON.parse(JSON.stringify(defaultData));
         if (raw && raw.lastDateKey === '2026-11-24') {
           if (raw.waterCups && raw.waterCups > fresh.waterCups) fresh.waterCups = raw.waterCups;
@@ -1682,12 +1692,12 @@
       showToast(`↩️ [${removed.name}] (-${removed.kcal}kcal) 삭제 완료!`);
     }
 
-    // 🔄 오늘 기본 식단(22일차 더블리아버거+순대국밥+수육 = 1,620kcal)으로 즉시 복구
+    // 🔄 오늘 기본 식단(22일차 더블리아+순대국밥+수육+더단백 = 1,725kcal)으로 즉시 복구
     function restoreTodayDefaultMeals() {
       state.todayMeals = JSON.parse(JSON.stringify(defaultData.todayMeals));
       renderDietTab();
-      saveState('식단 복구: 22일차 오늘 기본 식단(1,620kcal · 단백질 80g)으로 복원', true);
-      showToast('🔄 22일차 오늘 식단(1,620kcal · 단백질 80g) 상태로 복구되었습니다!');
+      saveState('식단 복구: 22일차 오늘 기본 식단(1,725kcal · 단백질 100g)으로 복원', true);
+      showToast('🔄 22일차 오늘 식단(1,725kcal · 단백질 100g) 상태로 복구되었습니다!');
     }
 
     // 🗑️ 수분 기록은 유지하고 오늘 음식 목록만 0kcal로 비우기
