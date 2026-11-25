@@ -259,7 +259,7 @@
               ↩️ 방금 1개 취소
             </button>
             <button onclick="restoreTodayDefaultMeals()" class="py-2 px-2 rounded-xl text-[11px] font-extrabold bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 active:scale-95 transition">
-              🔄 오늘식단(485) 복구
+              🔄 오늘식단(1,535) 복구
             </button>
             <button onclick="clearTodayMealsOnly()" class="py-2 px-2 rounded-xl text-[11px] font-extrabold bg-rose-500/20 text-rose-300 border border-rose-500/50 active:scale-95 transition">
               🗑️ 음식 전체 0kcal
@@ -858,7 +858,8 @@
       day22TuesdayPt2HunchedBackNoteV1: true,
       day23WednesdayPt3InitV1: true,
       day23WednesdayLunchChicken2SmallRice485V1: true,
-      lastAction: '23일차 (수) 점심 🍗실온 닭가슴살 2팩(떡볶이·블랙페퍼)+🍚햇반 작은공기(485kcal · 단54g · 지5g 🏆) 반영!',
+      day23WednesdayFinalMoksal400Rice1535V1: true,
+      lastAction: '23일차 (수) 최종 마감 🏆 PT 3회차 + 총 1,535kcal · 단백질 139g (-1,215kcal 적자 · 클린 완승!)',
       ptSessionsDone: 3,
       ptNotes: [
         {
@@ -901,6 +902,15 @@
       psylliumLunch: false,
       psylliumDinner: false,
       todayMeals: [
+        {
+          id: 1795605000002,
+          time: '오후 6:30',
+          name: '🥩 직화 목살 구이 400g + 🍚 발아현미밥 (단백질 85g · 클린 마감!)',
+          kcal: 1050,
+          carb: 55,
+          protein: 85,
+          fat: 49
+        },
         {
           id: 1795592400001,
           time: '오후 2:00',
@@ -1271,10 +1281,10 @@
       },
       watchRecords: [
         {
-          date: '11/25 (수) · 23일차 🎓 PT 3회차(72분) & 헬창 교과서 점심 🏆',
-          weight: '최저 93.5 kg (-2.5kg · 금강세트 1kg 가성비 소고기 픽!)',
-          activeKcal: '활동 490 kcal (Fitbit 활동 603 / 16시 총 2,121kcal · 자정 ~2,750kcal)',
-          memo: '🎓 3/16회 PT(12:08~13:20 · 72분 · 100BPM · 286kcal) + 워밍업 걷기(13분 · 131BPM · 160kcal) 완주! / 🍗 점심: 실온 닭가슴살 2팩(240g) + 햇반 작은공기(130g) = 485kcal · 탄54/단54/지5g 완벽! 저녁 목살300g+발아현미밥이면 1,385kcal·단120g 정조준!'
+          date: '11/25 (수) · 23일차 🎓 PT 3회차 & 클린 1,535kcal 완승! 🏆',
+          weight: '최저 93.5 kg (-2.5kg · 금강세트 1kg 픽!)',
+          activeKcal: '활동 490 kcal (Fitbit 활동 603 / 자정 총 ~2,750kcal)',
+          memo: '🎓 3/16회 PT(72분·100BPM·286kcal) + 워밍업 걷기(13분·131BPM·160kcal) 완주! / 🍽️ 최종 1,535kcal · 단백질 139g!! (점심 닭가슴살 2팩+작은공기 485 + 저녁 목살 400g+발아현미밥 1,050kcal · -1,215kcal 초대형 적자 완벽 마감!)'
         },
         {
           date: '11/24 (화) · 22일차 🎓 PT 2회차 & 더단백 깔끔 마감 🏆',
@@ -1407,8 +1417,8 @@
 
     function normalizeState(raw) {
       const todayKey = new Date().toLocaleDateString('sv-SE');
-      // 23일차(2026-11-25 수) 점심 닭가슴살 2팩+햇반 작은공기(485kcal · 단54g) 동기화
-      if (todayKey === '2026-11-25' && (!raw || !raw.day23WednesdayLunchChicken2SmallRice485V1)) {
+      // 23일차(2026-11-25 수) 저녁 목살400g+발아현미밥 추가 → 최종 1,535kcal · 단백질 139g 마감 동기화
+      if (todayKey === '2026-11-25' && (!raw || !raw.day23WednesdayFinalMoksal400Rice1535V1)) {
         const fresh = JSON.parse(JSON.stringify(defaultData));
         if (raw && raw.lastDateKey === '2026-11-25') {
           if (raw.waterCups && raw.waterCups > fresh.waterCups) fresh.waterCups = raw.waterCups;
@@ -1682,12 +1692,12 @@
       showToast(`↩️ [${removed.name}] (-${removed.kcal}kcal) 삭제 완료!`);
     }
 
-    // 🔄 오늘 기본 식단(23일차 닭가슴살 2팩+햇반 작은공기 = 485kcal)으로 즉시 복구
+    // 🔄 오늘 기본 식단(23일차 점심 485 + 저녁 목살400g·발아현미밥 1,050 = 1,535kcal)으로 즉시 복구
     function restoreTodayDefaultMeals() {
       state.todayMeals = JSON.parse(JSON.stringify(defaultData.todayMeals));
       renderDietTab();
-      saveState('식단 복구: 23일차 오늘 기본 식단(485kcal · 단백질 54g)으로 복원', true);
-      showToast('🔄 23일차 오늘 식단(485kcal · 단백질 54g) 상태로 복구되었습니다!');
+      saveState('식단 복구: 23일차 오늘 기본 식단(1,535kcal · 단백질 139g)으로 복원', true);
+      showToast('🔄 23일차 오늘 식단(1,535kcal · 단백질 139g) 상태로 복구되었습니다!');
     }
 
     // 🗑️ 수분 기록은 유지하고 오늘 음식 목록만 0kcal로 비우기
