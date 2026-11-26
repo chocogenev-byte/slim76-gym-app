@@ -259,7 +259,7 @@
               ↩️ 방금 1개 취소
             </button>
             <button onclick="restoreTodayDefaultMeals()" class="py-2 px-2 rounded-xl text-[11px] font-extrabold bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 active:scale-95 transition">
-              🔄 오늘식단(1,395) 복구
+              🔄 오늘식단(1,995) 복구
             </button>
             <button onclick="clearTodayMealsOnly()" class="py-2 px-2 rounded-xl text-[11px] font-extrabold bg-rose-500/20 text-rose-300 border border-rose-500/50 active:scale-95 transition">
               🗑️ 음식 전체 0kcal
@@ -861,8 +861,9 @@
       day23WednesdayFinalMoksal400Rice1535V1: true,
       day24ThursdayLunch755V1: true,
       day24ThursdayFinalYukhoe400V1: true,
-      lastAction: '24일차 (목) 저녁 🥩직접 무친 육회 400g(640kcal · 단88g) 완료! 총 1,395kcal · 단백질 148g · 지방 32g 6시 칼마감 🏆',
-      ptSessionsDone: 3,
+      day24ThursdayFinalWhopper1995V1: true,
+      lastAction: '24일차 (목) 최종 마감 🏆 와퍼 딱 1개 방어! 총 1,995kcal · 단백질 177g (-605kcal 적자 유지 · 1주차 PT 완주!)',
+      ptSessionsDone: 4,
       ptNotes: [
         {
           id: 1795519100001,
@@ -904,6 +905,15 @@
       psylliumLunch: false,
       psylliumDinner: false,
       todayMeals: [
+        {
+          id: 1795694500003,
+          time: '오후 9:15',
+          name: '🍔 버거킹 와퍼 단품 1개 (딱 1개 방어 · 1주차 PT 리피드!)',
+          kcal: 600,
+          carb: 49,
+          protein: 29,
+          fat: 32
+        },
         {
           id: 1795683400002,
           time: '오후 5:55',
@@ -1283,10 +1293,10 @@
       },
       watchRecords: [
         {
-          date: '11/26 (목) · 24일차 🥩 육회 400g 6시 칼마감! (1,395kcal · 단148g 🏆)',
-          weight: '최저 93.5 kg (-2.5kg · 2일 연속 초클린 마감!)',
-          activeKcal: '목요일 PT 4회차 / 활동 소모 반영 대기',
-          memo: '🍗 점심: 햇반 큰공기(300g)+닭가슴살 2팩+김치(755kcal · 탄113/단60/지6g) + 🥩 저녁: 직접 무친 육회 400g(640kcal · 단88g · 5시55분 마감!) = 총 1,395kcal · 순탄수 118g · 단백질 148g · 지방 32g 완벽 클린!'
+          date: '11/26 (목) · 24일차 🎓 1주차 PT 4회 완주 & 와퍼 1개 적자 방어! 🏆',
+          weight: '최저 93.5 kg (-2.5kg · 4일 연속 PT 완주!)',
+          activeKcal: '목요일 PT 4/16회 완료 (추정 총 소모 ~2,600kcal)',
+          memo: '🍗 점심: 햇반 큰공기+닭가슴살 2팩+김치(755) + 🥩 저녁: 육회 400g(640) + 🍔 밤 와퍼 딱 1개 방어(600) = 최종 1,995kcal · 단백질 177g!! (-605kcal 적자 유지 · 살 0g 방어 & 1주차 PT 완벽 리피드!)'
         },
         {
           date: '11/25 (수) · 23일차 🎓 PT 3회차 & 클린 1,535kcal 완승! 🏆',
@@ -1425,8 +1435,8 @@
 
     function normalizeState(raw) {
       const todayKey = new Date().toLocaleDateString('sv-SE');
-      // 24일차(2026-11-26 목) 저녁 직접 무친 육회 400g 추가 → 총 1,395kcal · 단백질 148g 마감 동기화
-      if (todayKey === '2026-11-26' && (!raw || !raw.day24ThursdayFinalYukhoe400V1)) {
+      // 24일차(2026-11-26 목) 밤 와퍼 딱 1개 방어 → 최종 1,995kcal · 단백질 177g (-605kcal 적자 유지) 동기화
+      if (todayKey === '2026-11-26' && (!raw || !raw.day24ThursdayFinalWhopper1995V1)) {
         const fresh = JSON.parse(JSON.stringify(defaultData));
         if (raw && raw.lastDateKey === '2026-11-26') {
           if (raw.waterCups && raw.waterCups > fresh.waterCups) fresh.waterCups = raw.waterCups;
@@ -1700,12 +1710,12 @@
       showToast(`↩️ [${removed.name}] (-${removed.kcal}kcal) 삭제 완료!`);
     }
 
-    // 🔄 오늘 기본 식단(24일차 점심 755 + 저녁 육회 400g 640 = 1,395kcal)으로 즉시 복구
+    // 🔄 오늘 기본 식단(24일차 점심 755 + 육회 640 + 와퍼 1개 600 = 1,995kcal)으로 즉시 복구
     function restoreTodayDefaultMeals() {
       state.todayMeals = JSON.parse(JSON.stringify(defaultData.todayMeals));
       renderDietTab();
-      saveState('식단 복구: 24일차 오늘 기본 식단(1,395kcal · 단백질 148g)으로 복원', true);
-      showToast('🔄 24일차 오늘 식단(1,395kcal · 단백질 148g) 상태로 복구되었습니다!');
+      saveState('식단 복구: 24일차 오늘 기본 식단(1,995kcal · 단백질 177g)으로 복원', true);
+      showToast('🔄 24일차 오늘 식단(1,995kcal · 단백질 177g) 상태로 복구되었습니다!');
     }
 
     // 🗑️ 수분 기록은 유지하고 오늘 음식 목록만 0kcal로 비우기
