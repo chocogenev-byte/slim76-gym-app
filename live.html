@@ -768,7 +768,7 @@
 
     const defaultData = {
       updatedAt: Date.now(),
-      lastDateKey: '2026-11-26',
+      lastDateKey: '2026-11-28',
       day6SundaySyncedV1: true,
       day6SundayWorkoutDoneV1: true,
       day6SundayLunchSyncedV1: true,
@@ -862,7 +862,8 @@
       day24ThursdayLunch755V1: true,
       day24ThursdayFinalYukhoe400V1: true,
       day24ThursdayFinalWhopper1995V1: true,
-      lastAction: '24일차 (목) 최종 마감 🏆 와퍼 딱 1개 방어! 총 1,995kcal · 단백질 177g (-605kcal 적자 유지 · 1주차 PT 완주!)',
+      day26SaturdayResetAfterFriLegsV1: true,
+      lastAction: '25일차(금) 하체 빡세게 & 곱창·대창·위스키 본전 방어 기록 완료! 26일차(토) 수분·클린 회복 리셋 💧',
       ptSessionsDone: 4,
       ptNotes: [
         {
@@ -900,39 +901,11 @@
       ],
       currentWeight: 93.5,
       todayWatchKcal: 0,
-      todayWatchHr: 'PT 4회차 예정/진행 (핏빗 재연결 시 자동수신 🔥)',
-      waterCups: 3,
+      todayWatchHr: '토요일 회복·수분 리셋 데이 (5일 연속 근력 완주! 💧)',
+      waterCups: 2,
       psylliumLunch: false,
       psylliumDinner: false,
-      todayMeals: [
-        {
-          id: 1795694500003,
-          time: '오후 9:15',
-          name: '🍔 버거킹 와퍼 단품 1개 (딱 1개 방어 · 1주차 PT 리피드!)',
-          kcal: 600,
-          carb: 49,
-          protein: 29,
-          fat: 32
-        },
-        {
-          id: 1795683400002,
-          time: '오후 5:55',
-          name: '🥩 직접 무친 생고기 육회 400g (양조간장·참기름 · 초고단백 88g!)',
-          kcal: 640,
-          carb: 5,
-          protein: 88,
-          fat: 26
-        },
-        {
-          id: 1795672800001,
-          time: '오후 2:30',
-          name: '🍚 햇반 큰공기(300g) + 🍗 실온 닭가슴살 2팩(240g) + 🥬 비비고 김치(80g)',
-          kcal: 755,
-          carb: 113,
-          protein: 60,
-          fat: 6
-        }
-      ],
+      todayMeals: [],
       activeTab: 'diet',
       courses: {
         courseA: [
@@ -1293,6 +1266,12 @@
       },
       watchRecords: [
         {
+          date: '11/27 (금) · 25일차 ⚡ 5일 연속 근력(하체 빡세게) & 곱창·대창·위스키 본전 방어! 🔥',
+          weight: '최저 93.5 kg (-2.5kg · 5일 연속 운동 완주!)',
+          activeKcal: '금요일 하체 고강도 세션 완료 (추정 총 소모 ~2,650~2,700kcal)',
+          memo: '⚡ 월~목 PT 4회 이어 금요일 하체까지 5일 연속 근력 돌파! / 🍽️ 점심: 저온 닭가슴살 2팩+햇반 200g+비비고 볶음김치(690kcal · 단63g) + 저녁: 곱창·대창(~1,150kcal) + 위스키 250ml(~580kcal) = 추정 ~2,420kcal (단백질 ~108g · 하체 소모량 덕분에 칼로리 본전~소폭 적자 방어! 토요일 수분·클린 식단으로 부기 100% 리셋!)'
+        },
+        {
           date: '11/26 (목) · 24일차 🎓 1주차 PT 4회 완주 & 와퍼 1개 적자 방어! 🏆',
           weight: '최저 93.5 kg (-2.5kg · 4일 연속 PT 완주!)',
           activeKcal: '목요일 PT 4/16회 완료 (추정 총 소모 ~2,600kcal)',
@@ -1435,10 +1414,10 @@
 
     function normalizeState(raw) {
       const todayKey = new Date().toLocaleDateString('sv-SE');
-      // 24일차(2026-11-26 목) 밤 와퍼 딱 1개 방어 → 최종 1,995kcal · 단백질 177g (-605kcal 적자 유지) 동기화
-      if (todayKey === '2026-11-26' && (!raw || !raw.day24ThursdayFinalWhopper1995V1)) {
+      // 26일차(2026-11-28 토) 25일차(금) 하체+곱창·대창·위스키 기록 반영 & 토요일 리셋 동기화
+      if (todayKey === '2026-11-28' && (!raw || !raw.day26SaturdayResetAfterFriLegsV1)) {
         const fresh = JSON.parse(JSON.stringify(defaultData));
-        if (raw && raw.lastDateKey === '2026-11-26') {
+        if (raw && raw.lastDateKey === '2026-11-28') {
           if (raw.waterCups && raw.waterCups > fresh.waterCups) fresh.waterCups = raw.waterCups;
           if (raw.todayMeals && raw.todayMeals.length > 0) {
             const existingIds = new Set(fresh.todayMeals.map(m => m.id));
@@ -1446,6 +1425,7 @@
               if (!existingIds.has(m.id)) fresh.todayMeals.unshift(m);
             });
           }
+          if (raw.todayWatchKcal && raw.todayWatchKcal > 0) fresh.todayWatchKcal = raw.todayWatchKcal;
         }
         if (raw && Array.isArray(raw.ptNotes) && raw.ptNotes.length > 0) {
           const existingNoteIds = new Set(fresh.ptNotes.map(n => n.id));
@@ -3042,7 +3022,7 @@
       if (chartEl) {
         const points = [
           { label: '시작(11/04)', w: 96.0, highlight: false },
-          { label: '현재(10일차)', w: curW, highlight: true },
+          { label: '현재(26일차)', w: curW, highlight: true },
           { label: '80대진입', w: 89.9, highlight: false },
           { label: '최종목표', w: 76.0, highlight: false }
         ];
