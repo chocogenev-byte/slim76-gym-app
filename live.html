@@ -863,7 +863,8 @@
       day24ThursdayFinalYukhoe400V1: true,
       day24ThursdayFinalWhopper1995V1: true,
       day26SaturdayResetAfterFriLegsV1: true,
-      lastAction: '25일차(금) 하체 빡세게 & 곱창·대창·위스키 본전 방어 기록 완료! 26일차(토) 수분·클린 회복 리셋 💧',
+      day26SaturdayMeals2085V1: true,
+      lastAction: '26일차(토) 식단 마감 2,085kcal · 단백질 122g (와퍼+목살250g+갈비찜300g+현미밥 · 여기서 칼마감 + 가벼운 산책/자전거 20분 추천!)',
       ptSessionsDone: 4,
       ptNotes: [
         {
@@ -902,10 +903,38 @@
       currentWeight: 93.5,
       todayWatchKcal: 0,
       todayWatchHr: '토요일 회복·수분 리셋 데이 (5일 연속 근력 완주! 💧)',
-      waterCups: 2,
+      waterCups: 3,
       psylliumLunch: false,
       psylliumDinner: false,
-      todayMeals: [],
+      todayMeals: [
+        {
+          id: 1795861500003,
+          time: '오후 7:10',
+          name: '🍖 갈비찜 300g + 🍚 현미밥 1공기 + 🥬 김치·무생채',
+          kcal: 960,
+          carb: 90,
+          protein: 48,
+          fat: 44
+        },
+        {
+          id: 1795854000002,
+          time: '오후 3:30',
+          name: '🥩 돼지 목살 구이 250g (고단백 45g)',
+          kcal: 525,
+          carb: 0,
+          protein: 45,
+          fat: 37
+        },
+        {
+          id: 1795840000001,
+          time: '오전 11:30',
+          name: '🍔 버거킹 와퍼 단품 1개',
+          kcal: 600,
+          carb: 49,
+          protein: 29,
+          fat: 32
+        }
+      ],
       activeTab: 'diet',
       courses: {
         courseA: [
@@ -1266,6 +1295,12 @@
       },
       watchRecords: [
         {
+          date: '11/28 (토) · 26일차 🍖 휴식일 본전 방어 (2,085kcal · 여기서 칼마감!)',
+          weight: '최저 93.5 kg (-2.5kg · 일요일 클린 리셋 예정)',
+          activeKcal: '휴식일 (식후 산책 30분 또는 자전거 20분 추가 시 -250kcal 적자 전환!)',
+          memo: '🍔 와퍼(600) + 🥩 목살 250g(525) + 🍖 갈비찜 300g·현미밥 1공기·김치(960) = 총 2,085kcal · 탄139g · 단122g · 지113g! 휴식일 유지선(2,100kcal) 딱 경계 → 저녁 7시30분 칼마감 & 내일(일) 1,400~1,500kcal 클린 브레이크 필수!'
+        },
+        {
           date: '11/27 (금) · 25일차 ⚡ 5일 연속 근력(하체 빡세게) & 곱창·대창·위스키 본전 방어! 🔥',
           weight: '최저 93.5 kg (-2.5kg · 5일 연속 운동 완주!)',
           activeKcal: '금요일 하체 고강도 세션 완료 (추정 총 소모 ~2,650~2,700kcal)',
@@ -1414,8 +1449,8 @@
 
     function normalizeState(raw) {
       const todayKey = new Date().toLocaleDateString('sv-SE');
-      // 26일차(2026-11-28 토) 25일차(금) 하체+곱창·대창·위스키 기록 반영 & 토요일 리셋 동기화
-      if (todayKey === '2026-11-28' && (!raw || !raw.day26SaturdayResetAfterFriLegsV1)) {
+      // 26일차(2026-11-28 토) 와퍼+목살250g+갈비찜300g+현미밥(2,085kcal) 식단 동기화
+      if (todayKey === '2026-11-28' && (!raw || !raw.day26SaturdayMeals2085V1)) {
         const fresh = JSON.parse(JSON.stringify(defaultData));
         if (raw && raw.lastDateKey === '2026-11-28') {
           if (raw.waterCups && raw.waterCups > fresh.waterCups) fresh.waterCups = raw.waterCups;
