@@ -864,7 +864,8 @@
       day24ThursdayFinalWhopper1995V1: true,
       day26SaturdayResetAfterFriLegsV1: true,
       day26SaturdayMeals2085V1: true,
-      lastAction: '26일차(토) 식단 마감 2,085kcal · 단백질 122g (와퍼+목살250g+갈비찜300g+현미밥 · 여기서 칼마감 + 가벼운 산책/자전거 20분 추천!)',
+      day26SaturdayMeals1835V2: true,
+      lastAction: '26일차(토) 식단 정정 완료 🏆 총 1,835kcal · 단백질 108g (갈비찜 절반 반영 · 휴식일에도 -265~315kcal 적자 달성!)',
       ptSessionsDone: 4,
       ptNotes: [
         {
@@ -910,11 +911,11 @@
         {
           id: 1795861500003,
           time: '오후 7:10',
-          name: '🍖 갈비찜 300g + 🍚 현미밥 1공기 + 🥬 김치·무생채',
-          kcal: 960,
-          carb: 90,
-          protein: 48,
-          fat: 44
+          name: '🍖 갈비찜 절반(순살 ~150g) + 🍚 현미밥 1공기 + 🥬 김치 약간',
+          kcal: 710,
+          carb: 75,
+          protein: 34,
+          fat: 30
         },
         {
           id: 1795854000002,
@@ -1295,10 +1296,10 @@
       },
       watchRecords: [
         {
-          date: '11/28 (토) · 26일차 🍖 휴식일 본전 방어 (2,085kcal · 여기서 칼마감!)',
-          weight: '최저 93.5 kg (-2.5kg · 일요일 클린 리셋 예정)',
-          activeKcal: '휴식일 (식후 산책 30분 또는 자전거 20분 추가 시 -250kcal 적자 전환!)',
-          memo: '🍔 와퍼(600) + 🥩 목살 250g(525) + 🍖 갈비찜 300g·현미밥 1공기·김치(960) = 총 2,085kcal · 탄139g · 단122g · 지113g! 휴식일 유지선(2,100kcal) 딱 경계 → 저녁 7시30분 칼마감 & 내일(일) 1,400~1,500kcal 클린 브레이크 필수!'
+          date: '11/28 (토) · 26일차 🏆 휴식일 적자 방어 성공! (1,835kcal · -265~315kcal)',
+          weight: '최저 93.5 kg (-2.5kg · 휴식일 적자 마감!)',
+          activeKcal: '휴식일 (소모 ~2,100~2,150kcal · 산책 20~30분 추가 시 -500kcal!)',
+          memo: '🍔 와퍼(600) + 🥩 목살 250g(525) + 🍖 갈비찜 절반·현미밥 1공기·김치 약간(710) = 최종 1,835kcal · 탄124g · 단108g · 지99g! 휴식일에도 넉넉히 적자 방어 성공! 여기서 칼마감 & 내일(일) 클린 식단으로 92kg대 정조준!'
         },
         {
           date: '11/27 (금) · 25일차 ⚡ 5일 연속 근력(하체 빡세게) & 곱창·대창·위스키 본전 방어! 🔥',
@@ -1449,8 +1450,8 @@
 
     function normalizeState(raw) {
       const todayKey = new Date().toLocaleDateString('sv-SE');
-      // 26일차(2026-11-28 토) 와퍼+목살250g+갈비찜300g+현미밥(2,085kcal) 식단 동기화
-      if (todayKey === '2026-11-28' && (!raw || !raw.day26SaturdayMeals2085V1)) {
+      // 26일차(2026-11-28 토) 갈비찜 절반 반영 정정 → 최종 1,835kcal (휴식일 적자 방어!) 동기화
+      if (todayKey === '2026-11-28' && (!raw || !raw.day26SaturdayMeals1835V2)) {
         const fresh = JSON.parse(JSON.stringify(defaultData));
         if (raw && raw.lastDateKey === '2026-11-28') {
           if (raw.waterCups && raw.waterCups > fresh.waterCups) fresh.waterCups = raw.waterCups;
